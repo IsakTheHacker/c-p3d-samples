@@ -14,14 +14,14 @@ PT(CollisionHandlerQueue) collision_handler;
 NodePath maze = NodePath("maze");
 NodePath ball = NodePath("ball");
 NodePath ball_root = NodePath("ball_root");
-LVector3 ballV(0, 0, 0);				//Initial velocity is 0
-LVector3 accelV(0, 0, 0);				//Initial acceleration is 0
+LVector3 ballV;
+LVector3 accelV;
 std::vector<NodePath> lose_triggers;
 
 //Some constants for the program
 int ACCELERATION = 70;							//Acceleration in ft/sec/sec
 int MAX_SPEED = 5;								//Max speed in ft/sec
-int MAX_SPEED_SQ = 25;		//MAX_SPEED squared
+int MAX_SPEED_SQ = 25;							//MAX_SPEED squared
 
 //Exit function
 void panda_exit(const Event* theEvent, void* data) {
@@ -66,7 +66,7 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 	double dt = ClockObject::get_global_clock()->get_dt();
 	PT(MouseWatcher) mouseWatcher = DCAST(MouseWatcher, (PandaNode*)mouseWatcherNode);
 	if (dt > 0.2) {
-		return AsyncTask::DoneStatus::DS_cont;
+		return AsyncTask::DS_cont;
 	}
 
 	if (collision_handler->get_num_entries() > 0) {
@@ -91,8 +91,6 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 		LPoint2 mpos = mouseWatcher->get_mouse(); //Get the mouse position
 		maze.set_p(mpos.get_y() * -10);
 		maze.set_r(mpos.get_x() * 10);
-		ball_root.set_x(ball_root.get_x() + mpos.get_x());
-		ball_root.set_y(ball_root.get_y() + mpos.get_y());
 	}
 
 	ballV += accelV * dt * ACCELERATION;
@@ -100,7 +98,7 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 		ballV.normalize();
 		ballV *= MAX_SPEED;
 	}
-	//ball_root.set_pos(ball_root.get_pos() + (ballV * dt));		//Update the position based on the velocity
+	ball_root.set_pos(ball_root.get_pos() + (ballV * dt));		//Update the position based on the velocity
 	LRotation prevRot(ball.get_quat());
 	LVector3 axis = LVector3::up().cross(ballV);
 	LRotation newRot(axis, 45.5 * dt * ballV.length());
@@ -208,8 +206,11 @@ int main(int argc, char* argv[]) {
 	material->set_shininess(96);
 	ball_root.set_material(material, 1);
 
-	ball_root.set_pos(maze.find("**/start").get_pos());
 
+	//More initialization
+	ball_root.set_pos(maze.find("**/start").get_pos());
+	ballV.set(0, 0, 0);
+	accelV.set(0, 0, 0);
 	PT(GenericAsyncTask) roll_task = new GenericAsyncTask("roll_task", roll_func, (void*)window->get_mouse().node());
 	AsyncTaskManager::get_global_ptr()->add(roll_task);
 	
