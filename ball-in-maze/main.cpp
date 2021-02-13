@@ -25,6 +25,37 @@ void panda_exit(const Event* theEvent, void* data) {
 	exit(0);
 }
 
+void wall_collide_handler(PT(CollisionEntry) entry) {
+	LVector3 norm = entry->get_surface_normal(window->get_render()) * -1;
+	double current_speed = ballV.length();
+	LVector3 inVec = ballV / current_speed;
+	double vel_angle = norm.dot(inVec);
+	LVector3 hit_dir = entry->get_surface_point(window->get_render()) - ball_root.get_pos();
+	hit_dir.normalize();
+	double hit_angle = norm.dot(hit_dir);
+
+	if (vel_angle > 0 && hit_angle > 0.995) {
+		//Standard reflection equation
+		LPoint3 reflectVec = (norm * norm.dot(inVec * -1) * 2) + inVec;
+
+		ballV = reflectVec * (current_speed * (((1 - vel_angle) * 0.5) + 0.5));
+
+		LPoint3 disp = entry->get_surface_point(window->get_render()) - entry->get_interior_point(window->get_render());
+		LPoint3 newPos = ball_root.get_pos() + disp;
+		ball_root.set_pos(newPos);
+	}
+}
+
+void ground_collide_handler(PT(CollisionEntry) entry) {
+	double newZ = entry->get_surface_point(window->get_render()).get_z();
+	ball_root.set_z(newZ + 0.4);
+
+	LVector3 norm = entry->get_surface_normal(window->get_render());
+	LVector3 accelSide = norm.cross(LVector3::up());
+
+	accelV = norm.cross(accelSide);
+}
+
 //Roll task
 AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) {
 	double dt = ClockObject::get_global_clock()->get_dt();
@@ -39,7 +70,7 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 			PT(CollisionEntry) entry = collision_handler->get_entry(i);
 			std::string name = entry->get_into_node()->get_name();
 			if (name == "wall_collide") {
-				//wall_collide_handler(entry);
+				wall_collide_handler(entry);
 			} else if (name == "ground_collide") {
 				ground_collide_handler(entry);
 			} else if (name == "loseTrigger") {
@@ -66,16 +97,6 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 	ball.set_quat(prevRot * newRot);
 
 	return AsyncTask::DS_cont;
-}
-
-void ground_collide_handler(PT(CollisionEntry) entry) {
-	double newZ = entry->get_surface_point(window->get_render()).get_z();
-	ball_root.set_z(newZ + 0.4);
-
-	LVector3 norm = entry->get_surface_normal(window->get_render());
-	LVector3 accelSide = norm.cross(LVector3::up());
-
-	accelV = norm.cross(accelSide);
 }
 
 int main(int argc, char* argv[]) {
