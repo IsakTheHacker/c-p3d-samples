@@ -13,6 +13,7 @@ namespace Globals {
 	extern NodePath maze;
 	extern NodePath ball;
 	extern NodePath ball_root;
+	extern std::vector<NodePath> lose_triggers;
 
 	//Some constants for the program
 	extern int ACCELERATION;

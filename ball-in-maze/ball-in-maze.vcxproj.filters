@@ -43,12 +43,18 @@
     <ClCompile Include="src\globals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\init.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\header\functions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\header\globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\header\init.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

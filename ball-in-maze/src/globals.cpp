@@ -9,6 +9,7 @@ namespace Globals {
 	NodePath maze = NodePath("maze");
 	NodePath ball = NodePath("ball");
 	NodePath ball_root = NodePath("ball_root");
+	std::vector<NodePath> lose_triggers;
 
 	//Some constants for the program
 	int ACCELERATION = 70;							//Acceleration in ft/sec/sec
