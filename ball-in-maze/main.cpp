@@ -7,6 +7,7 @@
 #include "mouseWatcher.h"
 
 std::string samplePath = "./";
+WindowFramework* window;
 PT(CollisionHandlerQueue) collision_handler = new CollisionHandlerQueue();
 NodePath maze = NodePath("maze");
 NodePath ball = NodePath("ball");
@@ -25,9 +26,9 @@ void panda_exit(const Event* theEvent, void* data) {
 }
 
 //Roll task
-AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* data) {
+AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) {
 	double dt = ClockObject::get_global_clock()->get_dt();
-	PT(MouseWatcher) mouseWatcher = DCAST(MouseWatcher, (((WindowFramework*)data)->get_mouse().node()));
+	PT(MouseWatcher) mouseWatcher = DCAST(MouseWatcher, (PandaNode*)mouseWatcherNode);
 	if (dt > 0.2) {
 		return AsyncTask::DS_cont;
 	}
@@ -40,7 +41,7 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* data) {
 			if (name == "wall_collide") {
 				//wall_collide_handler(entry);
 			} else if (name == "ground_collide") {
-				//ground_collide_handler(entry);
+				ground_collide_handler(entry);
 			} else if (name == "loseTrigger") {
 				//lose_game(entry);
 			}
@@ -59,12 +60,17 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* data) {
 		ballV *= MAX_SPEED;
 	}
 	ball_root.set_pos(ball_root.get_pos() + (ballV * dt));		//Update the position based on the velocity
-	LRotation prevRot = ball.get_quat();
+	LRotation prevRot(ball.get_quat());
 	LVector3 axis = LVector3::up().cross(ballV);
 	LRotation newRot(axis, 45.5 * dt * ballV.length());
 	ball.set_quat(prevRot * newRot);
 
 	return AsyncTask::DS_cont;
+}
+
+void ground_collide_handler(PT(CollisionEntry) entry) {
+	double newZ = entry->get_surface_point(window->get_render()).get_z();
+	ball_root.set_z(newZ + 0.4);
 }
 
 int main(int argc, char* argv[]) {
@@ -82,7 +88,11 @@ int main(int argc, char* argv[]) {
 
 	//Set the window title and open new window
 	framework.set_window_title("Ball in maze - C++ Panda3D Samples");
-	WindowFramework* window = framework.open_window();
+	window = framework.open_window();
+
+	//Camera
+	NodePath camera = window->get_camera_group();
+	camera.set_pos_hpr(0, 0, 25, 0, -90, 0);		//Position the camera
 
 	//Keyboard definitions
 	window->enable_keyboard();
@@ -90,7 +100,7 @@ int main(int argc, char* argv[]) {
 
 
 	//Load models
-	NodePath maze = window->load_model(framework.get_models(), samplePath + "models/maze");
+	maze = window->load_model(framework.get_models(), samplePath + "models/maze");
 	maze.reparent_to(window->get_render());
 
 	NodePath walls = maze.find("**/wall_collide");				//Find the collision node named wall_collide
@@ -100,8 +110,8 @@ int main(int argc, char* argv[]) {
 	maze_ground.node()->set_into_collide_mask(BitMask32::bit(1));
 
 	//Ball
-	NodePath ball_root = window->get_render().attach_new_node("ball_root");
-	NodePath ball = window->load_model(framework.get_models(), samplePath + "models/ball");
+	ball_root = window->get_render().attach_new_node("ball_root");
+	ball = window->load_model(framework.get_models(), samplePath + "models/ball");
 	ball.reparent_to(ball_root);
 
 	NodePath ball_sphere = ball.find("**/ball");
@@ -125,10 +135,10 @@ int main(int argc, char* argv[]) {
 
 	ball_root.set_pos(maze.find("**/start").get_pos());
 
-	window->get_render().ls();
-
-	PT(GenericAsyncTask) roll_task = new GenericAsyncTask("roll_task", roll_func, (void*)&window);
+	PT(GenericAsyncTask) roll_task = new GenericAsyncTask("roll_task", roll_func, (void*)window->get_mouse().node());
 	AsyncTaskManager::get_global_ptr()->add(roll_task);
+	
+	window->get_render().ls();
 
 	//Do the main loop
 	framework.main_loop();
