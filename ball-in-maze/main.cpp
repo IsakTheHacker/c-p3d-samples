@@ -71,6 +71,11 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 void ground_collide_handler(PT(CollisionEntry) entry) {
 	double newZ = entry->get_surface_point(window->get_render()).get_z();
 	ball_root.set_z(newZ + 0.4);
+
+	LVector3 norm = entry->get_surface_normal(window->get_render());
+	LVector3 accelSide = norm.cross(LVector3::up());
+
+	accelV = norm.cross(accelSide);
 }
 
 int main(int argc, char* argv[]) {
