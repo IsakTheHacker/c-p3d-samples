@@ -14,6 +14,7 @@ NodePath ball = NodePath("ball");
 NodePath ball_root = NodePath("ball_root");
 LVector3 ballV(0, 0, 0);				//Initial velocity is 0
 LVector3 accelV(0, 0, 0);				//Initial acceleration is 0
+std::vector<NodePath> lose_triggers;
 
 //Some constants for the program
 int ACCELERATION = 70;							//Acceleration in ft/sec/sec
@@ -137,10 +138,10 @@ int main(int argc, char* argv[]) {
 	maze.reparent_to(window->get_render());
 
 	NodePath walls = maze.find("**/wall_collide");				//Find the collision node named wall_collide
-	walls.node()->set_into_collide_mask(BitMask32::bit(0));		//Everything the ball should collide with will include bit 0
+	DCAST(CollisionNode, walls.node())->set_into_collide_mask(BitMask32::bit(0));		//Everything the ball should collide with will include bit 0
 
 	NodePath maze_ground = maze.find("**/ground_collide");
-	maze_ground.node()->set_into_collide_mask(BitMask32::bit(1));
+	DCAST(CollisionNode, maze_ground.node())->set_into_collide_mask(BitMask32::bit(1));
 
 	//Ball
 	ball_root = window->get_render().attach_new_node("ball_root");
@@ -160,6 +161,16 @@ int main(int argc, char* argv[]) {
 	ball_ground_col->set_from_collide_mask(BitMask32::bit(1));	//Set its bitmasks
 	ball_ground_col->set_into_collide_mask(BitMask32::all_off());
 	NodePath ball_ground_col_NP = ball_root.attach_new_node(ball_ground_col);
+	ball_ground_col_NP.show_tight_bounds();
+
+	//Setup lose triggers
+	for (size_t i = 0; i < 6; i++) {
+		NodePath trigger = maze.find("**/hole_collide" + std::to_string(i));
+		trigger.node()->set_into_collide_mask(BitMask32::bit(0));
+		trigger.node()->set_name("loseTrigger");
+		lose_triggers.push_back(trigger);
+		trigger.show();
+	}
 
 	//Collision
 	CollisionTraverser collision_traverser;
