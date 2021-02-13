@@ -1,0 +1,2 @@
+#define DCAST(want_type, pointer) _dcast((want_type*)0, pointer)
+#define PT(type)

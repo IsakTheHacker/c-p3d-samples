@@ -4,8 +4,15 @@
 #include "collisionRay.h"
 #include "collisionTraverser.h"
 #include "collisionHandlerQueue.h"
+#include "mouseWatcher.h"
 
 std::string samplePath = "./";
+PT(CollisionHandlerQueue) collision_handler = new CollisionHandlerQueue();
+NodePath maze = NodePath("maze");
+NodePath ball = NodePath("ball");
+NodePath ball_root = NodePath("ball_root");
+LVector3 ballV(0, 0, 0);				//Initial velocity is 0
+LVector3 accelV(0, 0, 0);				//Initial acceleration is 0
 
 //Some constants for the program
 int ACCELERATION = 70;							//Acceleration in ft/sec/sec
@@ -18,11 +25,46 @@ void panda_exit(const Event* theEvent, void* data) {
 }
 
 //Roll task
-AsyncTask::DoneStatus roll_task(GenericAsyncTask* task, void* data) {
+AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* data) {
 	double dt = ClockObject::get_global_clock()->get_dt();
+	PT(MouseWatcher) mouseWatcher = DCAST(MouseWatcher, (((WindowFramework*)data)->get_mouse().node()));
 	if (dt > 0.2) {
 		return AsyncTask::DS_cont;
 	}
+
+	if (collision_handler->get_num_entries() > 0) {
+		collision_handler->sort_entries();
+		for (size_t i = 0; i < collision_handler->get_num_entries(); i++) {
+			PT(CollisionEntry) entry = collision_handler->get_entry(i);
+			std::string name = entry->get_into_node()->get_name();
+			if (name == "wall_collide") {
+				//wall_collide_handler(entry);
+			} else if (name == "ground_collide") {
+				//ground_collide_handler(entry);
+			} else if (name == "loseTrigger") {
+				//lose_game(entry);
+			}
+		}
+	}
+
+	if (mouseWatcher->has_mouse()) {
+		LPoint2 mpos = mouseWatcher->get_mouse(); //Get the mouse position
+		maze.set_p(mpos.get_y() * -10);
+		maze.set_r(mpos.get_x() * 10);
+	}
+
+	ballV += accelV * dt * ACCELERATION;
+	if (ballV.length_squared() > MAX_SPEED_SQ) {
+		ballV.normalize();
+		ballV *= MAX_SPEED;
+	}
+	ball_root.set_pos(ball_root.get_pos() + (ballV * dt));		//Update the position based on the velocity
+	LRotation prevRot = ball.get_quat();
+	LVector3 axis = LVector3::up().cross(ballV);
+	LRotation newRot(axis, 45.5 * dt * ballV.length());
+	ball.set_quat(prevRot * newRot);
+
+	return AsyncTask::DS_cont;
 }
 
 int main(int argc, char* argv[]) {
@@ -78,13 +120,15 @@ int main(int argc, char* argv[]) {
 
 	//Collision
 	CollisionTraverser collision_traverser;
-	PT(CollisionHandlerQueue) collision_handler = new CollisionHandlerQueue();
 	collision_traverser.add_collider(ball_sphere, collision_handler);
 	collision_traverser.add_collider(ball_ground_col_NP, collision_handler);
 
 	ball_root.set_pos(maze.find("**/start").get_pos());
-	LVector3 ballV(0, 0, 0);				//Initial velocity is 0
-	LVector3 accelV(0, 0, 0);				//Initial acceleration is 0
+
+	window->get_render().ls();
+
+	PT(GenericAsyncTask) roll_task = new GenericAsyncTask("roll_task", roll_func, (void*)&window);
+	AsyncTaskManager::get_global_ptr()->add(roll_task);
 
 	//Do the main loop
 	framework.main_loop();
