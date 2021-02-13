@@ -1,6 +1,11 @@
 #include "pandaFramework.h"
 #include "pandaSystem.h"
 
+//Some constants for the program
+int ACCEL = 70;									//Acceleration in ft/sec/sec
+int MAX_SPEED = 5;								//Max speed in ft/sec
+int MAX_SPEED_SQ = MAX_SPEED * MAX_SPEED;		//MAX_SPEED squared
+
 int main(int argc, char* argv[]) {
 	// Open a new window framework
 	PandaFramework framework;
@@ -15,5 +20,5 @@ int main(int argc, char* argv[]) {
 	// Do the main loop, equal to run() in python
 	framework.main_loop();
 	framework.close_framework();
-	return (0);
+	return 0;
 }
