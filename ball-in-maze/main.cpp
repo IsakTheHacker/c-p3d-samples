@@ -202,6 +202,12 @@ int main(int argc, char* argv[]) {
 	ball_root.set_light(window->get_render().attach_new_node(alight));
 	ball_root.set_light(window->get_render().attach_new_node(dlight));
 
+	//Material for the ball
+	PT(Material) material = new Material();
+	material->set_specular(LColor(1, 1, 1, 1));
+	material->set_shininess(96);
+	ball_root.set_material(material, 1);
+
 	ball_root.set_pos(maze.find("**/start").get_pos());
 
 	PT(GenericAsyncTask) roll_task = new GenericAsyncTask("roll_task", roll_func, (void*)window->get_mouse().node());
