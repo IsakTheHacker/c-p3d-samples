@@ -18,5 +18,8 @@ void wall_collide_handler(PT(CollisionEntry) entry);
 //Ground collide handler
 void ground_collide_handler(PT(CollisionEntry) entry);
 
+//Lose game
+void lose_game(PT(CollisionEntry) entry);
+
 //Roll task
 AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode);

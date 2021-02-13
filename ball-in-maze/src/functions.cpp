@@ -41,6 +41,14 @@ void ground_collide_handler(PT(CollisionEntry) entry) {
 	printf("Ground collide handler called!\n");
 }
 
+void lose_game(PT(CollisionEntry) entry) {
+	using namespace Globals;
+
+	LPoint3 to_pos = entry->get_interior_point(window->get_render());
+
+	printf("Lose game!");
+}
+
 AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) {
 	using namespace Globals;
 
@@ -61,7 +69,7 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 			} else if (name == "ground_collide") {
 				ground_collide_handler(entry);
 			} else if (name == "loseTrigger") {
-				//lose_game(entry);
+				lose_game(entry);
 			}
 		}
 	} else {
