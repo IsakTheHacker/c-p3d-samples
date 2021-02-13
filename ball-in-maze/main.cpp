@@ -61,7 +61,7 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 	double dt = ClockObject::get_global_clock()->get_dt();
 	PT(MouseWatcher) mouseWatcher = DCAST(MouseWatcher, (PandaNode*)mouseWatcherNode);
 	if (dt > 0.2) {
-		return AsyncTask::DS_cont;
+		return AsyncTask::DoneStatus::DS_cont;
 	}
 
 	if (collision_handler->get_num_entries() > 0) {
@@ -95,6 +95,8 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 	LVector3 axis = LVector3::up().cross(ballV);
 	LRotation newRot(axis, 45.5 * dt * ballV.length());
 	ball.set_quat(prevRot * newRot);
+
+	std::cout << ball_root.get_pos() << std::endl;
 
 	return AsyncTask::DS_cont;
 }
