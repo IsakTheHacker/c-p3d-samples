@@ -89,6 +89,8 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 		LPoint2 mpos = mouseWatcher->get_mouse(); //Get the mouse position
 		maze.set_p(mpos.get_y() * -10);
 		maze.set_r(mpos.get_x() * 10);
+		ball_root.set_x(ball_root.get_x() + mpos.get_x());
+		ball_root.set_y(ball_root.get_y() + mpos.get_y());
 	}
 
 	ballV += accelV * dt * ACCELERATION;
@@ -96,7 +98,7 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 		ballV.normalize();
 		ballV *= MAX_SPEED;
 	}
-	ball_root.set_pos(ball_root.get_pos() + (ballV * dt));		//Update the position based on the velocity
+	//ball_root.set_pos(ball_root.get_pos() + (ballV * dt));		//Update the position based on the velocity
 	LRotation prevRot(ball.get_quat());
 	LVector3 axis = LVector3::up().cross(ballV);
 	LRotation newRot(axis, 45.5 * dt * ballV.length());
@@ -123,6 +125,7 @@ int main(int argc, char* argv[]) {
 	//Set the window title and open new window
 	framework.set_window_title("Ball in maze - C++ Panda3D Samples");
 	window = framework.open_window();
+	framework.show_collision_solids(window->get_render());
 
 	//Camera
 	NodePath camera = window->get_camera_group();
@@ -137,7 +140,7 @@ int main(int argc, char* argv[]) {
 	maze = window->load_model(framework.get_models(), samplePath + "models/maze");
 	maze.reparent_to(window->get_render());
 
-	NodePath walls = maze.find("**/wall_collide");				//Find the collision node named wall_collide
+	NodePath walls = maze.find("**/wall_collide");										//Find the collision node named wall_collide
 	DCAST(CollisionNode, walls.node())->set_into_collide_mask(BitMask32::bit(0));		//Everything the ball should collide with will include bit 0
 
 	NodePath maze_ground = maze.find("**/ground_collide");
@@ -176,6 +179,7 @@ int main(int argc, char* argv[]) {
 	CollisionTraverser collision_traverser;
 	collision_traverser.add_collider(ball_sphere, collision_handler);
 	collision_traverser.add_collider(ball_ground_col_NP, collision_handler);
+	collision_traverser.show_collisions(window->get_render());
 
 	ball_root.set_pos(maze.find("**/start").get_pos());
 
