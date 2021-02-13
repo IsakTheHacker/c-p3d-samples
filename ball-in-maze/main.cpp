@@ -18,7 +18,7 @@ LVector3 accelV(0, 0, 0);				//Initial acceleration is 0
 //Some constants for the program
 int ACCELERATION = 70;							//Acceleration in ft/sec/sec
 int MAX_SPEED = 5;								//Max speed in ft/sec
-int MAX_SPEED_SQ = MAX_SPEED * MAX_SPEED;		//MAX_SPEED squared
+int MAX_SPEED_SQ = 25;		//MAX_SPEED squared
 
 //Exit function
 void panda_exit(const Event* theEvent, void* data) {
@@ -41,9 +41,10 @@ void wall_collide_handler(PT(CollisionEntry) entry) {
 		ballV = reflectVec * (current_speed * (((1 - vel_angle) * 0.5) + 0.5));
 
 		LPoint3 disp = entry->get_surface_point(window->get_render()) - entry->get_interior_point(window->get_render());
-		LPoint3 newPos = ball_root.get_pos() + disp;
+		LVector3 newPos = ball_root.get_pos() + disp;
 		ball_root.set_pos(newPos);
 	}
+	printf("Wall collide handler called!\n");
 }
 
 void ground_collide_handler(PT(CollisionEntry) entry) {
@@ -54,6 +55,7 @@ void ground_collide_handler(PT(CollisionEntry) entry) {
 	LVector3 accelSide = norm.cross(LVector3::up());
 
 	accelV = norm.cross(accelSide);
+	printf("Ground collide handler called!\n");
 }
 
 //Roll task
@@ -69,6 +71,7 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 		for (size_t i = 0; i < collision_handler->get_num_entries(); i++) {
 			PT(CollisionEntry) entry = collision_handler->get_entry(i);
 			std::string name = entry->get_into_node()->get_name();
+			std::cout << name << std::endl;
 			if (name == "wall_collide") {
 				wall_collide_handler(entry);
 			} else if (name == "ground_collide") {
@@ -77,6 +80,8 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 				//lose_game(entry);
 			}
 		}
+	} else {
+		printf("No entries!\n");
 	}
 
 	if (mouseWatcher->has_mouse()) {
