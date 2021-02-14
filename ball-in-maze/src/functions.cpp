@@ -36,7 +36,6 @@ void wall_collide_handler(PT(CollisionEntry) entry) {
 		LVector3 newPos = ball_root.get_pos() + disp;
 		ball_root.set_pos(newPos);
 	}
-	printf("Wall collide handler called!\n");
 }
 
 void ground_collide_handler(PT(CollisionEntry) entry) {
@@ -49,7 +48,6 @@ void ground_collide_handler(PT(CollisionEntry) entry) {
 	LVector3 accelSide = norm.cross(LVector3::up());
 
 	accelV = norm.cross(accelSide);
-	printf("Ground collide handler called!\n");
 }
 
 void lose_game(PT(CollisionEntry) entry) {
@@ -59,8 +57,6 @@ void lose_game(PT(CollisionEntry) entry) {
 
 	AsyncTaskManager::get_global_ptr()->remove(roll_task);
 	new_game();
-
-	printf("Lose game!\n");
 }
 
 AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) {

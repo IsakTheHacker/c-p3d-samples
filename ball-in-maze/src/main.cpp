@@ -13,6 +13,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
+	//Initialization
 	initPanda(argc, argv);
 	setupModels(samplePath);
 	setupLighting();			//Lighting
@@ -21,8 +22,6 @@ int main(int argc, char* argv[]) {
 	//Start game
 	new_game();
 	
-	window->get_render().ls();
-
 	//Do the main loop
 	framework.main_loop();
 	framework.close_framework();

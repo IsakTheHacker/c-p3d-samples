@@ -93,5 +93,4 @@ void setupModels(std::string samplePath) {
 	//Collision
 	collision_traverser.add_collider(ball_sphere, collision_handler);
 	collision_traverser.add_collider(ball_ground_col_NP, collision_handler);
-	std::cout << "Num colliders: " << collision_traverser.get_num_colliders() << std::endl;
 }
