@@ -46,7 +46,7 @@ void lose_game(PT(CollisionEntry) entry) {
 
 	LPoint3 to_pos = entry->get_interior_point(window->get_render());
 
-	printf("Lose game!");
+	printf("Lose game!\n");
 }
 
 AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) {

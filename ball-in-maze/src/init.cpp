@@ -90,14 +90,8 @@ void setupModels(std::string samplePath) {
 	ball_ground_col->set_into_collide_mask(0);
 	NodePath ball_ground_col_NP = ball_root.attach_new_node(ball_ground_col);
 
-	ball_ground_col_NP.show();
-
 	//Collision
 	collision_traverser.add_collider(ball_sphere, collision_handler);
 	collision_traverser.add_collider(ball_ground_col_NP, collision_handler);
 	std::cout << "Num colliders: " << collision_traverser.get_num_colliders() << std::endl;
-	for (size_t i = 0; i < collision_traverser.get_num_colliders(); i++) {
-		std::cout << collision_traverser.get_collider(i) << std::endl;
-	}
-	//framework.show_collision_solids(window->get_render());
 }
