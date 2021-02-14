@@ -4,6 +4,17 @@ void panda_exit(const Event* theEvent, void* data) {
 	exit(0);
 }
 
+void new_game() {
+	using namespace Globals;
+
+	ball_root.set_pos(maze.find("**/start").get_pos());
+	ballV.set(0, 0, 0);
+	accelV.set(0, 0, 0);
+
+	roll_task = new GenericAsyncTask("roll_task", roll_func, (void*)window->get_mouse().node());
+	AsyncTaskManager::get_global_ptr()->add(roll_task);
+}
+
 void wall_collide_handler(PT(CollisionEntry) entry) {
 	using namespace Globals;
 
@@ -45,6 +56,9 @@ void lose_game(PT(CollisionEntry) entry) {
 	using namespace Globals;
 
 	LPoint3 to_pos = entry->get_interior_point(window->get_render());
+
+	AsyncTaskManager::get_global_ptr()->remove(roll_task);
+	new_game();
 
 	printf("Lose game!\n");
 }

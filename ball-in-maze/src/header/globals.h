@@ -11,6 +11,7 @@ namespace Globals {
 	extern LVector3 accelV;
 	extern PT(CollisionHandlerQueue) collision_handler;
 	extern CollisionTraverser collision_traverser;
+	extern PT(GenericAsyncTask) roll_task;
 	extern NodePath maze;
 	extern NodePath ball;
 	extern NodePath ball_root;

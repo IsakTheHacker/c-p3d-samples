@@ -18,10 +18,8 @@ int main(int argc, char* argv[]) {
 	setupLighting();			//Lighting
 	setupMaterial();			//Material for the ball
 
-	//More initialization
-	ball_root.set_pos(maze.find("**/start").get_pos());
-	PT(GenericAsyncTask) roll_task = new GenericAsyncTask("roll_task", roll_func, (void*)window->get_mouse().node());
-	AsyncTaskManager::get_global_ptr()->add(roll_task);
+	//Start game
+	new_game();
 	
 	window->get_render().ls();
 

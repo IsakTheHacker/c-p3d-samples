@@ -12,6 +12,8 @@
 //Exit function
 void panda_exit(const Event* theEvent, void* data);
 
+void new_game();
+
 //Wall collide handler
 void wall_collide_handler(PT(CollisionEntry) entry);
 

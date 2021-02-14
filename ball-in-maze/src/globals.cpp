@@ -7,6 +7,7 @@ namespace Globals {
 	LVector3 accelV(0, 0, 0);
 	PT(CollisionHandlerQueue) collision_handler = new CollisionHandlerQueue();
 	CollisionTraverser collision_traverser;
+	PT(GenericAsyncTask) roll_task;
 	NodePath maze = NodePath("maze");
 	NodePath ball = NodePath("ball");
 	NodePath ball_root = NodePath("ball_root");
