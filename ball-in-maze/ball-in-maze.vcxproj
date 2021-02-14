@@ -175,7 +175,15 @@
     <None Include="models\maze.egg.pz" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\functions.cpp" />
+    <ClCompile Include="src\globals.cpp" />
+    <ClCompile Include="src\init.cpp" />
+    <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\header\functions.h" />
+    <ClInclude Include="src\header\globals.h" />
+    <ClInclude Include="src\header\init.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
