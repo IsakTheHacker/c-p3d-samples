@@ -53,12 +53,12 @@ void setupModels(std::string samplePath) {
 
 	//Walls
 	NodePath walls = maze.find("**/wall_collide");										//Find the collision node named wall_collide
-	DCAST(CollisionNode, walls.node())->set_into_collide_mask(BitMask32::bit(0));		//Everything the ball should collide with will include bit 0
+	DCAST(CollisionNode, walls.node())->set_into_collide_mask(1);						//Everything the ball should collide with will include bit 0
 
 	//Setup lose triggers
 	for (size_t i = 0; i < 6; i++) {
 		NodePath trigger = maze.find("**/hole_collide" + std::to_string(i));
-		trigger.node()->set_into_collide_mask(BitMask32::bit(0));
+		trigger.node()->set_into_collide_mask(1);
 		trigger.node()->set_name("loseTrigger");
 		lose_triggers.push_back(trigger);
 		trigger.show();
@@ -66,17 +66,17 @@ void setupModels(std::string samplePath) {
 
 	//Maze ground
 	NodePath maze_ground = maze.find("**/ground_collide");
-	DCAST(CollisionNode, maze_ground.node())->set_into_collide_mask(BitMask32::bit(1));
+	DCAST(CollisionNode, maze_ground.node())->set_into_collide_mask(1);
 
 	//Ball
-	ball_root = window->get_render().attach_new_node("ball_root");
+	ball_root = window->get_render().attach_new_node("ballRoot");
 	ball = window->load_model(framework.get_models(), samplePath + "models/ball");
 	ball.reparent_to(ball_root);
 
 	//Ball sphere
 	NodePath ball_sphere = ball.find("**/ball");
-	DCAST(CollisionNode, ball_sphere.node())->set_from_collide_mask(BitMask32::bit(0));
-	DCAST(CollisionNode, ball_sphere.node())->set_into_collide_mask(BitMask32::all_off());
+	DCAST(CollisionNode, ball_sphere.node())->set_from_collide_mask(1);
+	DCAST(CollisionNode, ball_sphere.node())->set_into_collide_mask(0);
 
 	//Ball ground ray
 	PT(CollisionRay) ball_ground_ray = new CollisionRay();		//Create the ray
@@ -84,17 +84,20 @@ void setupModels(std::string samplePath) {
 	ball_ground_ray->set_direction(0, 0, -1);					//And its direction
 
 	//Ball ground col
-	PT(CollisionNode) ball_ground_col = new CollisionNode("ball_ground_col");
+	PT(CollisionNode) ball_ground_col = new CollisionNode("groundRay");
 	ball_ground_col->add_solid(ball_ground_ray);				//Add the ray
-	ball_ground_col->set_from_collide_mask(BitMask32::bit(1));	//Set its bitmasks
-	ball_ground_col->set_into_collide_mask(BitMask32::all_off());
+	ball_ground_col->set_from_collide_mask(1);					//Set its bitmasks
+	ball_ground_col->set_into_collide_mask(0);
 	NodePath ball_ground_col_NP = ball_root.attach_new_node(ball_ground_col);
 
 	ball_ground_col_NP.show();
 
 	//Collision
-	CollisionTraverser collision_traverser;
 	collision_traverser.add_collider(ball_sphere, collision_handler);
 	collision_traverser.add_collider(ball_ground_col_NP, collision_handler);
-	collision_traverser.show_collisions(window->get_render());
+	std::cout << "Num colliders: " << collision_traverser.get_num_colliders() << std::endl;
+	for (size_t i = 0; i < collision_traverser.get_num_colliders(); i++) {
+		std::cout << collision_traverser.get_collider(i) << std::endl;
+	}
+	//framework.show_collision_solids(window->get_render());
 }

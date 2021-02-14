@@ -10,6 +10,7 @@ namespace Globals {
 	extern LVector3 ballV;
 	extern LVector3 accelV;
 	extern PT(CollisionHandlerQueue) collision_handler;
+	extern CollisionTraverser collision_traverser;
 	extern NodePath maze;
 	extern NodePath ball;
 	extern NodePath ball_root;

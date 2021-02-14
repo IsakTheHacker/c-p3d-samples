@@ -58,12 +58,12 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 		return AsyncTask::DS_cont;
 	}
 
+	collision_traverser.traverse(window->get_render());
 	if (collision_handler->get_num_entries() > 0) {
 		collision_handler->sort_entries();
 		for (size_t i = 0; i < collision_handler->get_num_entries(); i++) {
 			PT(CollisionEntry) entry = collision_handler->get_entry(i);
 			std::string name = entry->get_into_node()->get_name();
-			std::cout << name << std::endl;
 			if (name == "wall_collide") {
 				wall_collide_handler(entry);
 			} else if (name == "ground_collide") {
@@ -72,8 +72,6 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 				lose_game(entry);
 			}
 		}
-	} else {
-		printf("No entries!\n");
 	}
 
 	if (mouseWatcher->has_mouse()) {
@@ -92,8 +90,6 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouseWatcherNode) 
 	LVector3 axis = LVector3::up().cross(ballV);
 	LRotation newRot(axis, 45.5 * dt * ballV.length());
 	ball.set_quat(prevRot * newRot);
-
-	std::cout << ball_root.get_pos() << std::endl;
 
 	return AsyncTask::DS_cont;
 }
