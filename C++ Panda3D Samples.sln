@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ball-in-maze", "ball-in-maz
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "procedural-cube", "procedural-cube\procedural-cube.vcxproj", "{21571A5B-7AA5-496D-8ECF-7B0739F0EE19}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "snake", "snake\snake.vcxproj", "{4C10C913-78A0-46C8-997A-9C4BBEC9160C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{21571A5B-7AA5-496D-8ECF-7B0739F0EE19}.Release|x64.Build.0 = Release|x64
 		{21571A5B-7AA5-496D-8ECF-7B0739F0EE19}.Release|x86.ActiveCfg = Release|Win32
 		{21571A5B-7AA5-496D-8ECF-7B0739F0EE19}.Release|x86.Build.0 = Release|Win32
+		{4C10C913-78A0-46C8-997A-9C4BBEC9160C}.Debug|x64.ActiveCfg = Debug|x64
+		{4C10C913-78A0-46C8-997A-9C4BBEC9160C}.Debug|x64.Build.0 = Debug|x64
+		{4C10C913-78A0-46C8-997A-9C4BBEC9160C}.Debug|x86.ActiveCfg = Debug|Win32
+		{4C10C913-78A0-46C8-997A-9C4BBEC9160C}.Debug|x86.Build.0 = Debug|Win32
+		{4C10C913-78A0-46C8-997A-9C4BBEC9160C}.Release|x64.ActiveCfg = Release|x64
+		{4C10C913-78A0-46C8-997A-9C4BBEC9160C}.Release|x64.Build.0 = Release|x64
+		{4C10C913-78A0-46C8-997A-9C4BBEC9160C}.Release|x86.ActiveCfg = Release|Win32
+		{4C10C913-78A0-46C8-997A-9C4BBEC9160C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
