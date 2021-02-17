@@ -4,6 +4,7 @@
 #include "ambientLight.h"
 #include "directionalLight.h"
 #include "collisionRay.h"
+#include "load_prc_file.h"
 
 //My includes
 #include "header/globals.h"
