@@ -6,6 +6,13 @@ snake::snake(WindowFramework* window, PandaFramework& framework, std::string sam
 }
 
 void snake::update() {
-	if (direction == 1) {
+	if (direction == 0) {
+		model.set_z(model, 0.01);
+	} else if (direction == 1) {
+		model.set_x(model, 0.01);
+	} else if (direction == 2) {
+		model.set_z(model, -0.01);
+	} else if (direction == 3) {
+		model.set_x(model, -0.01);
 	}
 }
