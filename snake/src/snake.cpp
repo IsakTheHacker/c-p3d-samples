@@ -2,7 +2,7 @@
 
 snake::snake(WindowFramework* window, PandaFramework& framework, std::string samplePath) {
 	model = window->load_model(framework.get_models(), samplePath + "models/ball");
-	model.reparent_to(window->get_render());
+	model.reparent_to(window->get_aspect_2d());
 }
 
 void snake::update() {
