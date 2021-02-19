@@ -27,6 +27,8 @@ void setupMaterial() {
 void initPanda(int argc, char* argv[]) {
 	using namespace Globals;
 
+	load_prc_file_data("", "win-size 600 600");
+
 	//Open framework
 	framework.open_framework(argc, argv);
 
@@ -61,7 +63,6 @@ void setupModels(std::string samplePath) {
 		trigger.node()->set_into_collide_mask(1);
 		trigger.node()->set_name("loseTrigger");
 		lose_triggers.push_back(trigger);
-		trigger.show();
 	}
 
 	//Maze ground
