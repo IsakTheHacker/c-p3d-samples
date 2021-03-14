@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{9034dbfd-c83a-49fd-ba37-99af84a7a641}</ProjectGuid>
-    <RootNamespace>ballinmaze</RootNamespace>
+    <ProjectGuid>{4c10c913-78a0-46c8-997a-9c4bbec9160c}</ProjectGuid>
+    <RootNamespace>snake</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -76,15 +76,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <ExecutablePath>C:\dev\Panda project\Panda project;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <ExecutablePath>C:\dev\Panda project\Panda project;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <ExecutablePath>C:\dev\Panda project\Panda project;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <ExecutablePath>C:\dev\Panda project\Panda project;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -143,23 +147,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Image Include="models\iron05.jpg" />
-    <Image Include="models\limba.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="models\ball.egg.pz" />
-    <None Include="models\maze.egg.pz" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\functions.cpp" />
-    <ClCompile Include="src\globals.cpp" />
-    <ClCompile Include="src\init.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\snake.cpp" />
+    <ClCompile Include="src\tasks.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\header\functions.h" />
-    <ClInclude Include="src\header\globals.h" />
-    <ClInclude Include="src\header\init.h" />
+    <ClInclude Include="src\header\snake.h" />
+    <ClInclude Include="src\header\tasks.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
