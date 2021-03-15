@@ -5,6 +5,8 @@
 #include "geomVertexWriter.h"
 #include "geomTriangles.h"
 #include "geom.h"
+#include "texturePool.h"
+#include "spotlight.h"
 
 //You can't normalize inline so this is a helper function
 LVector3 normalized(double x, double y, double z) {
@@ -68,17 +70,53 @@ PT(Geom) makeSquare(double x1, double x2, double z1, double z2, double y1, doubl
 }
 
 int main(int argc, char* argv[]) {
-	// Open a new window framework
+
+	//Open a new window framework
 	PandaFramework framework;
 	framework.open_framework(argc, argv);
 
-	// Set the window title and open the window
+	//Set the window title and open the window
 	framework.set_window_title("My Panda3D Window");
 	WindowFramework* window = framework.open_window();
 
-	// Here is room for your own code
+	//Note: it isn't particularly efficient to make every face as a separate Geom.
+	//instead, it would be better to create one Geom holding all of the faces.
+	PT(Geom) square0 = makeSquare(-1, -1, -1, 1, -1, 1);
+	PT(Geom) square1 = makeSquare(-1, 1, -1, 1, 1, 1);
+	PT(Geom) square2 = makeSquare(-1, 1, 1, 1, -1, 1);
+	PT(Geom) square3 = makeSquare(-1, 1, -1, 1, -1, -1);
+	PT(Geom) square4 = makeSquare(-1, -1, -1, -1, 1, 1);
+	PT(Geom) square5 = makeSquare(1, -1, -1, 1, 1, 1);
+	GeomNode snode("square");
+	snode.add_geom(square0);
+	snode.add_geom(square1);
+	snode.add_geom(square2);
+	snode.add_geom(square3);
+	snode.add_geom(square4);
+	snode.add_geom(square5);
 
-	// Do the main loop, equal to run() in python
+	NodePath cube = window->get_render().attach_new_node(DCAST(PandaNode, &snode));
+
+	//OpenGl by default only draws "front faces" (polygons whose vertices are
+	//specified CCW).
+	cube.set_two_sided(true);
+
+	//Init
+	PT(Texture) testTexture = TexturePool::load_texture("maps/envir-reeds.png");
+	/*framework.define_key("1", "", self.toggleTex);
+	framework.define_key("2", "", self.toggleLightsSide);
+	framework.define_key("3", "", self.toggleLightsUp);*/
+
+	bool LightsOn = false;
+	bool LightsOn1 = false;
+	PT(Spotlight) slight = new Spotlight("slight");
+	slight->set_color((1, 1, 1, 1));
+	PerspectiveLens lens;
+	slight->set_lens(DCAST(Lens, &lens));
+	NodePath slnp = window->get_render().attach_new_node(slight);
+	NodePath slnp1 = window->get_render().attach_new_node(slight);
+
+	//Do the main loop
 	framework.main_loop();
 	framework.close_framework();
 	return 0;
