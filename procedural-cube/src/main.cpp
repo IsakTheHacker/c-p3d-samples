@@ -102,7 +102,7 @@ int main(int argc, char* argv[]) {
 	cube.set_two_sided(true);
 
 	//Init
-	PT(Texture) testTexture = TexturePool::load_texture("maps/envir-reeds.png");
+	PT(Texture) testTexture = TexturePool::load_texture("models/envir-reeds.png");
 	/*framework.define_key("1", "", self.toggleTex);
 	framework.define_key("2", "", self.toggleLightsSide);
 	framework.define_key("3", "", self.toggleLightsUp);*/
