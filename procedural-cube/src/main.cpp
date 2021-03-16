@@ -19,6 +19,18 @@ void toggleTex(const Event* theEvent, void* data) {
 		objects.first.set_texture(objects.second);
 	}
 }
+void toggleLightsSide(const Event* theEvent, void* data) {
+	std::tuple<NodePath, NodePath, bool&, NodePath> objects = *(std::tuple<NodePath, NodePath, bool&, NodePath>*)data;
+	std::get<2>(objects) = !std::get<2>(objects);
+
+	if (std::get<2>(objects)) {
+		std::get<3>(objects).set_light(std::get<1>(objects));
+		std::get<1>(objects).set_pos(std::get<0>(objects), 10, -400, 0);
+		std::get<1>(objects).look_at(10, 0, 0);
+	} else {
+		std::get<3>(objects).set_light_off(std::get<1>(objects));
+	}
+}
 
 // This task runs for two seconds, then prints done
 AsyncTask::DoneStatus rotateTask(GenericAsyncTask* task, void* data) {
