@@ -10,6 +10,16 @@
 #include "asyncTaskManager.h"
 
 
+//Keyboard events
+void toggleTex(const Event* theEvent, void* data) {
+	std::pair<NodePath, PT(Texture)> objects = *(std::pair<NodePath, PT(Texture)>*)data;
+	if (objects.first.has_texture()) {
+		objects.first.set_texture_off(1);
+	} else {
+		objects.first.set_texture(objects.second);
+	}
+}
+
 // This task runs for two seconds, then prints done
 AsyncTask::DoneStatus rotateTask(GenericAsyncTask* task, void* data) {
 	NodePath cube = *(NodePath*)data;
@@ -115,9 +125,9 @@ int main(int argc, char* argv[]) {
 
 	//Init
 	PT(Texture) testTexture = TexturePool::load_texture("models/envir-reeds.png");
-	/*framework.define_key("1", "", self.toggleTex);
+	framework.define_key("1", "", self.toggleTex);
 	framework.define_key("2", "", self.toggleLightsSide);
-	framework.define_key("3", "", self.toggleLightsUp);*/
+	framework.define_key("3", "", self.toggleLightsUp);
 
 	bool LightsOn = false;
 	bool LightsOn1 = false;
