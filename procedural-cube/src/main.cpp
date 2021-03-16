@@ -7,6 +7,16 @@
 #include "geom.h"
 #include "texturePool.h"
 #include "spotlight.h"
+#include "asyncTaskManager.h"
+
+
+// This task runs for two seconds, then prints done
+AsyncTask::DoneStatus rotateTask(GenericAsyncTask* task, void* data) {
+	NodePath cube = *(NodePath*)data;
+	cube.set_hpr(cube.get_hpr() + 6);
+	/*cube.hprInterval(1.5, (360, 360, 360)).loop()*/
+	return AsyncTask::DS_cont;
+}
 
 //You can't normalize inline so this is a helper function
 LVector3 normalized(double x, double y, double z) {
@@ -78,6 +88,8 @@ int main(int argc, char* argv[]) {
 	//Set the window title and open the window
 	framework.set_window_title("My Panda3D Window");
 	WindowFramework* window = framework.open_window();
+	NodePath camera = window->get_camera_group();
+	camera.set_pos(0, -10, 0);
 
 	//Note: it isn't particularly efficient to make every face as a separate Geom.
 	//instead, it would be better to create one Geom holding all of the faces.
@@ -94,7 +106,7 @@ int main(int argc, char* argv[]) {
 	snode.add_geom(square3);
 	snode.add_geom(square4);
 	snode.add_geom(square5);
-
+	
 	NodePath cube = window->get_render().attach_new_node(DCAST(PandaNode, &snode));
 
 	//OpenGl by default only draws "front faces" (polygons whose vertices are
@@ -115,6 +127,9 @@ int main(int argc, char* argv[]) {
 	slight->set_lens(DCAST(Lens, &lens));
 	NodePath slnp = window->get_render().attach_new_node(slight);
 	NodePath slnp1 = window->get_render().attach_new_node(slight);
+
+	PT(GenericAsyncTask) task = new GenericAsyncTask("MyTaskName", &rotateTask, (void*)&cube);
+	AsyncTaskManager::get_global_ptr()->add(task);
 
 	//Do the main loop
 	framework.main_loop();
