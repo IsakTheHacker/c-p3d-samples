@@ -19,7 +19,7 @@ void toggleTex(const Event* theEvent, void* data) {
 		objects.first.set_texture(objects.second);
 	}
 }
-void toggleLightsSide(const Event* theEvent, void* data) {
+void toggleLights(const Event* theEvent, void* data) {
 	std::tuple<NodePath, NodePath, bool&, NodePath> objects = *(std::tuple<NodePath, NodePath, bool&, NodePath>*)data;
 	std::get<2>(objects) = !std::get<2>(objects);
 
