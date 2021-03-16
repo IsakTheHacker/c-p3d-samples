@@ -13,7 +13,7 @@
 // This task runs for two seconds, then prints done
 AsyncTask::DoneStatus rotateTask(GenericAsyncTask* task, void* data) {
 	NodePath cube = *(NodePath*)data;
-	cube.set_hpr(cube.get_hpr() + 6);
+	cube.set_hpr(cube.get_hpr() + 250 * AsyncTaskManager::get_global_ptr()->get_clock()->get_dt());
 	/*cube.hprInterval(1.5, (360, 360, 360)).loop()*/
 	return AsyncTask::DS_cont;
 }
