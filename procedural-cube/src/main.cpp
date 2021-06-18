@@ -18,10 +18,11 @@ void toggleTex(const Event* theEvent, void* data) {
 	} else {
 		objects.first.set_texture(objects.second);
 	}
+	std::cout << "toggle tex called!" << std::endl;
 }
 void toggleLights(const Event* theEvent, void* data) {
-	std::tuple<NodePath, NodePath, bool&, NodePath> objects = *(std::tuple<NodePath, NodePath, bool&, NodePath>*)data;
-	std::get<2>(objects) = !std::get<2>(objects);
+	std::tuple<NodePath, NodePath, bool*, NodePath> objects = *(std::tuple<NodePath, NodePath, bool*, NodePath>*)data;
+	*std::get<2>(objects) = !*std::get<2>(objects);
 
 	if (std::get<2>(objects)) {
 		std::get<3>(objects).set_light(std::get<1>(objects));
@@ -30,6 +31,7 @@ void toggleLights(const Event* theEvent, void* data) {
 	} else {
 		std::get<3>(objects).set_light_off(std::get<1>(objects));
 	}
+	std::cout << "toggle lights called!" << std::endl;
 }
 
 // This task runs for two seconds, then prints done
@@ -131,15 +133,11 @@ int main(int argc, char* argv[]) {
 	
 	NodePath cube = window->get_render().attach_new_node(DCAST(PandaNode, &snode));
 
-	//OpenGl by default only draws "front faces" (polygons whose vertices are
+	//OpenGL by default only draws "front faces" (polygons whose vertices are
 	//specified CCW).
 	cube.set_two_sided(true);
 
 	//Init
-	PT(Texture) testTexture = TexturePool::load_texture("models/envir-reeds.png");
-	framework.define_key("1", "", self.toggleTex);
-	framework.define_key("2", "", self.toggleLightsSide);
-	framework.define_key("3", "", self.toggleLightsUp);
 
 	bool LightsOn = false;
 	bool LightsOn1 = false;
@@ -149,6 +147,14 @@ int main(int argc, char* argv[]) {
 	slight->set_lens(DCAST(Lens, &lens));
 	NodePath slnp = window->get_render().attach_new_node(slight);
 	NodePath slnp1 = window->get_render().attach_new_node(slight);
+
+	PT(Texture) testTexture = TexturePool::load_texture("models/envir-reeds.png");
+	std::pair<NodePath, PT(Texture)> pair(cube, testTexture);
+	std::tuple<NodePath, NodePath, bool*, NodePath> tuple(cube, slnp, &LightsOn, window->get_render());
+	std::tuple<NodePath, NodePath, bool*, NodePath> tuple1(cube, slnp1, &LightsOn1, window->get_render());
+	framework.define_key("s", "1-Key", toggleTex, (void*)&pair);
+	framework.define_key("2", "2-Key", toggleLights, (void*)&tuple);
+	framework.define_key("3", "3-Key", toggleLights, (void*)&tuple1);
 
 	PT(GenericAsyncTask) task = new GenericAsyncTask("MyTaskName", &rotateTask, (void*)&cube);
 	AsyncTaskManager::get_global_ptr()->add(task);
