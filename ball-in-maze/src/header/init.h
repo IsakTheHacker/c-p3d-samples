@@ -7,8 +7,8 @@
 #include "load_prc_file.h"
 
 //My includes
-#include "header/globals.h"
-#include "header/functions.h"
+#include "globals.h"
+#include "functions.h"
 
 void setupLighting();
 void setupMaterial();

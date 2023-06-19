@@ -7,7 +7,7 @@
 #include "mouseWatcher.h"
 
 //My includes
-#include "header/globals.h"
+#include "globals.h"
 
 //Exit function
 void panda_exit(const Event* theEvent, void* data);
