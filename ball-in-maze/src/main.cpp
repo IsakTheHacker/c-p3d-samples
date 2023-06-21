@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
 	//Start game
 	new_game();
 	
-	//Do the main loop
+	//Do the main loop (start 3d rendering and event processing)
 	framework.main_loop();
 	framework.close_framework();
 	return 0;

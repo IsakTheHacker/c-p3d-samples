@@ -16,9 +16,10 @@ namespace Globals {
 	extern NodePath ball;
 	extern NodePath ball_root;
 	extern std::vector<NodePath> lose_triggers;
+	extern NodePath title, instructions;
 
 	//Some constants for the program
-	extern int ACCELERATION;
-	extern int MAX_SPEED;
-	extern int MAX_SPEED_SQ;
+	extern const int ACCELERATION;
+	extern const int MAX_SPEED;
+	extern const int MAX_SPEED_SQ;
 }
