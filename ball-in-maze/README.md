@@ -1,6 +1,6 @@
  Translation of Python ball-in-maze sample from Panda3D.
 
-[Original](https://github.com/panda3d/panda3d/samples/ball-in-maze):
+[Original](https://github.com/panda3d/panda3d/tree/v1.10.13/samples/ball-in-maze):
 
 >Author: Shao Zhang, Phil Saltzman
 >

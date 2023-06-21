@@ -60,6 +60,7 @@ void initPanda(int argc, char* argv[]) {
 	title.set_pos(1.0-0.1, 0, -1+0.1); // BottomRight == (1,0,-1)
 	title.set_scale(0.08);
 	text_node->set_shadow_color(0.0f, 0.0f, 0.0f, 0.5f);
+	text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
 
 	text_node = new TextNode("instructions");
 	instructions = NodePath(text_node);
@@ -70,6 +71,7 @@ void initPanda(int argc, char* argv[]) {
 	text_node->set_text_color(1, 1, 1, 1);
 	instructions.set_scale(0.06);
 	text_node->set_shadow_color(0.0f, 0.0f, 0.0f, 0.5f);
+	text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
 
 	//Keyboard definitions
 	window->enable_keyboard();
