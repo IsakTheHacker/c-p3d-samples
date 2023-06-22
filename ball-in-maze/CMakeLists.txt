@@ -46,3 +46,6 @@ set(SRC main.cpp functions.cpp init.cpp globals.cpp)
 list(TRANSFORM SRC PREPEND src/)
 add_executable(${EXEC_NAME} ${SRC})
 target_link_libraries(${EXEC_NAME} Eigen3::Eigen ${PANDALIB})
+
+#install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME}" TYPE BIN)
+#install(FILES models DESTINATION ???)

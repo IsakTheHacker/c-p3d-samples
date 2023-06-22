@@ -90,13 +90,13 @@ NodePath gen_label_text(const char *text, int i)
     TextNode *text_node = new TextNode(text);
     auto ret = NodePath(text_node);
     text_node->set_text(text);
-    title.reparent_to(window->get_aspect_2d()); // a2d
-    title.set_pos(-1.0 + 0.07, 0, 1.0 - 0.6 * i - 0.1); // TopLeft == (-1,0,1)
+    ret.reparent_to(window->get_aspect_2d()); // a2d
+    ret.set_pos(-1.0 + 0.07, 0, 1.0 - 0.06 * i - 0.1); // TopLeft == (-1,0,1)
     text_node->set_text_color(1, 1, 1, 1);
     text_node->set_align(TextNode::A_left);
     text_node->set_shadow_color(0.0f, 0.0f, 0.0f, 0.5f);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
-    title.set_scale(0.05);
+    ret.set_scale(0.05);
     return ret;
 }
 
@@ -139,6 +139,7 @@ void init(void)
     // Mouse-based camera control requires manual enable.  Don't do that.
 
     // Load the background starfield.
+    // FIXME:  I am doing something wrong here.  It doesn't do anything
     window->get_graphics_output()->set_clear_color(LColor(0, 0, 0, 1));
     window->get_graphics_output()->set_clear_color_active(true);
 

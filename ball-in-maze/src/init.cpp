@@ -55,8 +55,6 @@ void initPanda(int argc, char* argv[]) {
 	title.reparent_to(window->get_aspect_2d()); // a2d
 	text_node->set_align(TextNode::A_right);
 	text_node->set_text_color(1, 1, 1, 1);
-	//auto frame = text_node->get_frame_actual();
-	//auto height = frame[3] - frame[2];
 	title.set_pos(1.0-0.1, 0, -1+0.1); // BottomRight == (1,0,-1)
 	title.set_scale(0.08);
 	text_node->set_shadow_color(0.0f, 0.0f, 0.0f, 0.5f);
