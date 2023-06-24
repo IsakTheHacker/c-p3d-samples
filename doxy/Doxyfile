@@ -1,0 +1,86 @@
+# Difference with default Doxyfile 1.9.4
+PROJECT_NAME           = Panda3D
+PROJECT_BRIEF          = "Panda3D is a game engine, a framework for 3D rendering and game development for Python and C++ programs."
+PROJECT_NUMBER         = 1.10.13
+PROJECT_LOGO           = panda3d.png
+USE_MDFILE_AS_MAINPAGE = ../README.md
+
+INPUT                  = ../built/include ../README.md \
+                         ../contrib/src  ../dmodels/src  ../panda/src \
+			 ../direct/src   ../dtool/src    ../pandatool/src
+RECURSIVE              = YES
+EXTRACT_ALL            = YES
+#EXAMPLE_PATH           = ../samples
+#EXAMPLE_RECURSIVE      = YES
+# *.I is impl, not API, but docs are there; see below.
+# *.cxx is way overkill, but again, docs are there rather than in .h.
+FILE_PATTERNS          = *.[hIT] *.cxx
+EXTENSION_MAPPING      = I=C++ T=C++
+# I suppose just using non-abs file names might work, too, but for now, just strip:
+STRIP_FROM_PATH        = ../built/include
+
+# in-line non-API include files
+#   _src needs macros expanded, and in-lining regardless
+#   .I is not part of API, but docs are in .I files, so they need in-lining
+INPUT_FILTER           = ./expinc
+MACRO_EXPANSION        = YES
+SKIP_FUNCTION_MACROS   = NO
+# even with MACRO_EXPANSION, these don't get interpreted correctly
+# so force it.
+PREDEFINED             = PUBLISHED:=public INLINE:=inline
+
+# remove:
+#  .I (not even included in list above): expanded in-line
+#    This is due to poor documentation practices.  Docs should be in the
+#    public header (.h) rather than the source (.I).
+#    Or, at the very least, "\headerfile fname.h" should be included.
+#    Not part of public API, anyway (do not include diretly)
+#    In fact, some docs are only present in the C++ source, so their docs
+#    should be extracted as well, I guess.  I have no idea how.
+#  _src (pseudo-templates expanded in-line)
+#    Not part of public API, anyway (do not include diretly)
+#  _ext (Python interface)
+#    Private files; shouldn't even be here.
+#  aa_luse.h (expanded in-line in luse.h)
+#    Not part of public API, anyway (do not include diretly)
+#  test_lib.h (what is this even doing here?)
+#  cpp*
+#    Yeah, I suppose this might be part of the API, but I don't care.
+#    It's too messy/full of internal-use-only symbols.  Why would I
+#    want to parse C++ code in my game, anyway?
+#  vrmlLexer* vrmlParser* xLexer* xParser* lexer* parser* dcLexer* dcParser*
+#    Raw parser includes.  These should not be in the public API.
+# src/*.h - only use "installed" headers
+
+EXCLUDE                = ../built/include/parser-inc
+EXCLUDE_PATTERNS       = *_src.h *_ext.h aa_luse.h test_lib.h cpp* \
+                         *[lL]exer* vrmlParser* xParser* parser* dcParser* \
+                         */contrib/src/*.[hIT]  */dmodels/src/*.[hIT]  */panda/src/*.[hIT] \
+			 */direct/src/*.[hIT]   */dtool/src/*.[hIT]    */pandatool/src/*.[hIT]
+
+ALLOW_UNICODE_NAMES    = YES
+INLINE_INHERITED_MEMB  = YES
+BUILTIN_STL_SUPPORT    = YES
+# I can't filter out the non-include files from the files list.
+# Disabling the source browser only disables the code, not the file entry
+#SOURCE_BROWSER         = YES
+# and I can't get a list of functions without the files menu.
+# god, I hate doxygen, and everyone who uses/loves it.
+#SHOW_FILES             = NO
+SHOW_NAMESPACES        = NO
+DIRECTORY_GRAPH        = NO
+FILTER_SOURCE_FILES    = YES
+# The include graph will also reference the C++ files
+INCLUDED_BY_GRAPH      = NO
+INCLUDE_GRAPH          = NO
+SHOW_USED_FILES        = NO
+HTML_FORMULA_FORMAT    = svg
+DOT_IMAGE_FORMAT       = svg
+USE_MATHJAX            = YES
+COLLABORATION_GRAPH    = NO
+
+LOOKUP_CACHE_SIZE      = 2
+NUM_PROC_THREADS       = 9
+DOT_NUM_THREADS        = 9
+
+ALPHABETICAL_INDEX = YES

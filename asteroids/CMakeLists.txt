@@ -32,21 +32,34 @@ include_directories("${PANDA_H}")
 # Even though the libraries are probably all together in one location,
 # it's not as easy to just look in the same place.  Instead, I look for
 # every required library in the standard places, again looking in a
-# panda3d subdirectory.  Yes, this means if this code doesn't find it,
-# you'll have a lot of typing to do to correct it.  Feel free to fix it
-# and report a fix.
-set(PANDALIB)
-foreach(x panda pandaexpress p3dtoolconfig p3dtool p3framework)
-  find_library(PANDA-${x} ${x} PATH_SUFFIXES panda3d REQUIRED)
-  list(APPEND PANDALIB "${PANDA-${x}}")
+# panda3d subdirectory.  The HINT option allows it to at least try
+# the same place first, but it's possible you'll have a lot of typing
+# to do if cmake can't just find it.
+find_library(PANDALIB panda PATH_SUFFIXES panda3d REQUIRED)
+cmake_path(SET PANDALIB_DIR "${PANDALIB}")
+cmake_path(GET PANDALIB_DIR PARENT_PATH PANDALIB_DIR)
+set(PANDALIBS "${PANDALIB}")
+foreach(x p3framework p3direct pandaexpress p3dtoolconfig p3dtool)
+  find_library(PANDA-${x} ${x} HINT "${PANDALIB}" PATH_SUFFIXES panda3d REQUIRED)
+  list(APPEND PANDALIBS "${PANDA-${x}}")
 endforeach()
+
+# Finally, in order to run these demos, I bake in the samples dir, if present.
+find_file(SAMPLE_DIR samples/${EXEC_NAME}/main.py 
+          PATHS /usr/share /usr/local/share  PATH_SUFFIXES panda3d
+          DOC "The original Python demo (for assets)")
+if(SAMPLE_DIR)
+  cmake_path(SET SAMPLE_DIR "${SAMPLE_DIR}")
+  cmake_path(GET SAMPLE_DIR PARENT_PATH SAMPLE_DIR)
+  add_compile_definitions("SAMPLE_DIR=\"${SAMPLE_DIR}\"")
+endif()
+
+# And my own simple extensions to make porting easier
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../supt")
 
 #### Build executable
 set(SRC main.cpp)
-list(TRANSFORM SRC PREPEND src/)
-add_executable(${EXEC_NAME} ${SRC})
-target_link_libraries(${EXEC_NAME} Eigen3::Eigen ${PANDALIB})
+add_executable(${EXEC_NAME} ${SRC} ../supt/anim_supt.cpp)
+target_link_libraries(${EXEC_NAME} Eigen3::Eigen ${PANDALIBS})
 
-#install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME}" TYPE BIN)
-#install(FILES models DESTINATION ???)
-#install(FILES textures DESTINATION ???)
+install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME}" TYPE BIN)

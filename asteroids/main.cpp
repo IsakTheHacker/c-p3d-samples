@@ -1,11 +1,32 @@
-
+/*
+ *  Translation of Python asteroids sample from Panda3D.
+ *  https://github.com/panda3d/panda3d/tree/v1.10.13/samples/asteroids
+ *
+ * Original C++ conversion by Thomas J. Moore June 2023.
+ *
+ * Comments are mostly extracted from the Python sample, such as:
+ *
+ * Author: Shao Zhang, Phil Saltzman, and Greg Lindley
+ * Last Updated: 2015-03-13
+ *
+ * This tutorial demonstrates the use of tasks. A task is a function that
+ * gets called once every frame. They are good for things that need to be
+ * updated very often. In the case of asteroids, we use tasks to update
+ * the positions of all the objects, and to check if the bullets or the
+ * ship have hit the asteroids.
+ *
+ * Note: This definitely a complicated example. Tasks are the cores of
+ * most games so it seemed appropriate to show what a full game in Panda
+ * could look like.
+ */
+#include <pandaFramework.h>
 #include <textNode.h>
 #include <transparencyAttrib.h>
 #include <samplerState.h>
 
-// "globals"
-#include <pandaFramework.h>
-namespace Globals {
+#include "anim_supt.h"
+
+namespace { // don't export/pollute the global namespace
 // Constants that will control the behavior of the game. It is good to
 // group constants like this so that they can be changed once without
 // having to find everywhere they are used in code
@@ -33,7 +54,11 @@ const PN_stdfloat
     PandaFramework framework;
     WindowFramework *window;
     Randomizer rands;
-    std::string sample_path;
+    std::string sample_path
+#ifdef SAMPLE_DIR
+	= SAMPLE_DIR "/"
+#endif
+	;
     NodePath title;
     NodePath escape_text, leftkey_text, rightkey_text, upkey_text, spacekey_text;
     NodePath bg, ship;
@@ -45,8 +70,6 @@ const PN_stdfloat
 	k_turn_left, k_turn_right, k_accel, k_fire, k_num, k_pressed = 32
     };
     bool keys[k_num];
-};
-using namespace Globals;
 
 // This helps reduce the amount of code used by loading objects, since all of
 // the objects are pretty much the same.
@@ -112,6 +135,7 @@ void init(void)
     // everything like ShowBase, but it does provide convenient functions
     // to do so.
     framework.open_framework();
+    init_interval();
 
     //Set the window title and open new window
     framework.set_window_title("Asteroids - C++ Panda3D Samples");
@@ -154,10 +178,13 @@ void init(void)
     memset(keys, 0, sizeof(keys)); // all false
 
     window->enable_keyboard();
-    // Instead of definint ESC
-    //framework.define_key("escape", "Quit", exit, 0);
-    // Use the default keybindings (partial conflict, but OK)
+#if 0 // Instead of defining ESC
+    framework.define_key("escape", "Quit", [](const Event *, void *){
+        framework.set_exit_flag();
+    }, 0);
+#else // Use the default keybindings (partial conflict, but OK)
     framework.enable_default_keys();
+#endif
 
     // Other keys events set the appropriate value in our key array
     framework.define_key("arrow_left",     "Turn Left",  set_key, (void *)(k_turn_left | k_pressed));
@@ -181,9 +208,10 @@ void init(void)
     auto game_task = new GenericAsyncTask("game_loop", game_loop, 0);
     // The AsyncTaskManager is the task manager that actually executes the
     // AsyncTask each frame.  There is one global that most users should
-    // always use, found by get_global_ptr().  The add method queues
+    // always use, found by AsyncTaskMgr::get_global_ptr().  As a convenience,
+    // it is also provided by framework.get_task_mgr().  The add method queues
     // and effectively takes ownership of the task.
-    AsyncTaskManager::get_global_ptr()->add(game_task);
+    framework.get_task_mgr().add(game_task);
 
     // Stores the time at which the next bullet may be fired.
     next_bullet = 0.0;
@@ -386,19 +414,17 @@ AsyncTask::DoneStatus game_loop(GenericAsyncTask *task, void *)
 	    for(auto &i: bullets)
 		i.remove_node();
 	    bullets.clear();          // Clear the bullet list
-            ship.hide();           // Hide the ship
+            ship.hide();              // Hide the ship
 	    // Reset the velocity
 	    set_velocity(ship, LVector3(0, 0, 0));
-	    auto task = new GenericAsyncTask("restart", [](GenericAsyncTask *,void *) {
-		ship.set_r(0);  // Reset heading
-		ship.set_x(0);  // Reset position X
-		ship.set_z(0);  // Reset position Y (Z for Panda)
-		ship.show();    // Show the ship
-		spawn_asteroids();  // Remake asteroids
-		return AsyncTask::DS_done;
-	    }, 0);
-	    task->set_delay(2);          // Wait 2 seconds first
-	    AsyncTaskManager::get_global_ptr()->add(task);
+	    (new Sequence({
+		new Wait(2),                 // Wait 2 seconds
+		new Func(ship.set_r(0)),     // Reset heading
+		new Func(ship.set_x(0)),     // Reset position x
+		new Func(ship.set_z(0)),     // Reset position Y (Z for Panda)
+		new Func(ship.show()),       // Show the ship
+		new Func(spawn_asteroids())  // Remake asteroids
+	    }))->start();
 	    return AsyncTask::DS_cont;
 	}
     }
@@ -524,11 +550,12 @@ void fire(double time)
     // Finally, add the new bullet to the list
     bullets.push_back(bullet);
 }
+}
 
 int main(int argc, char **argv)
 {
-    if(argc > 1 && !strcmp(argv[1], "-vs"))
-	sample_path = "../../../";
+    if(argc > 1)
+	sample_path = argv[1];
     init();
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();

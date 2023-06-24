@@ -1,0 +1,103 @@
+#include <asyncTaskManager.h>
+#include <asyncTaskSequence.h>
+#include <asyncTaskPause.h>
+#include <genericAsyncTask.h>
+#include <initializer_list>
+
+typedef std::initializer_list<AsyncTask *> AsyncTaskList;
+
+class Sequence : public AsyncTaskSequence {
+  private:
+    void init(const AsyncTaskList tasks) {
+	for(auto t : tasks)
+	    add_task(t);
+    }
+  public:
+    Sequence(const std::string &name, const AsyncTaskList tasks) :
+	AsyncTaskSequence(name) { init(tasks); }
+    Sequence(const AsyncTaskList tasks) :
+	AsyncTaskSequence("<Sequence>") { init(tasks); }
+    void start(void) { AsyncTaskManager::get_global_ptr()->add(this); }
+};
+
+// Since I don't feel like figuring out how to get chains to work, or add
+// another manager to service these, "Parallel" just means "Sequence" but
+// without waiting for each one to complete before running the next.  Basically,
+// cooperative multitasking (which I think is what the task manager does by
+// default, anyway if you don't add threads).
+class Parallel : public AsyncTask, public AsyncTaskCollection {
+  private:
+    void init(const AsyncTaskList tasks) {
+	for(auto t : tasks)
+	    add_task(t);
+    }
+  public:
+    Parallel(const std::string &name, const AsyncTaskList tasks) :
+	AsyncTaskCollection(), AsyncTask(name) { init(tasks); }
+    Parallel(const AsyncTaskList tasks) :
+	AsyncTaskCollection(), AsyncTask("<Parallel>") { init(tasks); }
+    DoneStatus do_task() {
+	for(unsigned i = 0; i < size(); i++)
+	   if(get_task(i)->is_alive())
+		return DS_cont;
+	return DS_done;
+    }
+    void upon_birth(AsyncTaskManager *manager) {
+	for(unsigned i = 0; i < size(); i++) {
+	    // delay at least as long as the longest delay
+	    auto t = get_task(i);
+	    if(t->has_delay()) {
+		if(!_has_delay || _delay < t->get_delay())
+		    _delay = t->get_delay();
+		_has_delay = true;
+	    }
+	    manager->add(t);
+	}
+    }
+    void upon_death(AsyncTaskManager *manager, bool clean_exit) {
+	if(!clean_exit)
+	    for(unsigned i = 0; i < size(); i++)
+		manager->remove(get_task(i));
+    }
+    void start(void) { AsyncTaskManager::get_global_ptr()->add(this); }
+    // NOTE: adding members requires this:
+    ALLOC_DELETED_CHAIN(Parallel);
+};
+typedef AsyncTaskPause Wait;
+#define Func(fn) GenericAsyncTask(#fn, [](GenericAsyncTask *, void *) {fn; return AsyncTask::DS_done;}, 0)
+
+// Very simple linear interpolator.  No end snap modes.
+template<class C, class T> class LerpFunc : public AsyncTask {
+  public:
+    LerpFunc(std::string name, C *what, void(C::*setter)(T) , T start, T end,
+	     double duration) :
+	AsyncTask(name), _what(what), _setter(setter), _start(start),
+	_diff(end - start), _duration(duration) {}
+    LerpFunc(C *what, void(C::*setter)(T), T start, T end, double duration) :
+	AsyncTask("<Lerp>"), _what(what), _setter(setter), _start(start),
+	_diff(end - start), _duration(duration) {}
+    DoneStatus do_task() {
+	double curt = get_elapsed_time() / _duration;
+	if(curt >= 1) {
+	    (_what->*_setter)(_start + _diff);
+	    return DS_done;
+	}
+	(_what->*_setter)(_start + _diff * curt);
+	return DS_cont;
+    }
+    // NOTE: adding members requires this:
+    ALLOC_DELETED_CHAIN(LerpFunc);
+  protected:
+    C *_what;
+    void(C::*_setter)(T);
+    T _start, _diff;
+    double _duration;
+};
+
+#include <pandaNode.h>
+// Traverse the tree depth-first, left-to-right.  Assumes only one
+// parent per node.  When "from" is non-NULL, continue search at its
+// sibling, then move up and right from its parent, etc.
+// No attempts are made to detect loops, or accomodate multiple parents.
+PandaNode *find_node_type(const PandaNode *root, const TypeHandle &t,
+                          const PandaNode *from = nullptr);
