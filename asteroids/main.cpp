@@ -57,8 +57,6 @@ const PN_stdfloat
 	= SAMPLE_DIR "/"
 #endif
 	;
-    NodePath title;
-    NodePath escape_text, leftkey_text, rightkey_text, upkey_text, spacekey_text;
     NodePath bg, ship;
     PN_stdfloat next_bullet;
     std::vector<NodePath> bullets, asteroids;
@@ -105,19 +103,18 @@ NodePath load_object(std::string tex, PN_stdfloat scale = 1, LPoint2 pos={0,0},
 
 // Macro-like function used to reduce the amount to code needed to create the
 // on screen instructions
-NodePath gen_label_text(const char *text, int i)
+void gen_label_text(const char *text, int i)
 {
     TextNode *text_node = new TextNode(text);
-    auto ret = NodePath(text_node);
+    auto path = NodePath(text_node);
     text_node->set_text(text);
-    ret.reparent_to(window->get_aspect_2d()); // a2d
-    ret.set_pos(-1.0 + 0.07, 0, 1.0 - 0.06 * i - 0.1); // TopLeft == (-1,0,1)
+    path.reparent_to(window->get_aspect_2d()); // a2d
+    path.set_pos(-1.0 + 0.07, 0, 1.0 - 0.06 * i - 0.1); // TopLeft == (-1,0,1)
     text_node->set_text_color(1, 1, 1, 1);
     text_node->set_align(TextNode::A_left);
     text_node->set_shadow_color(0.0f, 0.0f, 0.0f, 0.5f);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
-    ret.set_scale(0.05);
-    return ret;
+    path.set_scale(0.05);
 }
 
 // forward decls
@@ -142,20 +139,20 @@ void init(void)
     // There is no convenient "OnScreenText" class, although one could
     // be written.  Instead, here are the manual steps:
     TextNode *text_node = new TextNode("title");
-    title = NodePath(text_node);
+    auto text = NodePath(text_node);
     text_node->set_text("Panda3D: Tutorial - Tasks");
-    title.reparent_to(window->get_aspect_2d()); // a2d
-    title.set_scale(0.07);
+    text.reparent_to(window->get_aspect_2d()); // a2d
+    text.set_scale(0.07);
     text_node->set_align(TextNode::A_right);
-    title.set_pos(1.0-0.1, 0, -1+0.1); // BottomRight == (1,0,-1)
+    text.set_pos(1.0-0.1, 0, -1+0.1); // BottomRight == (1,0,-1)
     text_node->set_text_color(1, 1, 1, 1);
     text_node->set_shadow_color(0.0f, 0.0f, 0.0f, 0.5f);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
-    escape_text = gen_label_text("ESC: Quit", 0);
-    leftkey_text = gen_label_text("[Left Arrow]: Turn Left (CCW)", 1);
-    rightkey_text = gen_label_text("[Right Arrow]: Turn Right (CW)", 2);
-    upkey_text = gen_label_text("[Up Arrow]: Accelerate", 3);
-    spacekey_text = gen_label_text("[Space Bar]: Fire", 4);
+    gen_label_text("ESC: Quit", 0);
+    gen_label_text("[Left Arrow]: Turn Left (CCW)", 1);
+    gen_label_text("[Right Arrow]: Turn Right (CW)", 2);
+    gen_label_text("[Up Arrow]: Accelerate", 3);
+    gen_label_text("[Space Bar]: Fire", 4);
 
     // Mouse-based camera control requires manual enable.  Don't do that.
 

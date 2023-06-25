@@ -28,9 +28,6 @@ namespace { // don't export/pollute the global namespace
 // they need to all be delcared at the top.
 PandaFramework framework;
 WindowFramework *window;
-NodePath title;
-NodePath escape_event_text, akey_event_text, skey_event_text,
-	 kkey_event_text, lkey_event_text;
 NodePath ring, robot[2];
 PT(AnimControl) left_punch[2], right_punch[2], head_up[2], head_down[2];
 PT(Sequence) punch_left[2], punch_right[2], reset_head[2];
@@ -43,17 +40,16 @@ std::string sample_path
 
 // Macro-like function used to reduce the amount to code needed to create the
 // on screen instructions
-NodePath gen_label_text(const char *text, int i)
+void gen_label_text(const char *text, int i)
 {
     TextNode *text_node = new TextNode(text);
-    auto ret = NodePath(text_node);
+    auto path = NodePath(text_node);
     text_node->set_text(text);
-    ret.reparent_to(window->get_aspect_2d()); // a2d
-    ret.set_scale(0.05);
-    ret.set_pos(-1.0 + 0.1, 0, 1.0 - 0.1 - 0.07 * i); // TopLeft == (-1,0,1)
+    path.reparent_to(window->get_aspect_2d()); // a2d
+    path.set_scale(0.05);
+    path.set_pos(-1.0 + 0.1, 0, 1.0 - 0.1 - 0.07 * i); // TopLeft == (-1,0,1)
     text_node->set_text_color(1, 1, 1, 1);
     text_node->set_align(TextNode::A_left);
-    return ret;
 }
 
 void try_punch(const Event *, void *);
@@ -77,19 +73,19 @@ void init()
     // There is no convenient "OnScreenText" class, although one could
     // be written.  Instead, here are the manual steps:
     TextNode *text_node = new TextNode("title");
-    title = NodePath(text_node);
+    auto text = NodePath(text_node);
     text_node->set_text("Panda3D: Tutorial - Actors");
-    title.reparent_to(window->get_aspect_2d()); // a2d
+    text.reparent_to(window->get_aspect_2d()); // a2d
     // style = 1 -> plain (default)
     text_node->set_text_color(0, 0, 0, 1);
-    title.set_pos(1.0-0.2, 0, -1+0.1); // BottomRight == (1,0,-1)
+    text.set_pos(1.0-0.2, 0, -1+0.1); // BottomRight == (1,0,-1)
     text_node->set_align(TextNode::A_right);
-    title.set_scale(0.09);
-    escape_event_text = gen_label_text("ESC: Quit", 0);
-    akey_event_text = gen_label_text("[A]: Robot 1 Left Punch", 1);
-    skey_event_text = gen_label_text("[S]: Robot 1 Right Punch", 2);
-    kkey_event_text = gen_label_text("[K]: Robot 2 Left Punch", 3);
-    lkey_event_text = gen_label_text("[L]: Robot 2 Right Punch", 4);
+    text.set_scale(0.09);
+    gen_label_text("ESC: Quit", 0);
+    gen_label_text("[A]: Robot 1 Left Punch", 1);
+    gen_label_text("[S]: Robot 1 Right Punch", 2);
+    gen_label_text("[K]: Robot 2 Left Punch", 3);
+    gen_label_text("[L]: Robot 2 Right Punch", 4);
 
     // Set the camera in a fixed position
     // note: mouse already disabled by default

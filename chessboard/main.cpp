@@ -39,7 +39,6 @@ std::string sample_path
     = SAMPLE_DIR "/"
 #endif
     ;
-NodePath title, instructions, instructions2;
 CollisionTraverser picker;
 PT(CollisionNode) picker_node;
 NodePath pickerNP;
@@ -109,37 +108,37 @@ void init(void)
     // There is no convenient "OnScreenText" class, although one could
     // be written.  Instead, here are the manual steps:
     // This code was modified slightly to match the other demos
-    TextNode *text_node = new TextNode("title");
-    title = NodePath(text_node);
+    auto text_node = new TextNode("title");
+    auto text = NodePath(text_node);
     text_node->set_text("Panda3D: Tutorial - Mouse Picking");
     // style=1: default
     text_node->set_text_color(1, 1, 1, 1);
     text_node->set_shadow_color(0.0f, 0.0f, 0.0f, 0.5f);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
-    title.reparent_to(window->get_aspect_2d()); // a2d
+    text.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_align(TextNode::A_right);
-    title.set_pos(1.0-0.2, 0, -1+0.05); // BottomRight == (1,0,-1)
-    title.set_scale(0.07);
+    text.set_pos(1.0-0.2, 0, -1+0.05); // BottomRight == (1,0,-1)
+    text.set_scale(0.07);
 
     text_node = new TextNode("instructions");
-    instructions = NodePath(text_node);
+    text = NodePath(text_node);
     text_node->set_text("ESC: Quit");
-    instructions.reparent_to(window->get_aspect_2d()); // a2d
+    text.reparent_to(window->get_aspect_2d()); // a2d
     // style=1: default
     text_node->set_text_color(1, 1, 1, 1);
-    instructions.set_pos(-1+0.06, 0, 1-0.1); // TopLeft == (-1,0,1)
+    text.set_pos(-1+0.06, 0, 1-0.1); // TopLeft == (-1,0,1)
     text_node->set_align(TextNode::A_left);
-    instructions.set_scale(0.05);
+    text.set_scale(0.05);
 
     text_node = new TextNode("instructions2");
-    instructions2 = NodePath(text_node);
+    text = NodePath(text_node);
     text_node->set_text("Left-click and drag: Pick up and drag piece");
-    instructions2.reparent_to(window->get_aspect_2d()); // a2d
+    text.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_align(TextNode::A_left);
     // style=1: default
     text_node->set_text_color(1, 1, 1, 1);
-    instructions2.set_pos(-1+0.06, 0, 1-0.16); // TopLeft == (-1,0,1)
-    instructions2.set_scale(0.05);
+    text.set_pos(-1+0.06, 0, 1-0.16); // TopLeft == (-1,0,1)
+    text.set_scale(0.05);
 
     window->enable_keyboard();
 #if 0

@@ -52,37 +52,35 @@ CellManager *cellmanager;
 std::vector<NodePath> models;
 
 // Function to put instructions on the screen.
-NodePath add_instructions(PN_stdfloat pos, const std::string &msg)
+void add_instructions(PN_stdfloat pos, const std::string &msg)
 {
     TextNode *text_node = new TextNode("instructions");
-    auto ret = NodePath(text_node);
+    auto text = NodePath(text_node);
     text_node->set_text(msg);
     // style = 1 -> plain (default)
     text_node->set_text_color(1, 1, 1, 1);
     text_node->set_shadow_color(0, 0, 0, 1);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
-    ret.reparent_to(window->get_aspect_2d()); // a2d
+    text.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_align(TextNode::A_left);
-    ret.set_pos(-1.0+0.08, 0, 1 - pos - 0.04); // TopLeft == (-1,0,1)
-    ret.set_scale(0.05);
-    return ret;
+    text.set_pos(-1.0+0.08, 0, 1 - pos - 0.04); // TopLeft == (-1,0,1)
+    text.set_scale(0.05);
 }
 
 // Function to put title on the screen.
-NodePath add_title(const std::string &text)
+void add_title(const std::string &text)
 {
     TextNode *text_node = new TextNode("title");
-    auto ret = NodePath(text_node);
+    auto path = NodePath(text_node);
     text_node->set_text(text);
     // style = 1 -> plain (default)
-    ret.set_pos(1.0-0.1, 0, -1 + 0.09); // BottomRight == (1,0,-1)
-    ret.set_scale(0.08);
-    ret.reparent_to(window->get_aspect_2d()); // a2d
+    path.set_pos(1.0-0.1, 0, -1 + 0.09); // BottomRight == (1,0,-1)
+    path.set_scale(0.08);
+    path.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_align(TextNode::A_right);
     text_node->set_text_color(1, 1, 1, 1);
     text_node->set_shadow_color(0, 0, 0, 1);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
-    return ret;
 }
 
 void push_key(const Event *, void *);

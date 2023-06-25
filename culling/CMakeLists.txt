@@ -44,11 +44,11 @@ foreach(x p3framework pandaexpress p3dtoolconfig p3dtool)
 endforeach()
 
 # Finally, in order to run these demos, I bake in the samples dir, if present.
-find_file(SAMPLE_DIR samples/culling/occluder_culling.py
+find_file(SAMPLE_DIR_culling samples/culling/occluder_culling.py
           PATHS /usr/share /usr/local/share  PATH_SUFFIXES panda3d
           DOC "The original Python demo (for assets)")
-if(SAMPLE_DIR)
-  cmake_path(SET SAMPLE_DIR "${SAMPLE_DIR}")
+if(SAMPLE_DIR_culling)
+  cmake_path(SET SAMPLE_DIR "${SAMPLE_DIR_culling}")
   cmake_path(GET SAMPLE_DIR PARENT_PATH SAMPLE_DIR)
   add_compile_definitions("SAMPLE_DIR=\"${SAMPLE_DIR}\"")
 endif()

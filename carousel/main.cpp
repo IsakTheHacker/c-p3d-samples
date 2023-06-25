@@ -35,7 +35,7 @@ namespace { // don't export/pollute the global namespace
 // Global variables
 PandaFramework framework;
 WindowFramework *window;
-NodePath title, carousel, lights1, lights2, env, pandas[4], models[4];
+NodePath carousel, lights1, lights2, env, pandas[4], models[4];
 PT(CInterval) moves[4];
 PT(Texture) light_off_tex, light_on_tex;
 std::string sample_path
@@ -67,7 +67,7 @@ void init(void)
     // There is no convenient "OnScreenText" class, although one could
     // be written.  Instead, here are the manual steps:
     TextNode *text_node = new TextNode("title");
-    title = NodePath(text_node);
+    auto title = NodePath(text_node);
     text_node->set_text("Panda3D: Tutorial - Carousel");
     title.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_text_color(1, 1, 1, 1);
