@@ -65,3 +65,33 @@ pages of bloated garbage, and then dies).  Perhaps after I get things
 working on the code side, assuming I don't abandon Panda3D entirely in
 frustration, I'll revisit this and clean up the documentation.  This
 really needs to be coordinated with the official maintainers, though.
+
+TODO:
+  X asteroids
+  X ball-in-maze
+  O boxing-robots  Compiles, but punch animations broken
+    bump-mapping   Requires lighting I don't understand
+  X carousel
+    cartoon-shader
+    chessboard
+    culling
+    disco-lights
+    distortion
+    fireflies
+    fractal-plants
+    gamepad
+    glow-filter
+    infinite-tunnel
+    looking-and-gripping
+    media-player
+    motion-trails
+    mouse-modes
+    music-box
+    particles
+    procedural-cube
+    render-to-texture
+    roaming-ralph
+    rocket-console
+    shader-terrain
+    shadows
+    solar-system

@@ -20,9 +20,7 @@
  * could look like.
  */
 #include <pandaFramework.h>
-#include <textNode.h>
-#include <transparencyAttrib.h>
-#include <samplerState.h>
+#include <texturePool.h>
 
 #include "anim_supt.h"
 
@@ -78,7 +76,7 @@ NodePath load_object(std::string tex, PN_stdfloat scale = 1, LPoint2 pos={0,0},
 {
     // Every object uses the plane model and is parented to the camera
     // so that it faces the screen.
-    auto obj = window->load_model(framework.get_models(), sample_path + "models/plane.egg");
+    auto obj = def_load_model("models/plane");
     obj.reparent_to(window->get_camera_group());
 
     // Set the initial position and scale.
@@ -96,8 +94,7 @@ NodePath load_object(std::string tex, PN_stdfloat scale = 1, LPoint2 pos={0,0},
 
     if(tex.size()) {
         // Load and set the requested texture.
-	PT(Texture) texture = new Texture(tex);
-	texture->read(sample_path + "textures/" + tex);
+	PT(Texture) texture = def_load_texture("textures/" + tex);
         texture->set_wrap_u(SamplerState::WM_clamp);
 	texture->set_wrap_v(SamplerState::WM_clamp);
         obj.set_texture(texture, 1);

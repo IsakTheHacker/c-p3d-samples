@@ -117,7 +117,7 @@ void init(void)
     camera.set_pos_hpr(0, 0, 25, 0, -90, 0);  // Place the camera
 
     // Load the maze and place it in the scene
-    maze = window->load_model(framework.get_models(), sample_path + "models/maze");
+    maze = def_load_model("models/maze");
     maze.reparent_to(window->get_render());
 
     // Most times, you want collisions to be tested against invisible geometry
@@ -181,7 +181,7 @@ void init(void)
     // It is on a root dummy node so that we can rotate the ball itself without
     // rotating the ray that will be attached to it
     ball_root = window->get_render().attach_new_node("ballRoot");
-    ball = window->load_model(framework.get_models(), sample_path + "models/ball");
+    ball = def_load_model("models/ball");
     ball.reparent_to(ball_root);
 
     // Find the collison sphere for the ball which was created in the egg file

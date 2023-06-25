@@ -3,6 +3,8 @@
  * https://github.com/panda3d/panda3d/tree/v1.10.13/samples/boxing-robots
  *
  * Original C++ conversion by Thomas J. Moore June 2023.
+ *   NOTE: at present, this sample does not work.  The head animations work,
+ *   but the punches do not.  I have no idea why.
  *
  * Comments are mostly extracted from the Python sample, such as:
  *
@@ -101,8 +103,7 @@ void init()
     setup_lights();
 
     // Load the ring
-    auto model_root = framework.get_models(); // a convenient place to store 'em
-    ring = window->load_model(model_root, sample_path + "models/ring");
+    ring = def_load_model("models/ring");
     ring.reparent_to(window->get_render());
 
     // Models that use skeletal animation are known as Actors instead of models
@@ -117,7 +118,7 @@ void init()
     // cached, so no reparsing is necessary.
     for(int r = 0; r < 2; r++) {
 	// First, load the main characer model.
-	robot[r] = window->load_model(model_root, sample_path + "models/robot");
+	robot[r] = def_load_model("models/robot");
 	// Then, load and bind the animations.
 	// In general, I prefer using variables or arrays over dictionaries
 	// for storing things, since it speeds up the frequent lookups.
@@ -241,7 +242,7 @@ PT(AnimControl) load_anim(NodePath &model, const std::string &file)
 #else
     // Since the window's load_model() has additional functionality, it's
     // probably better to always use it, though.
-    auto mod = window->load_model(file);
+    auto mod = def_load_model(file);
     auto anim = AnimBundleNode::find_anim_bundle(mod);
     auto ret = char_node->get_bundle(0)->bind_anim(anim, match_flags);
     ret->set_anim_model(mod);

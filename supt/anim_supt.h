@@ -4,6 +4,12 @@
 #include <initializer_list>
 #include <functional>
 
+// I am tired of typing this all the time:
+// Loads at location offset by sample_path, rooted at standard model stash
+// Assumes the PandaFramework is called framework, and main win is window
+#define def_load_model(x) window->load_model(framework.get_models(), sample_path + x)
+#define def_load_texture(x) TexturePool::load_texture(sample_path + x)
+
 // Support for Intervals, in the style of the Python examples
 // Just prepend new and use -> if needed.  For Sequence/Parallel, enclose
 // the list in additional curly braces:
@@ -84,6 +90,29 @@ template<class C, class T>class LerpFunc : public CLerpInterval {
   protected:
     C *_what;
     void(C::*_setter)(T);
+    T _start, _diff;
+};
+// Linear interpolator with non-class (global) setter function.
+template<class C, class T>class LerpFuncG : public CLerpInterval {
+  public:
+    LerpFuncG(std::string name, C setter, T start, T end,
+	      double duration) :
+	CLerpInterval(name, duration, BT_no_blend),
+	_setter(setter), _start(start), _diff(end - start) {}
+    LerpFuncG(C setter, T start, T end, double duration) :
+	CLerpInterval(std::to_string((unsigned long)this), duration, BT_no_blend),
+	_setter(setter), _start(start), _diff(end - start) {}
+    virtual void priv_step(double t) {
+	double curt = compute_delta(t);
+	if(curt >= 1)
+	    _setter(_start + _diff);
+	else
+	    _setter(_start + _diff * curt);
+    }
+    // NOTE: adding members requires this:
+    ALLOC_DELETED_CHAIN(LerpFuncG);
+  protected:
+    C _setter;
     T _start, _diff;
 };
 
