@@ -31,7 +31,7 @@
 
 #include "anim_supt.h"
 
-namespace {
+namespace { // don't export/pollute the global namespace
 // Global variables
 PandaFramework framework;
 WindowFramework *window;

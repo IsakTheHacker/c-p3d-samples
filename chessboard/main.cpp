@@ -24,6 +24,7 @@
 
 #include "anim_supt.h"
 
+namespace { // don't export/pollute the global namespace
 // First we define some constants for the colors
 const LColor BLACK(0, 0, 0, 1);
 const LColor WHITE(1, 1, 1, 1);
@@ -399,6 +400,7 @@ const class Rook : public Piece {
     Piece *create(int square, const LColor &color) const { return init(new Rook, square, color); }
 } rook_factory;
 const Piece *rook = &rook_factory;
+}
 
 int main(int argc, char **argv)
 {

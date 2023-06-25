@@ -10,4 +10,7 @@ cmake_minimum_required(VERSION 3.21.0)
 
 project(cpp-panda3d LANGUAGES CXX)
 
-subdirs(asteroids ball-in-maze boxing-robots carousel chessboard)
+# Known broken as of now:
+#   boxing-robots: no punch animations
+#   culling: portal culling not working right (only displays cell you're in)
+subdirs(asteroids ball-in-maze boxing-robots carousel chessboard culling)
