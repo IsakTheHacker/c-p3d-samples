@@ -69,11 +69,11 @@ really needs to be coordinated with the official maintainers, though.
 TODO:
   X asteroids
   X ball-in-maze
-  O boxing-robots  Compiles, but punch animations broken
-    bump-mapping   Requires lighting I don't understand
+  O boxing-robots - Compiles, but punch animations silently missing
+    bump-mapping - manipulates internal variables I don't understand yet
   X carousel
-    cartoon-shader
-    chessboard
+    cartoon-shader - manipulates internal variables I don't understand yet
+  X chessboard
     culling
     disco-lights
     distortion

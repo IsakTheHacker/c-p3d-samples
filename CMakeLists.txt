@@ -10,4 +10,4 @@ cmake_minimum_required(VERSION 3.21.0)
 
 project(cpp-panda3d LANGUAGES CXX)
 
-subdirs(asteroids ball-in-maze boxing-robots carousel)
+subdirs(asteroids ball-in-maze boxing-robots carousel chessboard)

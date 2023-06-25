@@ -1,6 +1,6 @@
 /*
- *  Translation of Python asteroids sample from Panda3D.
- *  https://github.com/panda3d/panda3d/tree/v1.10.13/samples/asteroids
+ *  Translation of Python carousel sample from Panda3D.
+ *  https://github.com/panda3d/panda3d/tree/v1.10.13/samples/carousel
  *
  * Original C++ conversion by Thomas J. Moore June 2023.
  *
@@ -31,6 +31,7 @@
 
 #include "anim_supt.h"
 
+namespace {
 // Global variables
 PandaFramework framework;
 WindowFramework *window;
@@ -78,6 +79,9 @@ void init(void)
 
     // Allowing manual positioning of the camera is the default behavior.
     // window->disable_mouse();
+    // The Python sample has no keys, but I like at least esc.
+    window->enable_keyboard();
+    framework.enable_default_keys();
 
     NodePath camera = window->get_camera_group();
     camera.set_pos_hpr(0, -8, 2.5, 0, -9, 0);  // Set the cameras' position
@@ -259,6 +263,7 @@ void oscillate_panda(double rad, NodePath &panda, double offset)
     // each other.  The .2 is the amplitude, so the height of the panda will
     // vary from -.2 to .2
     panda.set_z(sin(rad + offset) * .2);
+}
 }
 
 int main(int argc, const char **argv)
