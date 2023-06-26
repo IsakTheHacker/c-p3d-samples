@@ -180,7 +180,7 @@ void init()
     // plays the given interval
     window->enable_keyboard();
 #if 1 // Instead of defining ESC
-    framework.define_key("escape", "Quit", [](const Event *, void *){
+    framework.define_key("escape", "Quit", EV_FN(){
         framework.set_exit_flag();
     }, 0);
 #else // You could use the default keybindings, but they conflict in a bad way

@@ -10,6 +10,8 @@
 #define def_load_model(x) window->load_model(framework.get_models(), sample_path + x)
 #define def_load_texture(x) TexturePool::load_texture(sample_path + x)
 
+#define EV_FN(d) [](const Event *,void *d)
+
 // Support for Intervals, in the style of the Python examples
 // Just prepend new and use -> if needed.  For Sequence/Parallel, enclose
 // the list in additional curly braces:

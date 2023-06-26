@@ -75,7 +75,7 @@ TODO:
     cartoon-shader - manipulates internal variables I don't understand yet
   X chessboard
   O culling - portal culling definitely broken; needs on-screen FPS meter
-    disco-lights
+  X disco-lights
     distortion
     fireflies
     fractal-plants

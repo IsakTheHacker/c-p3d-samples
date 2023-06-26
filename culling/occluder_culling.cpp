@@ -125,7 +125,7 @@ void init()
     framework.define_key("f", "", framework.event_w, 0);
     framework.define_key("x", "", toggle_xray_mode, 0);
     framework.define_key("b", "", toggle_model_bounds, 0);
-    framework.define_key("escape", "", [](const Event *, void *){ framework.set_exit_flag(); }, 0);
+    framework.define_key("escape", "", EV_FN(){ framework.set_exit_flag(); }, 0);
     //window->disable_mouse();
 
     // Setup camera

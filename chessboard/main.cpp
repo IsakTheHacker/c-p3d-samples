@@ -142,7 +142,7 @@ void init(void)
 
     window->enable_keyboard();
 #if 0
-    framework.define_key("escape", "Quit", [](const Event *, void *) {
+    framework.define_key("escape", "Quit", EV_FN() {
 	framework.set_exit_flag(); // Escape quits
     }, 0);
 #else

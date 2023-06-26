@@ -100,7 +100,7 @@ void init(void)
     // Keyboard definitions
     window->enable_keyboard();
 #if 0
-    framework.define_key("escape", "Quit", [](const Event *, void *) {
+    framework.define_key("escape", "Quit", EV_FN() {
 	framework.set_exit_flag();
     }, 0); // Escape quits
 #else

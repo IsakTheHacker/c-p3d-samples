@@ -13,4 +13,5 @@ project(cpp-panda3d LANGUAGES CXX)
 # Known broken as of now:
 #   boxing-robots: no punch animations
 #   culling: portal culling not working right (only displays cell you're in)
-subdirs(asteroids ball-in-maze boxing-robots carousel chessboard culling)
+subdirs(asteroids ball-in-maze boxing-robots carousel chessboard culling
+        disco-lights)
