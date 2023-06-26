@@ -93,11 +93,3 @@ template<class C, class T> class LerpFunc : public AsyncTask {
     T _start, _diff;
     double _duration;
 };
-
-#include <pandaNode.h>
-// Traverse the tree depth-first, left-to-right.  Assumes only one
-// parent per node.  When "from" is non-NULL, continue search at its
-// sibling, then move up and right from its parent, etc.
-// No attempts are made to detect loops, or accomodate multiple parents.
-PandaNode *find_node_type(const PandaNode *root, const TypeHandle &t,
-                          const PandaNode *from = nullptr);

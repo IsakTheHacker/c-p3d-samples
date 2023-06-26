@@ -218,7 +218,7 @@ PT(AnimControl) load_anim(NodePath &model, const std::string &file)
     auto char_node = dynamic_cast<Character *>
 	(model.find("robot_skinned_2").node()); // you have to know this.
     auto char_node = dynamic_cast<Character *>
-	(find_node_type(model.node(), Character::get_class_type())); // my supt.
+	(model.find("-Character").node());
 #endif
     // These flags (with obnoxiously long names) are needed to bind the
     // sample animations.  This bypasses hierarchy match integrity checks.

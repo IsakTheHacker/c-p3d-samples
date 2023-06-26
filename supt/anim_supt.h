@@ -151,16 +151,3 @@ class CharAnimate : public CLerpAnimEffectInterval {
 typedef CLerpNodePathInterval NPAnim_t;
 #define NPAnim(node, name, t) \
     NPAnim_t(name, t, CLerpInterval::BT_no_blend, true, false, node, NodePath())
-
-/* And now for something completely different:
- * A function to assist in loading animations, but also of other
- * general use.
- */
-
-#include <pandaNode.h>
-// Traverse the tree depth-first, left-to-right.  Assumes only one
-// parent per node.  When "from" is non-NULL, continue search at its
-// sibling, then move up and right from its parent, etc.
-// No attempts are made to detect loops, or accomodate multiple parents.
-PandaNode *find_node_type(const PandaNode *root, const TypeHandle &t,
-                          const PandaNode *from = nullptr);

@@ -67,31 +67,32 @@ frustration, I'll revisit this and clean up the documentation.  This
 really needs to be coordinated with the official maintainers, though.
 
 TODO:
-  X asteroids
-  X ball-in-maze
-  O boxing-robots - Compiles, but punch animations silently missing
-  X bump-mapping
-  X carousel
-    cartoon-shader - manipulates internal variables I don't understand yet
-  X chessboard
-  O culling - portal culling definitely broken; needs on-screen FPS meter
-  X disco-lights
-    distortion
-    fireflies
-    fractal-plants
-    gamepad
-    glow-filter
-    infinite-tunnel
-    looking-and-gripping
-    media-player
-    motion-trails
-    mouse-modes
-    music-box
-    particles
-    procedural-cube
-    render-to-texture
-    roaming-ralph
-    rocket-console
-    shader-terrain
-    shadows
-    solar-system
+
+ - ✓ asteroids
+ - ✓ ball-in-maze
+ - X boxing-robots - Compiles, but punch animations silently missing
+ - ✓ bump-mapping
+ - ✓ carousel
+ - _ cartoon-shader - basic recuires Python-only CommonFilters
+ - ✓ chessboard
+ - X culling - portal culling definitely broken; needs on-screen FPS meter
+ - ✓ disco-lights
+ - _  distortion
+ - _  fireflies
+ - _  fractal-plants
+ - _  gamepad
+ - _  glow-filter
+ - _  infinite-tunnel
+ - _  looking-and-gripping
+ - _  media-player
+ - _  motion-trails
+ - _  mouse-modes
+ - _  music-box
+ - _  particles
+ - _  procedural-cube
+ - _  render-to-texture
+ - _  roaming-ralph
+ - _  rocket-console
+ - _  shader-terrain
+ - _  shadows
+ - _  solar-system
