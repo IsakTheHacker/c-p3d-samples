@@ -10,6 +10,7 @@
 // Assumes the PandaFramework is called framework, and main win is window
 #define def_load_model(x) window->load_model(framework.get_models(), sample_path + x)
 #define def_load_texture(x) TexturePool::load_texture(sample_path + x)
+#define def_load_shader(x) ShaderPool::load_shader(sample_path + x)
 
 #define EV_FN(d) [](const Event *,void *d)
 
@@ -52,8 +53,10 @@ class Parallel : public CMetaInterval {
     Parallel(const CIntervalInitList ints) :
 	CMetaInterval(std::to_string((unsigned long)this)) { init(ints); }
 };
+
 // Wait is just a shortcut for WaitInterval.
 typedef WaitInterval Wait;
+
 // FuncI takes a function pointer and executes it (single-shot, instant).
 class FuncI : public CInterval {
   public:
@@ -68,6 +71,7 @@ class FuncI : public CInterval {
 };
 // Func is short-hand for the most common usage: just provide call as arg.
 #define Func(f) FuncI([=]{ f; })
+
 // Linear interpolator with setter function.  Works on any type that supports
 // self-addition and scaling (multiplication by a double).
 // This whole thing is way too heavy for linear interpolation, but I
@@ -95,6 +99,7 @@ template<class C, class T>class LerpFunc : public CLerpInterval {
     void(C::*_setter)(T);
     T _start, _diff;
 };
+
 // Linear interpolator with non-class (global) setter function.
 template<class C, class T>class LerpFuncG : public CLerpInterval {
   public:
@@ -119,8 +124,16 @@ template<class C, class T>class LerpFuncG : public CLerpInterval {
     T _start, _diff;
 };
 
+// The node intervals are done completely differently.  As such, I only
+// provide a way to at least shorten it.
+typedef CLerpNodePathInterval NPAnim;
+#define NPAnim(node, name, t) \
+    NPAnim(name, t, CLerpInterval::BT_no_blend, true, false, node, NodePath())
+// for uncovered cases, using all constructor args:
+#define NPAnimEx CLerpNodePathInterval
+
 // Character animations.  Instead of supplying the animation name, like in
-// Python, provide the actual AnimBundle.  If you con't have it, you can still
+// Python, provide the actual AnimBundle.  If you don't have it, you can still
 // search by name with find().
 class CharAnimate : public CLerpAnimEffectInterval {
     void init(AnimControl *ctrl, double rate, double start, double end)
@@ -146,8 +159,11 @@ class CharAnimate : public CLerpAnimEffectInterval {
 	    init(ctrl, rate, start, end);
 	}
 };
-// The node intervals are done completely differently.  As such, I only
-// provide a way to at least shorten it.
-typedef CLerpNodePathInterval NPAnim_t;
-#define NPAnim(node, name, t) \
-    NPAnim_t(name, t, CLerpInterval::BT_no_blend, true, false, node, NodePath())
+
+// I'm too lazy to make a sound player, so here's a macro:
+#define SoundInterval(snd, len, start) \
+    Sequence({ \
+	new Func((snd)->set_time(start); (snd)->play()), \
+	new Wait((len) < 0 ? (snd)->length() - (start) : (len)), \
+	new Func((snd)->stop()) \
+     })

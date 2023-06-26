@@ -73,11 +73,11 @@ TODO:
  - X boxing-robots - Compiles, but punch animations silently missing
  - ✓ bump-mapping
  - ✓ carousel
- - _ cartoon-shader - basic recuires Python-only CommonFilters
+ - _ cartoon-shader - requires apparently Python-only functionality
  - ✓ chessboard
  - X culling - portal culling definitely broken; needs on-screen FPS meter
  - ✓ disco-lights
- - _  distortion
+ - _  distortion - requires apparently Python-only functionality
  - _  fireflies
  - _  fractal-plants
  - _  gamepad
@@ -87,7 +87,7 @@ TODO:
  - _  media-player
  - _  motion-trails
  - _  mouse-modes
- - _  music-box
+ - ✓  music-box - gives lock assertion error on exit, but otherwise OK
  - _  particles
  - _  procedural-cube
  - _  render-to-texture

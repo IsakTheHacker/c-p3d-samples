@@ -182,9 +182,11 @@ void start_carousel()
     // value must be provided, or the fourth parameter, bake_in_start, must
     // be true.
     // I have created, in anim_supt.h, a shortcut to do this without so much
-    // typing.  I have shortened the class name to NPAnim_t, and provide a
-    // NPAnim() macro which sets some boilerplate.  All you now need to supply
-    // are the name, node, and time.  Setting it to animate hpr is still a
+    // typing.  I have shortened the class name to NPAnim, and provide a short
+    // contructor macro which sets some boilerplate.  All you now need to
+    // supply are the name, node, and time.  NPAnimEx must be used to set
+    // any other consturctor arguments to non-default, since many cannot be
+    // changed after construction.  Setting it to animate hpr is still a
     // separate step, though.
 
     auto carousel_spin = new NPAnim(carousel, "carousel_spin", 20);

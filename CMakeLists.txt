@@ -19,4 +19,5 @@ subdirs(
     chessboard
     culling         # broken: portal cull only shows objects in viewer's cell
     disco-lights
+    music-box       # seems to work, but fails lock assertion on exit
 )
