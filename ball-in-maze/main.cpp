@@ -429,7 +429,6 @@ void lose_game(PT(CollisionEntry) entry)
 	new Func(start())
     }))->start();
 }
-    
 }
 
 int main(int argc, char* argv[]) {

@@ -1,6 +1,7 @@
 #include <cMetaInterval.h>
 #include <waitInterval.h>
 #include <cLerpAnimEffectInterval.h>
+#include <cLerpNodePathInterval.h>
 #include <initializer_list>
 #include <functional>
 
@@ -145,6 +146,11 @@ class CharAnimate : public CLerpAnimEffectInterval {
 	    init(ctrl, rate, start, end);
 	}
 };
+// The node intervals are done completely differently.  As such, I only
+// provide a way to at least shorten it.
+typedef CLerpNodePathInterval NPAnim_t;
+#define NPAnim(node, name, t) \
+    NPAnim_t(name, t, CLerpInterval::BT_no_blend, true, false, node, NodePath())
 
 /* And now for something completely different:
  * A function to assist in loading animations, but also of other

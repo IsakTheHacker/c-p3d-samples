@@ -70,7 +70,7 @@ TODO:
   X asteroids
   X ball-in-maze
   O boxing-robots - Compiles, but punch animations silently missing
-    bump-mapping - manipulates internal variables I don't understand yet
+  X bump-mapping
   X carousel
     cartoon-shader - manipulates internal variables I don't understand yet
   X chessboard

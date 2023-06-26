@@ -10,8 +10,13 @@ cmake_minimum_required(VERSION 3.21.0)
 
 project(cpp-panda3d LANGUAGES CXX)
 
-# Known broken as of now:
-#   boxing-robots: no punch animations
-#   culling: portal culling not working right (only displays cell you're in)
-subdirs(asteroids ball-in-maze boxing-robots carousel chessboard culling
-        disco-lights)
+subdirs(
+    asteroids
+    ball-in-maze
+    boxing-robots   # broken: no punch animations
+    bump-mapping
+    carousel
+    chessboard
+    culling         # broken: portal cull only shows objects in viewer's cell
+    disco-lights
+)

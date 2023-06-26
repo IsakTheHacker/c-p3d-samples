@@ -27,7 +27,6 @@
 #include <texturePool.h>
 #include <ambientLight.h>
 #include <directionalLight.h>
-#include <cLerpNodePathInterval.h>
 
 #include "anim_supt.h"
 
@@ -173,14 +172,22 @@ void start_carousel()
     // Generally, you allocate a new interval using new(), and once it
     // is started, the animator prevents it from being freed.  Otherwise, you
     // will need to store it using a PT(T) pointer.
+    // In Python, the interval is created using a node method.  In C++, it
+    // is a standalone class, which takes the node as a parameter.  The class
+    // name is CLerpNodePathInterval.  The actual value to be interpolated is
+    // set by calling the set_end_XXX() (and maybe set_start_XXX()).  This
+    // flags that field as being animated.
     // Note also that in order for a loop to restart at the beginning, it
     // needs to either end at the same place it started, or an explicit start
     // value must be provided, or the fourth parameter, bake_in_start, must
     // be true.
+    // I have created, in anim_supt.h, a shortcut to do this without so much
+    // typing.  I have shortened the class name to NPAnim_t, and provide a
+    // NPAnim() macro which sets some boilerplate.  All you now need to supply
+    // are the name, node, and time.  Setting it to animate hpr is still a
+    // separate step, though.
 
-    auto carousel_spin = new
-	CLerpNodePathInterval("carousel_spin", 20, CLerpInterval::BT_no_blend,
-			      true, false, carousel, NodePath());
+    auto carousel_spin = new NPAnim(carousel, "carousel_spin", 20);
     carousel_spin->set_end_hpr(LVector3(360, 0, 0));
     // Once an interval is created, we need to tell it to actually move.
     // start() will cause an interval to play once. loop() will tell an interval

@@ -18,7 +18,6 @@
 #include <directionalLight.h>
 #include <spotlight.h>
 #include <pointLight.h>
-#include <cLerpNodePathInterval.h>
 #include <sstream>
 
 #include "anim_supt.h"
@@ -45,7 +44,7 @@ NodePath ambient_light, directional_light, spotlight, red_point_light,
 AmbientLight *ambient_light_node; // avoid DCAST
 DirectionalLight *directional_light_node;
 Spotlight *spotlight_node;
-PT(CLerpNodePathInterval) point_lights_spin;
+PT(NPAnim_t) point_lights_spin;
 bool are_point_lights_spinning, per_pixel_enabled, shadows_enabled;
 
 // Simple function to keep a value in a given range (by default 0 to 1)
@@ -222,9 +221,7 @@ void init(void)
 
     // Create and start interval to spin the lights, and a variable to
     // manage them.
-    point_lights_spin = new
-	CLerpNodePathInterval("point_lights_spin", 6, CLerpInterval::BT_no_blend,
-			      true, false, point_light_helper, NodePath());
+    point_lights_spin = new NPAnim(point_light_helper, "point_lights_spin", 6);
     point_lights_spin->set_end_hpr(LVector3(360, 0, 0));
     point_lights_spin->loop();
     are_point_lights_spinning = true;
