@@ -1,0 +1,25 @@
+#!/bin/sh
+etxt=
+case "$1" in
+  */*) dir="${1%/*}" ;;
+  *)   dir=. ;;
+esac
+addinc() {
+  etxt="$etxt/^#include \"$1\"/{
+    s%^%// doxygen in-line expansion of %
+    r $dir/$1
+    a \
+// end doxygen in-line expansion of #include \"$1\"
+  }
+  "
+}
+for x in flt dbl int flt2dbl dbl2flt; do
+  addinc "${x}names.h"
+done
+addinc "aa_luse.h"
+for inc in $(sed -n 's/#include "\(.*_src\.h\)".*/\1/;T;p' "$1" | sort -u); do
+  addinc "$inc"
+  addinc "${inc%.h}.I"
+done
+# done twice to catch .I
+sed -e "$etxt" "$1" | sed -e "$etxt"
