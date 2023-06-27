@@ -11,6 +11,8 @@
 #define def_load_model(x) window->load_model(framework.get_models(), sample_path + x)
 #define def_load_texture(x) TexturePool::load_texture(sample_path + x)
 #define def_load_shader(x) ShaderPool::load_shader(sample_path + x)
+#define def_load_shadert(t, x) Shader::load(t, sample_path + x)
+#define def_load_shader2(t, x, y) Shader::load(t, sample_path + x, sample_path + y)
 
 #define EV_FN(d) [](const Event *,void *d)
 

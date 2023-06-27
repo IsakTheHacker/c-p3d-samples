@@ -21,4 +21,5 @@ subdirs(
     disco-lights
     media-player
     music-box       # seems to work, but fails lock assertion on exit
+    shader-terrain
 )

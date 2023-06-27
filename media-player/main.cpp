@@ -1,6 +1,6 @@
 /*
- *  Translation of Python asteroids sample from Panda3D.
- *  https://github.com/panda3d/panda3d/tree/v1.10.13/samples/asteroids
+ *  Translation of Python media-player sample from Panda3D.
+ *  https://github.com/panda3d/panda3d/tree/v1.10.13/samples/media-player
  *
  * Original C++ conversion by Thomas J. Moore June 2023.
  *

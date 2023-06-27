@@ -93,6 +93,6 @@ TODO:
  - _  render-to-texture
  - _  roaming-ralph
  - _  rocket-console
- - _  shader-terrain
+ - ✓  shader-terrain
  - _  shadows
  - _  solar-system
