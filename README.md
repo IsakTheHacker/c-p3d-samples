@@ -95,4 +95,4 @@ TODO:
  - _  rocket-console
  - ✓  shader-terrain
  - _  shadows
- - _  solar-system
+ - ✓  solar-system

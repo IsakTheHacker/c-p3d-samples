@@ -61,7 +61,6 @@ void init(void)
     framework.open_framework();
 
     //Set the window title and open new window
-    framework.set_window_title("Chessboard - C++ Panda3D Samples");
     window = framework.open_window();
 
     // Increase camera FOV as well as the far plane

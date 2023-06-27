@@ -5,16 +5,9 @@
 #include <initializer_list>
 #include <functional>
 
-// I am tired of typing this all the time:
-// Loads at location offset by sample_path, rooted at standard model stash
-// Assumes the PandaFramework is called framework, and main win is window
-#define def_load_model(x) window->load_model(framework.get_models(), sample_path + x)
-#define def_load_texture(x) TexturePool::load_texture(sample_path + x)
-#define def_load_shader(x) ShaderPool::load_shader(sample_path + x)
-#define def_load_shadert(t, x) Shader::load(t, sample_path + x)
-#define def_load_shader2(t, x, y) Shader::load(t, sample_path + x, sample_path + y)
-
-#define EV_FN(d) [](const Event *,void *d)
+// This is primarily animation support functions for converting Python samples
+// to C++.  It also includes a few other extras that I probably should've put
+// in a different header file (see below).
 
 // Support for Intervals, in the style of the Python examples
 // Just prepend new and use -> if needed.  For Sequence/Parallel, enclose
@@ -169,3 +162,24 @@ class CharAnimate : public CLerpAnimEffectInterval {
 	new Wait((len) < 0 ? (snd)->length() - (start) : (len)), \
 	new Func((snd)->stop()) \
      })
+
+///////////////////////////////////////////////////////////////////////////
+// Some extra stuff that should probably go into a different header
+
+// I am tired of typing this all the time:
+// Loads at location offset by sample_path, rooted at standard model stash
+// Assumes the PandaFramework is called framework, and main win is window
+#define def_load_model(x) window->load_model(framework.get_models(), sample_path + x)
+#define def_load_texture(x) TexturePool::load_texture(sample_path + x)
+#define def_load_shader(x) ShaderPool::load_shader(sample_path + x)
+#define def_load_shadert(t, x) Shader::load(t, sample_path + x)
+#define def_load_shader2(t, x, y) Shader::load(t, sample_path + x, sample_path + y)
+
+// just a shorthand for using lambda functions for events
+#define EV_FN(d) [](const Event *,void *d)
+// shorthand for calling a class method
+#define EV_CM(m) [](const Event *, void *d) \
+    { reinterpret_cast<decltype(this)>(d)->m; }, this
+// same, but define a var
+#define EV_CMt(t,m) [](const Event *, void *d) \
+    { decltype(this) t = reinterpret_cast<decltype(this)>(d); t->m; }, this

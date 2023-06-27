@@ -7,7 +7,7 @@
 cmake_minimum_required(VERSION 3.21.0)
 
 # The project name can be anything; it doesn't affect the results.
-project(culling LANGUAGES CXX)
+project(solar-system LANGUAGES CXX)
 
 #### Find prerequisites
 # Eigen3 is used optionally by Panda3D and necessarily by this code.
@@ -38,17 +38,18 @@ find_library(PANDALIB panda PATH_SUFFIXES panda3d REQUIRED)
 cmake_path(SET PANDALIB_DIR "${PANDALIB}")
 cmake_path(GET PANDALIB_DIR PARENT_PATH PANDALIB_DIR)
 set(PANDALIBS "${PANDALIB}")
-foreach(x p3framework pandaexpress p3dtoolconfig p3dtool)
+# direct is only needed for 5+.  Oh well.  I don't want to add if-needed.
+foreach(x p3framework p3direct pandaexpress p3dtoolconfig p3dtool)
   find_library(PANDA-${x} ${x} HINT "${PANDALIB}" PATH_SUFFIXES panda3d REQUIRED)
   list(APPEND PANDALIBS "${PANDA-${x}}")
 endforeach()
 
 # Finally, in order to run these demos, I bake in the samples dir, if present.
-find_file(SAMPLE_DIR_culling samples/culling/occluder_culling.py
+find_file(SAMPLE_DIR_solar-system samples/solar-system/step1_blank_window.py
           PATHS /usr/share /usr/local/share  PATH_SUFFIXES panda3d
           DOC "The original Python demo (for assets)")
-if(SAMPLE_DIR_culling)
-  cmake_path(SET SAMPLE_DIR "${SAMPLE_DIR_culling}")
+if(SAMPLE_DIR_solar-system)
+  cmake_path(SET SAMPLE_DIR "${SAMPLE_DIR_solar-system}")
   cmake_path(GET SAMPLE_DIR PARENT_PATH SAMPLE_DIR)
   add_compile_definitions("SAMPLE_DIR=\"${SAMPLE_DIR}\"")
 endif()
@@ -56,10 +57,13 @@ endif()
 # And my own simple extensions to make porting easier
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../supt")
 
-#### Build executables
-add_executable(occluder_culling occluder_culling.cpp)
-target_link_libraries(occluder_culling Eigen3::Eigen ${PANDALIBS})
-add_executable(portal_culling portal_culling.cpp)
-target_link_libraries(portal_culling Eigen3::Eigen ${PANDALIBS})
+#### Build executable
+foreach(x step1_blank_window step2_basic_setup step3_load_model
+          step4_load_system step5_complete_solar_system
+	  step6_controllable_system)
+  # anim_supt is only needed for 5+, but it doesn't hurt
+  add_executable(${x} ${x}.cpp ../supt/anim_supt.cpp)
+  target_link_libraries(${x} Eigen3::Eigen ${PANDALIBS})
+  install(TARGETS ${x})
+endforeach()
 
-install(TARGETS occluder_culling portal_culling)
