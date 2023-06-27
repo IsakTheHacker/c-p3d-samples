@@ -84,7 +84,7 @@ TODO:
  - _  glow-filter
  - _  infinite-tunnel
  - _  looking-and-gripping
- - _  media-player
+ - ✓  media-player
  - _  motion-trails
  - _  mouse-modes
  - ✓  music-box - gives lock assertion error on exit, but otherwise OK
