@@ -1,9 +1,10 @@
 #include <cMetaInterval.h>
 #include <waitInterval.h>
-#include <cLerpAnimEffectInterval.h>
 #include <cLerpNodePathInterval.h>
 #include <initializer_list>
 #include <functional>
+#include <animControl.h>
+#include <partBundle.h>
 
 // This is primarily animation support functions for converting Python samples
 // to C++.  It also includes a few other extras that I probably should've put
@@ -130,29 +131,43 @@ typedef CLerpNodePathInterval NPAnim;
 // Character animations.  Instead of supplying the animation name, like in
 // Python, provide the actual AnimBundle.  If you don't have it, you can still
 // search by name with find().
-class CharAnimate : public CLerpAnimEffectInterval {
+// This was using CLerpAnimEffectInterval, but I don't think that was
+// appropriate.  Instead, it now uses set_pose() on the ctrl directly.
+class CharAnimate : public CInterval {
+    PT(AnimControl) _ctrl;
+    int _start, _end;
     void init(AnimControl *ctrl, double rate, double start, double end)
     {
+	_ctrl = ctrl;
 	auto bundle = ctrl->get_anim();
 	if(end > bundle->get_num_frames() || end < 0)
-	    end = bundle->get_num_frames();
+	    end = bundle->get_num_frames() - 1;
 	if(start < 0)
 	    start = 0;
-	_end_t = _duration = (end - start) / rate / bundle->get_base_frame_rate();
+	_end_t = _duration = (end - start + 1) / rate / bundle->get_base_frame_rate();
 	set_play_rate(rate);
-	add_control(ctrl, ctrl->get_name(), start, end);
+	ctrl->get_part()->set_control_effect(_ctrl, 1);
+	_start = start;
+	_end = end;
     }
   public:
     CharAnimate(std::string name, AnimControl *ctrl, double rate = 1.0,
 		double start = 0, double end = -1) :
-	CLerpAnimEffectInterval(name, 0, BT_no_blend) {
+	CInterval(name, 0, false) {
 	    init(ctrl, rate, start, end);
 	}
     CharAnimate(AnimControl *ctrl, double rate = 1.0,
 		double start = 0, double end = -1) :
-	CLerpAnimEffectInterval(std::to_string((unsigned long)this), 0, BT_no_blend) {
+	CInterval(std::to_string((unsigned long)this), 0, false) {
 	    init(ctrl, rate, start, end);
 	}
+    // NOTE: adding members requires this:
+    ALLOC_DELETED_CHAIN(CharAnimate);
+    void priv_step(double t)
+    {
+	double frame = _start + (_end - _start) / (_duration ? _duration : 1) * t;
+	_ctrl->pose(frame);
+    }
 };
 
 // I'm too lazy to make a sound player, so here's a macro:
@@ -162,6 +177,12 @@ class CharAnimate : public CLerpAnimEffectInterval {
 	new Wait((len) < 0 ? (snd)->length() - (start) : (len)), \
 	new Func((snd)->stop()) \
      })
+
+// Originally developed for boxing-robots, but also used elsewhere.
+// Load an animation "model" file and bind it to loaded model.
+// Assumes the samples' convention of model being just a dummy parent to
+// a Characdter node, which is the actual character to bind to.
+PT(AnimControl) load_anim(NodePath &model, const std::string &file);
 
 ///////////////////////////////////////////////////////////////////////////
 // Some extra stuff that should probably go into a different header

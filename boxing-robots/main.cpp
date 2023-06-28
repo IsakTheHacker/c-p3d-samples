@@ -55,7 +55,6 @@ void gen_label_text(const char *text, int i)
 void try_punch(const Event *, void *);
 void check_punch(int);
 void setup_lights(void);
-PT(AnimControl) load_anim(NodePath &model, const std::string &file);
 
 void init()
 {
@@ -182,7 +181,7 @@ void init()
 #else // You could use the default keybindings, but they conflict in a bad way
     framework.enable_default_keys();
 #endif
-#if 1 // test all animations
+#if 0 // test all animations
     // there's an odd delay before the "down" anim starts, to adjust the arm pos
     (new Sequence({
 	new CharAnimate(head_down[0]), // works
@@ -200,46 +199,6 @@ void init()
     framework.define_key("s", "Robot 1 Right Punch", try_punch, (void *)punch_right[0]);
     framework.define_key("k", "Robot 2 Left Punch", try_punch, (void *)punch_left[1]);
     framework.define_key("l", "Robot 2 Right Punch", try_punch, (void *)punch_right[1]);
-}
-
-// Since there a lot of animations to load, this convenience function
-// saves a lot of typing.
-PT(AnimControl) load_anim(NodePath &model, const std::string &file)
-{
-    // The first step is to locate the Character node to bind with.
-    // In the samples, it's always the first child
-    auto char_node = dynamic_cast<Character *>(model.node()->get_child(0));
-    // But, to be safe, you can either search by name or by type
-#if 0
-    auto char_node = dynamic_cast<Character *>
-	(model.find("robot_skinned_2").node()); // you have to know this.
-    auto char_node = dynamic_cast<Character *>
-	(model.find("-Character").node());
-#endif
-    // These flags (with obnoxiously long names) are needed to bind the
-    // sample animations.  This bypasses hierarchy match integrity checks.
-    // The first fails because it stupidly expects the animation name to
-    // match the model name.
-    // The second fails because there are some joints in the animation
-    // with no corresponding joint in the model.
-    int match_flags = PartGroup::HMF_ok_wrong_root_name | // the first killer
-                      PartGroup::HMF_ok_anim_extra; // the silent killer
-
-#if 1
-    // There is a convenient combination function, load_bind_anim(), to
-    // do all the work:
-    static Loader loader; // any loader will do; window's supports vfs
-    return char_node->get_bundle(0)->
-	load_bind_anim(&loader, file, match_flags, PartSubset(), false);     
-#else
-    // Since the window's load_model() has additional functionality, it's
-    // probably better to always use it, though.
-    auto mod = def_load_model(file);
-    auto anim = AnimBundleNode::find_anim_bundle(mod);
-    auto ret = char_node->get_bundle(0)->bind_anim(anim, match_flags);
-    ret->set_anim_model(mod);
-    return ret;
-#endif
 }
 
 // try_punch will play the interval passed to it only if

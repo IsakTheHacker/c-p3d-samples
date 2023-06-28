@@ -83,7 +83,7 @@ TODO:
  - _  gamepad
  - _  glow-filter
  - _  infinite-tunnel
- - _  looking-and-gripping
+ - ✓  looking-and-gripping
  - ✓  media-player
  - _  motion-trails
  - _  mouse-modes

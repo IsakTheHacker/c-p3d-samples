@@ -276,7 +276,7 @@ void start()
     // Create the movement task
     // It is stopped before calling start() again, so no need to make sure it's
     // not running
-    //framework.get_task_mgr()->remove(find_task("roll_task"));
+    //framework.get_task_mgr().remove(find_task("roll_task"));
     // while window is a global, passing the mouse node down avoids this
     // function call every time the task is executed.
     roll_task = new GenericAsyncTask("roll_task", roll_func, (void*)window->get_mouse().node());

@@ -13,12 +13,13 @@ project(cpp-panda3d LANGUAGES CXX)
 subdirs(
     asteroids
     ball-in-maze
-    boxing-robots   # broken: no punch animations
+    boxing-robots   # broken: all animations are broken
     bump-mapping
     carousel
     chessboard
     culling
     disco-lights
+    looking-and-gripping
     media-player
     music-box       # seems to work, but fails lock assertion on exit
     shader-terrain
