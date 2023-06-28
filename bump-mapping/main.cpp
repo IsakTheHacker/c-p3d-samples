@@ -81,8 +81,8 @@ void init(void)
     // Configure the parallax mapping settings (these are just the defaults)
     //parallax_mapping_samples = 3; ?? won't link ??
     //parallax_mapping_scale = 0.1; ?? won't link ??
-    load_prc_file_data("", "parallax_mapping_samples = 3\n"
-		           "parallax_mapping_scale = 0.1");
+    load_prc_file_data("", "parallax-mapping-samples 3\n"
+		           "parallax-mapping-scale 0.1");
 
     // Open framework (replaces ShowBase).  This will not set up
     // everything like ShowBase, but it does provide convenient functions

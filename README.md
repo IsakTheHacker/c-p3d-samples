@@ -75,7 +75,7 @@ TODO:
  - ✓ carousel
  - _ cartoon-shader - requires apparently Python-only functionality
  - ✓ chessboard
- - X culling - portal culling definitely broken; needs on-screen FPS meter
+ - ✓ culling
  - ✓ disco-lights
  - _  distortion - requires apparently Python-only functionality
  - _  fireflies

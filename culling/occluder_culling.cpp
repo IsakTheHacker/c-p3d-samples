@@ -85,10 +85,10 @@ void init()
     window_title = "Occluder Demo";
     sync_video = false;
     //show_frame_rate_meter = true; // ???can't link???
-    load_prc_file_data("", "show_frame_rate_meter = true");
+    load_prc_file_data("", "show-frame-rate-meter #t");
     texture_minfilter = SamplerState::FT_linear_mipmap_linear;
     //fake_view_frustum_cull = true; // show culled nodes in red  // ???can't link???
-    //load_prc_file_data("", "fake_view_frustum_cull = true");
+    //load_prc_file_data("", "fake-view-frustum-cull #t");
 
     // Open framework (replaces ShowBase).  This will not set up
     // everything like ShowBase, but it does provide convenient functions

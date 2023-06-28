@@ -153,7 +153,6 @@ int main(int argc, char **argv)
 {
     // Tell Panda3D to use OpenAL, not FMOD
     audio_library_name = "p3openal_audio";
-    //load_prc_file_data("", "audio-library-name p3openal_audio")
     if(argc > 1)
 	sample_path = argv[1];
     init("PandaSneezes.ogv");

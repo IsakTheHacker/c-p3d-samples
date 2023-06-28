@@ -3,8 +3,6 @@
  * https://github.com/panda3d/panda3d/tree/v1.10.13/samples/culling
  *
  * Original C++ conversion by Thomas J. Moore June 2023
- * Note that as of now, this does not work.  Only boxes within the cell
- * you're standing in are displayed.
  *
  * Comments are mostly extracted from the Python sample, such as:
  *
@@ -94,16 +92,16 @@ void init()
     // Load PRC data
 #if ENABLE_PORTALS
     //allow_portal_cull = true; ??? can't link?
-    load_prc_file_data("", "allow_portal_cull = true");
+    load_prc_file_data("", "allow-portal-cull #t");
 #if DEBUG_PORTALS
     //debug_portal_cull = true; ??? can't link?
-    load_prc_file_data("", "debug_portal_cull = true");
+    load_prc_file_data("", "debug-portal-cull #t");
 #endif
 #endif
     window_title = "Portal Demo";
     sync_video = false;
     //show_frame_rate_meter = true; ?? can't link?
-    load_prc_file_data("", "show_frame_rate_meter = true");
+    load_prc_file_data("", "show-frame-rate-meter #t");
     texture_minfilter = SamplerState::FT_linear_mipmap_linear;
 
     // Open framework (replaces ShowBase).  This will not set up

@@ -59,7 +59,7 @@ EXCLUDE_PATTERNS       = *_src.h *_ext.h aa_luse.h test_lib.h cpp* \
 			 */direct/src/*.[hIT]   */dtool/src/*.[hIT]    */pandatool/src/*.[hIT]
 
 ALLOW_UNICODE_NAMES    = YES
-INLINE_INHERITED_MEMB  = YES
+#INLINE_INHERITED_MEMB  = YES
 BUILTIN_STL_SUPPORT    = YES
 # I can't filter out the non-include files from the files list.
 # Disabling the source browser only disables the code, not the file entry
