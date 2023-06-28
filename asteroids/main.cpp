@@ -157,9 +157,7 @@ void init(void)
     // Mouse-based camera control requires manual enable.  Don't do that.
 
     // Load the background starfield.
-    // FIXME:  I am doing something wrong here.  It doesn't do anything
-    window->get_graphics_output()->set_clear_color(LColor(0, 0, 0, 1));
-    window->get_graphics_output()->set_clear_color_active(true);
+    window->set_background_type(WindowFramework::BT_black);
 
     bg = load_object("stars.jpg", 146, {0,0}, 200, false);
 
@@ -173,9 +171,7 @@ void init(void)
 
     window->enable_keyboard();
 #if 0 // Instead of defining ESC
-    framework.define_key("escape", "Quit", EV_FN() {
-        framework.set_exit_flag();
-    }, 0);
+    framework.define_key("escape", "Quit", framework.event_esc, &framework);
 #else // Use the default keybindings (partial conflict, but OK)
     framework.enable_default_keys();
 #endif

@@ -61,9 +61,7 @@ struct World {
 
     World() {
         // The standard camera position and background initialization
-	auto bgctrl = window->get_graphics_window();
-	bgctrl->set_clear_color(LPoint3(0, 0, 0));
-	bgctrl->set_clear_color_active(true);
+	window->set_background_type(WindowFramework::BT_black);
 	auto camera = window->get_camera_group();
         camera.set_pos(0, 0, 45);
         camera.set_hpr(0, -90, 0);
@@ -481,7 +479,6 @@ int main(int argc, char **argv)
     // does just that.  Check it out if you like:  it is very simple.
     init_interval(); // run the animations when added
 
-    background_color = LPoint3(0, 0, 0); // set bg black
     window = framework.open_window();
 
     // instantiate the class

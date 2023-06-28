@@ -91,9 +91,7 @@ void init()
     // note: mouse already disabled by default
     auto camera = window->get_camera_group();
     camera.set_pos_hpr(14.5, -15.4, 14, 45, -14, 0);
-    // FIXME:  I am doing something wrong here.  It doesn't do anything
-    window->get_graphics_output()->set_clear_color(LColor(0, 0, 0, 1));
-    window->get_graphics_output()->set_clear_color_active(true);
+    window->set_background_type(WindowFramework::BT_black);
 
     // Add lighting so that the objects are not drawn flat
     setup_lights();
@@ -180,9 +178,7 @@ void init()
     // plays the given interval
     window->enable_keyboard();
 #if 1 // Instead of defining ESC
-    framework.define_key("escape", "Quit", EV_FN(){
-        framework.set_exit_flag();
-    }, 0);
+    framework.define_key("escape", "Quit", framework.event_esc, &framework);
 #else // You could use the default keybindings, but they conflict in a bad way
     framework.enable_default_keys();
 #endif

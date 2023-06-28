@@ -100,9 +100,8 @@ void init(void)
     // Keyboard definitions
     window->enable_keyboard();
 #if 0
-    framework.define_key("escape", "Quit", EV_FN() {
-	framework.set_exit_flag();
-    }, 0); // Escape quits
+    // Escape quits
+    framework.define_key("escape", "Quit", framework.event_esc, &framework);
 #else
     // Or, default key bindings.  In particular, ? displays bindings; ESC quits
     // This adds debugging keys.

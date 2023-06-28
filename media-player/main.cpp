@@ -103,7 +103,7 @@ void init(const char *media_file)
     // Synchronize the video to the sound.
     tex->synchronize_to(sound);
 
-    framework.define_key("escape", "", EV_FN() { framework.set_exit_flag(); }, 0);
+    framework.define_key("escape", "", framework.event_esc, &framework);
     framework.define_key("p", "", EV_FN() { playpause(); }, 0);
     framework.define_key("P", "", EV_FN() { playpause(); }, 0);
     framework.define_key("s", "", EV_FN() { stopsound(); }, 0);

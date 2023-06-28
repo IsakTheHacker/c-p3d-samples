@@ -81,7 +81,7 @@ void init(void)
     title.set_scale(0.05);
 
     // Set up the key input
-    framework.define_key("escape", "Quit", EV_FN() { framework.set_exit_flag(); }, 0);
+    framework.define_key("escape", "Quit", framework.event_esc, &framework);
 
     // Fix the camera position
     // disable_mouse(); // unnecessary; requires manual enable

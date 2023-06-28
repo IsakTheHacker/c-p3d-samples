@@ -132,7 +132,7 @@ void init(void)
     auto task = new GenericAsyncTask("camera-task", control_camera, 0);
     framework.get_task_mgr().add(task);
     window->enable_keyboard();
-    framework.define_key("escape", "", EV_FN() { framework.set_exit_flag(); }, 0);
+    framework.define_key("escape", "", framework.event_esc, &framework);
     framework.define_key("mouse1", "", EV_FN() { mousebtn[0] = true; }, 0);
     framework.define_key("mouse1-up", "", EV_FN() { mousebtn[0] = false; }, 0);
     framework.define_key("mouse2", "", EV_FN() { mousebtn[1] = true; }, 0);

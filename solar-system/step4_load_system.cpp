@@ -46,9 +46,7 @@ struct World {
 	text_node->set_text_color(1, 1, 1, 1);
 	text.set_scale(0.07);
 
-	auto bgctrl = window->get_graphics_window();
-	bgctrl->set_clear_color(LPoint3(0, 0, 0));  // Set the background to black
-	bgctrl->set_clear_color_active(true);
+	window->set_background_type(WindowFramework::BT_black);  // Set the background to black
         // window->setup_trackball();  // don't enable mouse control of the camera
 	window->enable_keyboard();  // just enable any key bindings
 	framework.enable_default_keys();  // set default key bindings
@@ -190,7 +188,6 @@ int main(int argc, char **argv)
 	sample_path = *++argv; // override baked-in path to sample data
 
     framework.open_framework();
-    background_color = LPoint3(0, 0, 0); // set bg black
     window = framework.open_window();
 
     // instantiate the class

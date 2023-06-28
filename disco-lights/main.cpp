@@ -232,7 +232,7 @@ void init(void)
 
     // listen to keys for controlling the lights
     window->enable_keyboard();
-    framework.define_key("escape", "Quit", EV_FN() { framework.set_exit_flag(); }, 0);
+    framework.define_key("escape", "Quit", framework.event_esc, &framework);
     // instead of awkward casting, I use lambdas
     framework.define_key("a", "", EV_FN() { toggle_lights({ambient_light}); }, 0);
     framework.define_key("d", "", EV_FN() { toggle_lights({directional_light}); }, 0);

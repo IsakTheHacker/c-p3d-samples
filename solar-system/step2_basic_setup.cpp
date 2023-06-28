@@ -52,22 +52,11 @@ struct World {  // Our main class (struct: public by default)
 
         // Make the background color black (R=0, G=0, B=0)
         // instead of the default grey
-	// This does not work, and I have no idea why.
-	// It sets the values in the GrpahicsOutput, but they are ignored
-	// in favor of .. something else ..
-	// in gdb, I see 2 copies of GraphicsEngine.  Why?  Is one copy
-	// a springboard to the other?  I need to compile panda3d with
-	// debugging symbols, but its idiotic custom python build system
-	// can only compile everything from scratch.
-	auto bgctrl = window->get_graphics_window();
-	bgctrl->set_clear_color(LPoint3(0, 0, 0));
-	bgctrl->set_clear_color_active(true);
-
-	// The only way I have been able to get the bg color to
-	// change in C++ is to set the preference:
-	//background_color = LPoint3(0, 0, 0);
-	// but that only works if you do it before creating the window,
-	// and you can't change it dynamically.
+//	auto bgctrl = window->get_display_region_3d();
+//	bgctrl->set_clear_color(LPoint3(0, 0, 0));
+//	bgctrl->set_clear_color_active(true);
+	// Or, since it's so common, the framework provides a shortcut:
+	window->set_background_type(WindowFramework::BT_black);
 
 	// The mouse controls the camera only if we explicitly enable it.
         // Often, we don't enable that so that the camera can be placed
@@ -107,8 +96,6 @@ int main(void)
 {
     // Initialize Panda and create a window
     framework.open_framework();
-
-    background_color = LPoint3(0, 0, 0); // see above: set bg black
 
     window = framework.open_window();
 
