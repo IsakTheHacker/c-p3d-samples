@@ -133,8 +133,8 @@ void init()
     // Now we define how the animated models will move. Animations are played
     // through special intervals.  Since the Python code uses special convenience
     // wrappers, this code does, as well.  They are defined in the common
-    // anim_supt.h file.  In this case we use CLerpAnimEffectInterval,
-    // as enapsulated in the anim_supt convenience class CharAnimate.  This
+    // anim_supt.h file.  In this case we use a custom CInterval (CharAnimate,
+    // located in anim_supt.h) that runs the animation directly.  This
     // is used in a sequence to play the part of the punch animation where the
     // arm extends, call a function to check if the punch landed, and then
     // play the part of the animation where the arm retracts
@@ -145,14 +145,21 @@ void init()
 	    // Interval for the outstreched animation
 	    new CharAnimate(left_punch[r], 1, 1, 10),
 	    // Function to check if the punch was successful
-	    new Func(check_punch(2 - r)),
+	    // Note that CIntervalManager uses a global lock on every
+	    // method, including the one which runs this interval.  This
+	    // means that calls which modify or query the interval state,
+	    // such as most CInterval methods (even is_running()) will
+	    // deadlock.  Instead, use FuncAsync(), which spawns a task.
+	    // It's more expensive than Func(), though, so only use it
+	    // if necessary.
+	    new FuncAsync(check_punch(2 - r)),
             // Interval for the retract animation
 	    new CharAnimate(left_punch[r], 1, 11, 31)
 	});
 	// Punch sequence for robot's right arm
-	punch_right[0] = new Sequence({
+	punch_right[r] = new Sequence({
 	    new CharAnimate(right_punch[r], 1, 1, 10),
-	    new Func(check_punch(2 - r)),
+	    new FuncAsync(check_punch(2 - r)),
 	    new CharAnimate(right_punch[r], 1, 11, 31)
 	});
 
@@ -180,20 +187,6 @@ void init()
     framework.define_key("escape", "Quit", framework.event_esc, &framework);
 #else // You could use the default keybindings, but they conflict in a bad way
     framework.enable_default_keys();
-#endif
-#if 0 // test all animations
-    // there's an odd delay before the "down" anim starts, to adjust the arm pos
-    (new Sequence({
-	new CharAnimate(head_down[0]), // works
-	new CharAnimate(head_up[0]), // works
-	new CharAnimate(head_down[1]), // works
-	new CharAnimate(left_punch[0], .5), // does nothing but delay
-	new CharAnimate(right_punch[0], .5), // does nothing but delay
-	new CharAnimate(left_punch[1], .5), // does nothing but delay
-	new CharAnimate(right_punch[1], .5), // does nothing but delay
-	new CharAnimate(head_up[1]) // works
-        // there's an odd delay between iterations of the loop
-    }))->loop();
 #endif
     framework.define_key("a", "Robot 1 Left Punch", try_punch, (void *)punch_left[0]);
     framework.define_key("s", "Robot 1 Right Punch", try_punch, (void *)punch_right[0]);

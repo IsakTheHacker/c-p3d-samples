@@ -70,7 +70,7 @@ TODO:
 
  - ✓ asteroids
  - ✓ ball-in-maze
- - X boxing-robots - Compiles, but punch animations silently missing
+ - ✓ boxing-robots
  - ✓ bump-mapping
  - ✓ carousel
  - _ cartoon-shader - requires apparently Python-only functionality

@@ -4,7 +4,6 @@
 #include <initializer_list>
 #include <functional>
 #include <animControl.h>
-#include <partBundle.h>
 
 // This is primarily animation support functions for converting Python samples
 // to C++.  It also includes a few other extras that I probably should've put
@@ -62,11 +61,20 @@ class FuncI : public CInterval {
     virtual void priv_instant() { _f(); }
     // NOTE: adding members requires this:
     ALLOC_DELETED_CHAIN(FuncI);
-  private:
+  protected:
     fp _f;
 };
 // Func is short-hand for the most common usage: just provide call as arg.
 #define Func(f) FuncI([=]{ f; })
+
+// FuncA takes a function pointer and executes it asynchronously, in a task
+class FuncAsyncI : public FuncI {
+  public:
+    FuncAsyncI(const std::string &name, fp fn, bool open = true) : FuncI(name, fn, open) {}
+    FuncAsyncI(fp fn, bool open = true) : FuncI(fn, open) {}
+    virtual void priv_instant();
+};
+#define FuncAsync(f) FuncAsyncI([=]{ f; })
 
 // Linear interpolator with setter function.  Works on any type that supports
 // self-addition and scaling (multiplication by a double).
@@ -129,27 +137,14 @@ typedef CLerpNodePathInterval NPAnim;
 #define NPAnimEx CLerpNodePathInterval
 
 // Character animations.  Instead of supplying the animation name, like in
-// Python, provide the actual AnimBundle.  If you don't have it, you can still
+// Python, provide the actual AnimControl.  If you don't have it, you can still
 // search by name with find().
 // This was using CLerpAnimEffectInterval, but I don't think that was
-// appropriate.  Instead, it now uses set_pose() on the ctrl directly.
+// appropriate.  Instead, it now uses pose() on the ctrl directly.
 class CharAnimate : public CInterval {
     PT(AnimControl) _ctrl;
     int _start, _end;
-    void init(AnimControl *ctrl, double rate, double start, double end)
-    {
-	_ctrl = ctrl;
-	auto bundle = ctrl->get_anim();
-	if(end > bundle->get_num_frames() || end < 0)
-	    end = bundle->get_num_frames() - 1;
-	if(start < 0)
-	    start = 0;
-	_end_t = _duration = (end - start + 1) / rate / bundle->get_base_frame_rate();
-	set_play_rate(rate);
-	ctrl->get_part()->set_control_effect(_ctrl, 1);
-	_start = start;
-	_end = end;
-    }
+    void init(AnimControl *ctrl, double rate, double start, double end);
   public:
     CharAnimate(std::string name, AnimControl *ctrl, double rate = 1.0,
 		double start = 0, double end = -1) :
@@ -168,6 +163,8 @@ class CharAnimate : public CInterval {
 	double frame = _start + (_end - _start) / (_duration ? _duration : 1) * t;
 	_ctrl->pose(frame);
     }
+    void priv_initialize(double t);
+    void priv_finalize();
 };
 
 // I'm too lazy to make a sound player, so here's a macro:

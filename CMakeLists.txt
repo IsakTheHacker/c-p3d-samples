@@ -13,7 +13,7 @@ project(cpp-panda3d LANGUAGES CXX)
 subdirs(
     asteroids
     ball-in-maze
-    boxing-robots   # broken: all animations are broken
+    boxing-robots
     bump-mapping
     carousel
     chessboard
