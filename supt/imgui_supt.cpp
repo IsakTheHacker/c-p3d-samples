@@ -26,11 +26,11 @@
 
 /* Any other differences are by Thomas J. Moore and are in the Public Domain. */
 
-#include <pandaFramework.h>
-#include <pandaSystem.h>
-#include <buttonThrower.h>
-#include <mouseWatcher.h>
-#include <pgTop.h>
+#include <panda3d/pandaFramework.h>
+#include <panda3d/pandaSystem.h>
+#include <panda3d/buttonThrower.h>
+#include <panda3d/mouseWatcher.h>
+#include <panda3d/pgTop.h>
 
 #include "imgui_supt.h"
 extern "C" {

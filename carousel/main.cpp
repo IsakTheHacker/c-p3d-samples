@@ -23,10 +23,10 @@
  * will turn on and off by switching their texture with intervals in Sequence
  * and Parallel
  */
-#include <pandaFramework.h>
-#include <texturePool.h>
-#include <ambientLight.h>
-#include <directionalLight.h>
+#include <panda3d/pandaFramework.h>
+#include <panda3d/texturePool.h>
+#include <panda3d/ambientLight.h>
+#include <panda3d/directionalLight.h>
 
 #include "anim_supt.h"
 

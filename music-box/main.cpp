@@ -12,10 +12,10 @@
  * This tutorial shows how to load, play, and manipulate sounds
  * and sound intervals in a panda project.
  */
-#include <pandaFramework.h>
-#include <audio.h>
-#include <pointLight.h>
-#include <ambientLight.h>
+#include <panda3d/pandaFramework.h>
+#include <panda3d/audio.h>
+#include <panda3d/pointLight.h>
+#include <panda3d/ambientLight.h>
 
 #include "anim_supt.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
@@ -89,6 +89,7 @@ void init(void)
     // Sounds require an audio manager.  As per the docs, there should be
     // one AudioManager for each type of sound you use.
     music_manager = AudioManager::create_AudioManager();
+    music_manager->local_object();
 
     // Loading the main music box song
     // Synchronous loads can ge done with get_sound().  Asynchronous
@@ -122,6 +123,7 @@ void init(void)
     // Loading the open/close effect
     // Sound effects are in a different audio manager.
     sfx_manager = AudioManager::create_AudioManager();
+    sfx_manager->local_object();
 
     auto lid_sfx = sfx_manager->get_sound(sample_path + "music/openclose.ogg");
     // The open/close file has both effects in it. Fortunatly we can use intervals
@@ -186,8 +188,8 @@ void init(void)
     // Just like the scene graph contains hierarchies of nodes, so can
     // models. You can get the NodePath for the node using the find
     // function, and then you can animate the model by moving its parts
-    // To see the hierarchy of a model, use, the ls function (Python only)
-    // music_box.ls() prints out the entire hierarchy of the model
+    // To see the hierarchy of a model, use, the ls function
+    //music_box.ls(); // prints out the entire hierarchy of the model
 
     // Finding pieces of the model
     Lid = music_box.find("**/lid");

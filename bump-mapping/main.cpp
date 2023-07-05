@@ -13,11 +13,11 @@
  * This is a tutorial to show how to do normal mapping
  * in panda3d using the Shader Generator.
  */
-#include <pandaFramework.h>
-#include <ambientLight.h>
-#include <pointLight.h>
-#include <lodNode.h> // parallax config
-#include <load_prc_file.h> // but actually...
+#include <panda3d/pandaFramework.h>
+#include <panda3d/ambientLight.h>
+#include <panda3d/pointLight.h>
+#include <panda3d/lodNode.h> // parallax config
+#include <panda3d/load_prc_file.h> // but actually...
 
 #include "anim_supt.h"
 
@@ -202,6 +202,8 @@ AsyncTask::DoneStatus control_camera(GenericAsyncTask *task, void *data)
 {
     // figure out how much the mouse has moved (in pixels)
     auto win = window->get_graphics_window();
+    if(!win)
+	return AsyncTask::DS_done;
     auto md = win->get_pointer(0);
     auto x = md.get_x();
     auto y = md.get_y();

@@ -21,12 +21,12 @@
  */
 
 // Panda3D includes
-#include <pandaFramework.h>
-#include <collisionHandlerQueue.h>
-#include <collisionRay.h>
-#include <ambientLight.h>
-#include <directionalLight.h>
-#include <mouseWatcher.h>
+#include <panda3d/pandaFramework.h>
+#include <panda3d/collisionHandlerQueue.h>
+#include <panda3d/collisionRay.h>
+#include <panda3d/ambientLight.h>
+#include <panda3d/directionalLight.h>
+#include <panda3d/mouseWatcher.h>
 
 #include "anim_supt.h"
 

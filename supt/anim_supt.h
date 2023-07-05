@@ -1,9 +1,10 @@
-#include <cMetaInterval.h>
-#include <waitInterval.h>
-#include <cLerpNodePathInterval.h>
+#pragma once
+#include <panda3d/cMetaInterval.h>
+#include <panda3d/waitInterval.h>
+#include <panda3d/cLerpNodePathInterval.h>
 #include <initializer_list>
 #include <functional>
-#include <animControl.h>
+#include <panda3d/animControl.h>
 
 // This is primarily animation support functions for converting Python samples
 // to C++.  It also includes a few other extras that I probably should've put
@@ -146,6 +147,7 @@ class CharAnimate : public CInterval {
     int _start, _end;
     void init(AnimControl *ctrl, double rate, double start, double end);
   public:
+    const std::string &anim_name() { return _ctrl->get_name(); }
     CharAnimate(std::string name, AnimControl *ctrl, double rate = 1.0,
 		double start = 0, double end = -1) :
 	CInterval(name, 0, false) {
@@ -180,6 +182,17 @@ class CharAnimate : public CInterval {
 // Assumes the samples' convention of model being just a dummy parent to
 // a Characdter node, which is the actual character to bind to.
 PT(AnimControl) load_anim(NodePath &model, const std::string &file);
+
+// These flags (with obnoxiously long names) are needed to bind the
+// sample animations.  This bypasses hierarchy match integrity checks.
+// The first fails because it stupidly expects the animation name to
+// match the model name.
+// The second fails because there are some joints in the animation
+// with no corresponding joint in the model.
+#define ANIM_BIND_FLAGS ( \
+    PartGroup::HMF_ok_wrong_root_name | /* the first killer */ \
+    PartGroup::HMF_ok_anim_extra) /* the silent killer */
+
 
 ///////////////////////////////////////////////////////////////////////////
 // Some extra stuff that should probably go into a different header

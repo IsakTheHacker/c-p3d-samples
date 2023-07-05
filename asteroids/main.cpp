@@ -19,8 +19,8 @@
  * most games so it seemed appropriate to show what a full game in Panda
  * could look like.
  */
-#include <pandaFramework.h>
-#include <texturePool.h>
+#include <panda3d/pandaFramework.h>
+#include <panda3d/texturePool.h>
 
 #include "anim_supt.h"
 

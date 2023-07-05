@@ -1,10 +1,10 @@
 #include "anim_supt.h"
-#include <cIntervalManager.h>
-#include <genericAsyncTask.h>
-#include <asyncTaskManager.h>
-#include <character.h>
-#include <partBundle.h>
-#include <loader.h>
+#include <panda3d/cIntervalManager.h>
+#include <panda3d/genericAsyncTask.h>
+#include <panda3d/asyncTaskManager.h>
+#include <panda3d/character.h>
+#include <panda3d/partBundle.h>
+#include <panda3d/loader.h>
 
 // FIXME: sleep until there's something to do
 void init_interval(void)

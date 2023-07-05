@@ -6,10 +6,10 @@
  *
  * Comments are mostly extracted from the Python sample, if present.
  */
-#include <pandaFramework.h>
-#include <movieTexture.h>
-#include <cardMaker.h>
-#include <audioManager.h>
+#include <panda3d/pandaFramework.h>
+#include <panda3d/movieTexture.h>
+#include <panda3d/cardMaker.h>
+#include <panda3d/audioManager.h>
 
 #include "anim_supt.h"
 

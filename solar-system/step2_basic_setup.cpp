@@ -28,8 +28,8 @@
  * but in-line rather than as a generic function that can be called.
  */
 
-#include <pandaFramework.h>
-#include <graphicsOutput.h>
+#include <panda3d/pandaFramework.h>
+#include <panda3d/graphicsOutput.h>
 PandaFramework framework;
 WindowFramework *window;
 

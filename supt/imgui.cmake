@@ -21,7 +21,7 @@ list(TRANSFORM IMGUI_SRC PREPEND ../supt/imgui/)
 list(TRANSFORM IMGUI_INCLUDE PREPEND ../supt/imgui/)
 
 list(APPEND IMGUI_SRC ../supt/panda3d_imgui/panda3d_imgui/panda3d_imgui)
-list(APPEND IMGUI_INCLUDE ../supt/panda3d_imgui/panda3d_imgui) 
+list(APPEND IMGUI_INCLUDE ../supt/panda3d_imgui/panda3d_imgui)
 
 list(APPEND IMGUI_SRC ../supt/imgui_supt)
 
@@ -77,4 +77,6 @@ list(APPEND IMGUI_LIBS ${FC_LIBRARIES})
 list(TRANSFORM IMGUI_SRC APPEND .cpp)
 add_library(panda3d_imgui ${IMGUI_SRC})
 target_link_libraries(panda3d_imgui Eigen3::Eigen)
+# I prefer <panda3d/...>, but panda3d_imgui uses <...>
+target_include_directories(panda3d_imgui PUBLIC ${PANDA_H}/panda3d)
 list(PREPEND IMGUI_LIBS panda3d_imgui)

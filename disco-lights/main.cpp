@@ -13,11 +13,11 @@
  * This project demonstrates how to use various types of
  * lighting
  */
-#include <pandaFramework.h>
-#include <ambientLight.h>
-#include <directionalLight.h>
-#include <spotlight.h>
-#include <pointLight.h>
+#include <panda3d/pandaFramework.h>
+#include <panda3d/ambientLight.h>
+#include <panda3d/directionalLight.h>
+#include <panda3d/spotlight.h>
+#include <panda3d/pointLight.h>
 #include <sstream>
 
 #include "anim_supt.h"

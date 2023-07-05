@@ -39,7 +39,7 @@
 // The main header file should be in your include search path.
 // I prefer <> over "" to indicate "system" header files, but either
 // should work if you set the include search path correctly.
-#include <pandaFramework.h>
+#include <panda3d/pandaFramework.h>
 
 // These are stored globally, but of course that's not necessary or
 // even a good idea in large projects.

@@ -12,10 +12,10 @@
  * This is a demo of Panda's occluder-culling system. It demonstrates loading
  * occluder from an EGG file and adding them to a CullTraverser.
  */
-#include <pandaFramework.h>
-#include <texturePool.h>
-#include <occluderNode.h>
-#include <load_prc_file.h>
+#include <panda3d/pandaFramework.h>
+#include <panda3d/texturePool.h>
+#include <panda3d/occluderNode.h>
+#include <panda3d/load_prc_file.h>
 
 #include "anim_supt.h"
 

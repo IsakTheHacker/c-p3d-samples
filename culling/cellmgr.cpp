@@ -1,8 +1,8 @@
 #include <map>
-#include <portalNode.h>
-#include <collisionRay.h>
-#include <collisionTraverser.h>
-#include <collisionHandlerQueue.h>
+#include <panda3d/portalNode.h>
+#include <panda3d/collisionRay.h>
+#include <panda3d/collisionTraverser.h>
+#include <panda3d/collisionHandlerQueue.h>
 
 // Support classes for portalculling.cpp.
 // This is in a separate file because it needs to be at the top, but to

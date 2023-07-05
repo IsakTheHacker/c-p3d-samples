@@ -32,7 +32,7 @@ including Panda3D, requires changes/fixes for animated model loading;
 at least Panda3D's assimp support seems to be progressing without my
 intervention), or major misfeatures (such as not being able to avoid
 the use of excessive configuration files or scripting languages, in
-particular Python or Python-like languages or Python-like practaices
+particular Python or Python-like languages or Python-like practices
 (e.g. auto-downloading a complete distribution in order to run
 anything), as I consider Python a plague upon humanity, and an even
 biggest step backwards than Visual Basic).  I originally rejected
@@ -59,7 +59,7 @@ matter into the doxy directory.  It's intended to be run after
 building, in a top-level subdirectory (doxy in my case) of the panda3d
 source tree.  There are still undocumented entities, and it still
 includes internal APIs probably not intended for public use, and it is
-most defintely not tutorial in nature, but, again, it's better than
+most definitely not tutorial in nature, but, again, it's better than
 nothing.  Don't even bother looking at the broken latex output (20k+
 pages of bloated garbage, and then dies).  Perhaps after I get things
 working on the code side, assuming I don't abandon Panda3D entirely in
@@ -73,11 +73,11 @@ TODO:
  - ✓ boxing-robots
  - ✓ bump-mapping
  - ✓ carousel
- - _ cartoon-shader - requires apparently Python-only functionality
+ - ~ cartoon-shader - requires Python-only functionality; see note #3, #4.
  - ✓ chessboard
  - ✓ culling
  - ✓ disco-lights
- - _  distortion - requires apparently Python-only functionality
+ - ~  distortion - requires Python-only functionality; see note #4.
  - _  fireflies
  - _  fractal-plants
  - _  gamepad
@@ -87,7 +87,7 @@ TODO:
  - ✓  media-player
  - _  motion-trails
  - _  mouse-modes
- - ✓  music-box - gives lock assertion error on exit, but otherwise OK
+ - ✓  music-box - uses imgui; see note #1; crashes on exit; see note #2
  - _  particles
  - _  procedural-cube
  - _  render-to-texture
@@ -96,3 +96,35 @@ TODO:
  - ✓  shader-terrain
  - _  shadows
  - ✓  solar-system
+
+notes:
+
+1) The Direct GUI is entirely in Python, and I have no interest in
+   porting it.  Instead, I used someone else's work to get imgui working
+   in panda3d.  imgui has many flaws, some of which make the samples
+   that use GUIs harder, but I honestly believe that an independently
+   developed widget GUI has no place in this library (by widget I do
+   not include things like BufferViewer and the on-screen text
+   display).  Naturally, the GUI looks and works differently.
+   
+   **NOTE:**
+   
+   If you didn't use `--recursive` to obtain this git repository, you
+   must do "`git submodule init; git submodule update`" to load the 
+   imgui module source.
+2) OpenAL sounds require the OpenAL sound manager to exist when they
+   are deleted.  At program exit, the deletion order can't be relied
+   on.  I tried simple solutions to this, which didn't work, so I have
+   left music-box to crash (assertion failure due to manager's lock no
+   longer existing) on exit.  Really, the manager should track which
+   sounds still exist, and delete them itself in its destructor.  Or
+   at least flag the sounds to become inert.
+3) The filter classes, including the "common filters" are only
+   available in Python.  I suppose I should fix that, since they seem
+   generally useful.  Maybe in a future revision.  Thus, the
+   cartoon-shader "simple" sample won't work.
+4) The BufferViewer class is a feature of the Direct GUI, and
+   therefore not available in C++.  I have gone ahead and ported
+   distortion and cartoon-shader:advanced without that particular
+   sub-feature.  Maybe one day I'll port BufferViewer, but not now.
+   though.  Way too much exposure to Python for my taste.

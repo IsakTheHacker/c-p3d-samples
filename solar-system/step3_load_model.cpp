@@ -17,9 +17,9 @@
  * we will load just the sun and and the sky-sphere we use to create the
  * star-field.
  */
-#include <pandaFramework.h>
-#include <graphicsOutput.h>
-#include <texturePool.h>
+#include <panda3d/pandaFramework.h>
+#include <panda3d/graphicsOutput.h>
+#include <panda3d/texturePool.h>
 
 #include "anim_supt.h" // some macros I creaed to ease porting
 

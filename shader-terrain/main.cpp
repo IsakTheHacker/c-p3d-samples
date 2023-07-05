@@ -12,12 +12,12 @@
  *
  * This tutorial provides an example of using the ShaderTerrainMesh class
  */
-#include <pandaFramework.h>
-#include <glgsg.h>
-#include <shaderTerrainMesh.h>
-#include <load_prc_file.h>
-#include <texturePool.h>
-#include <shaderPool.h>
+#include <panda3d/pandaFramework.h>
+#include <panda3d/glgsg.h>
+#include <panda3d/shaderTerrainMesh.h>
+#include <panda3d/load_prc_file.h>
+#include <panda3d/texturePool.h>
+#include <panda3d/shaderPool.h>
 
 #include "anim_supt.h"
 

@@ -16,12 +16,14 @@ subdirs(
     boxing-robots
     bump-mapping
     carousel
+    cartoon-shader  # only advanced works, and no BufferViewer
     chessboard
     culling
     disco-lights
+    distortion      # no BufferViewer
     looking-and-gripping
     media-player
-    music-box       # seems to work, but fails lock assertion on exit
+    music-box       # fails lock assertion on exit; uses imgui
     shader-terrain
     solar-system
 )

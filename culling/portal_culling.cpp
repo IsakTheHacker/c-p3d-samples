@@ -18,9 +18,9 @@
 #define ENABLE_PORTALS 1 // Set to 0 to disable portal culling and see FPS drop!
 #define DEBUG_PORTALS  1 // Set to 1 to see visually which portals are used
 
-#include <pandaFramework.h>
-#include <texturePool.h>
-#include <load_prc_file.h>
+#include <panda3d/pandaFramework.h>
+#include <panda3d/texturePool.h>
+#include <panda3d/load_prc_file.h>
 
 #include "anim_supt.h"
 

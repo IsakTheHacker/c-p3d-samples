@@ -1,11 +1,13 @@
 #### Find prerequisites
-# For Panda3D, I just search for panda.h.  All include files should be
-# in the same place.  I let cmake search the standard places, plus a
-# panda3d subdirectory.  If not found, you will be prompted for the file
-# location in ccmake/cmake-gui.
+# For Panda3D, I just search for panada3d/panda.h.  All include files should
+# be in the same place.  I let cmake search the standard places.  Note that
+# this means that you have to install the inculde files in a panda3d
+# subdirectory.  This is standard practice.
+# If not found, you will be prompted for the file location in ccmake/cmake-gui.
 find_file(PANDA_H panda.h PATH_SUFFIXES panda3d REQUIRED
-          DOC "The main Panda3D include file (panda.h) in its installed home.")
+          DOC "The main Panda3D include file (panda3d/panda.h) in its installed home.")
 cmake_path(SET PANDA_H "${PANDA_H}")
+cmake_path(GET PANDA_H PARENT_PATH PANDA_H)
 cmake_path(GET PANDA_H PARENT_PATH PANDA_H)
 include_directories("${PANDA_H}")
 

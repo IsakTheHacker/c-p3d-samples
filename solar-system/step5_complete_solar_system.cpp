@@ -17,9 +17,9 @@
  * in the next tutorial, but watching it move really shows what inheritance on
  * the scene graph is all about.
  */
-#include <pandaFramework.h>
-#include <graphicsOutput.h>
-#include <texturePool.h>
+#include <panda3d/pandaFramework.h>
+#include <panda3d/graphicsOutput.h>
+#include <panda3d/texturePool.h>
 
 #include "anim_supt.h"
 

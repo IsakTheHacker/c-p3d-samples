@@ -14,10 +14,10 @@
  * This tutorial shows how to play animations on models aka "actors".
  * It is based on the popular game of "Rock 'em Sock 'em Robots".
  */
-#include <pandaFramework.h>
-#include <ambientLight.h>
-#include <directionalLight.h>
-#include <character.h>
+#include <panda3d/pandaFramework.h>
+#include <panda3d/ambientLight.h>
+#include <panda3d/directionalLight.h>
+#include <panda3d/character.h>
 
 #include "anim_supt.h"
 

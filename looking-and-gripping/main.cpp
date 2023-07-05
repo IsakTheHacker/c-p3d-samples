@@ -18,13 +18,13 @@
  * parenting an object to a hand joint, the object will stay in the character's
  * hand even if the hand is moving through an animation.
  */
-#include <pandaFramework.h>
-#include <ambientLight.h>
-#include <directionalLight.h>
-#include <character.h>
-#include <characterJoint.h>
-#include <mouseWatcher.h>
-#include <modelNode.h>
+#include <panda3d/pandaFramework.h>
+#include <panda3d/ambientLight.h>
+#include <panda3d/directionalLight.h>
+#include <panda3d/character.h>
+#include <panda3d/characterJoint.h>
+#include <panda3d/mouseWatcher.h>
+#include <panda3d/modelNode.h>
 
 #include "anim_supt.h"
 
