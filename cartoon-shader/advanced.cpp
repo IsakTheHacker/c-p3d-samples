@@ -22,6 +22,7 @@
 
 #include "anim_supt.h"
 
+namespace { // don't export/pollute the global namespace
 // Global variables.  The Python sample stored these in the class; I am not
 // using a class here.  Since it's not a class, C++ doesn't do forward
 // references, so they are all declared up here.
@@ -83,10 +84,13 @@ void init(void)
 
     window->get_camera_group().set_pos(0, -50, 0);
 
+    window->enable_keyboard();
+    framework.define_key("escape", "", framework.event_esc, &framework);
+
     // Check video card capabilities.
     if(!window->get_graphics_window()->get_gsg()->get_supports_basic_shaders()) {
 	add_title("Toon Shader: Video driver reports that Cg shaders are not supported.");
-	exit(1);
+	return;
     }
 
     // Show instructions in the corner of the window.
@@ -157,7 +161,6 @@ void init(void)
     drawn_scene.set_shader_input("separation", LVecBase4(separation, 0, separation, 0));
     drawn_scene.set_shader_input("cutoff", LVecBase4(cutoff));
 
-    window->enable_keyboard();
 #if 0 // The viewer is entiirely implemented in Python.  Forget it for now.
     // Panda contains a built-in viewer that lets you view the results of
     // your render-to-texture operations.  This code configures the viewer.
@@ -184,7 +187,6 @@ void init(void)
     spin->loop();
 
     // These allow you to change cartooning parameters in realtime
-    framework.define_key("escape", "", framework.event_esc, &framework);
     framework.define_key("arrow_up", "", EV_FN() { adjust_separation(10.0/9); }, 0);
     framework.define_key("arrow_down", "", EV_FN() { adjust_separation(0.9); }, 0);
     framework.define_key("arrow_left", "", EV_FN() { adjust_cutoff(10.0/9); }, 0);
@@ -204,6 +206,7 @@ void adjust_cutoff(PN_stdfloat adj)
     cutoff *= adj;
     std::cout << "cutoff: " << cutoff << '\n';
     drawn_scene.set_shader_input("cutoff", LVecBase4(cutoff));
+}
 }
 
 int main(int argc, const char **argv)

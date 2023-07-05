@@ -19,6 +19,7 @@
 #include <panda3d/pandaFramework.h>
 #include <panda3d/graphicsOutput.h>
 #include <panda3d/texturePool.h>
+#include <panda3d/throw_event.h>
 
 #include "anim_supt.h"
 
@@ -411,13 +412,14 @@ struct World {
         // Here the earth interval has been changed to rotate like the rest of the
         // planets and send a message before it starts turning again. To send a
         // message, create an Event object and dispatch() it to the handler.
+	// There is a throw_event global function overloaded with various
+	// numbers of parameters that does this for you.
 	// The "new_year" message is picked up by the add_hook("new_year"...)
 	// statement earlier, and calls the inc_year method as a result
 	NPAnim *earth_orb;
         orbit_period_earth = new Sequence({
 	    (earth_orb = new NPAnim(orbit_root_earth, "eartho", yearscale)),
-	    new Func(framework.get_event_handler().
-		     dispatch_event(new Event("new_year")))
+	    new Func(throw_event("new_year"))
 	});
 	earth_orb->set_end_hpr(LVector3(360, 0, 0));
         day_period_earth = new NPAnim(earth, "earthd", dayscale);

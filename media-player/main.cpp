@@ -82,7 +82,8 @@ void init(const char *media_file)
     PT(MovieTexture) tex = new MovieTexture("name");
     if(!tex->read(sample_path + media_file)) {
 	std::cerr << "Failed to load video!";
-	exit(1);
+	framework.set_exit_flag();
+	return;
     }
 
     // Set up a fullscreen card to set the video texture on.

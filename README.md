@@ -78,7 +78,7 @@ TODO:
  - ✓ culling
  - ✓ disco-lights
  - ~  distortion - requires Python-only functionality; see note #4.
- - _  fireflies
+ - ~  fireflies - requires Python-only functionality; see note #4, #5.
  - _  fractal-plants
  - _  gamepad
  - _  glow-filter
@@ -125,6 +125,11 @@ notes:
    cartoon-shader "simple" sample won't work.
 4) The BufferViewer class is a feature of the Direct GUI, and
    therefore not available in C++.  I have gone ahead and ported
-   distortion and cartoon-shader:advanced without that particular
+   samples which originally used this without that particular
    sub-feature.  Maybe one day I'll port BufferViewer, but not now.
    though.  Way too much exposure to Python for my taste.
+5) fireflies attempts to load models asynchronously, and often fails:
+   seg faulting in the memory allocator (usually), not showing the
+   "Loading models..." message, etc.  Sometimes it works, though, and
+   it's hard to reproduce in the debugger or in valgrind.  I will
+   revisit this some day, maybe.

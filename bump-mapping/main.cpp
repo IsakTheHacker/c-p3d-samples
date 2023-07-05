@@ -94,11 +94,14 @@ void init(void)
     framework.set_window_title("Bump Mapping - C++ Panda3D Samples");
     window = framework.open_window();
 
+    window->enable_keyboard();
+    framework.define_key("escape", "", framework.event_esc, &framework);
+
     // Check video card capabilities.
     if(!window->get_graphics_window()->get_gsg()->get_supports_basic_shaders()) {
 	add_title("Bump Mapping: "
 		  "Video driver reports that Cg shaders are not supported.");
-	exit(1);
+	return;
     }
 
     // Post the instructions
@@ -131,8 +134,6 @@ void init(void)
     // Start the camera control task:
     auto task = new GenericAsyncTask("camera-task", control_camera, 0);
     framework.get_task_mgr().add(task);
-    window->enable_keyboard();
-    framework.define_key("escape", "", framework.event_esc, &framework);
     framework.define_key("mouse1", "", EV_FN() { mousebtn[0] = true; }, 0);
     framework.define_key("mouse1-up", "", EV_FN() { mousebtn[0] = false; }, 0);
     framework.define_key("mouse2", "", EV_FN() { mousebtn[1] = true; }, 0);

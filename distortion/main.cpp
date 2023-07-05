@@ -15,6 +15,7 @@
 
 #include "anim_supt.h"
 
+namespace { // don't export/pollute the global namespace
 // Global variables.  The Python sample stored these in the class; I am not
 // using a class here.  Since it's not a class, C++ doesn't do forward
 // references, so they are all declared up here.
@@ -38,7 +39,7 @@ void add_instructions(PN_stdfloat pos, const std::string &msg)
     // style = 1 -> plain (default)
     text_node->set_text_color(1, 1, 1, 1);
     text.reparent_to(window->get_aspect_2d()); // a2d
-    text.set_pos(-1.0+0-.25, 0, 1 - pos - 0.04); // TopLeft == (-1,0,1)
+    text.set_pos(-1.0+-0.25, 0, 1 - pos); // TopLeft == (-1,0,1)
     text_node->set_align(TextNode::A_left);
     text.set_scale(0.05);
 }
@@ -74,9 +75,12 @@ void init(void)
     framework.set_window_title("Distortion - C++ Panda3D Samples");
     window = framework.open_window();
 
+    window->enable_keyboard();
+    framework.define_key("escape", "", framework.event_esc, &framework);
+
     if(!window->get_graphics_window()->get_gsg()->get_supports_basic_shaders()) {
 	add_title("Distortion Demo: Video driver says Cg shaders not supported.");
-	exit(1);
+	return;
     }
 
     window->set_background_type(WindowFramework::BT_black);
@@ -138,7 +142,6 @@ void init(void)
             tex_distortion, GraphicsOutput::RTM_bind_or_copy, GraphicsOutput::RTP_color);
     distortion_object.set_shader_input("screen", tex_distortion);
 
-    window->enable_keyboard();
 #if 0 /**** Buffer Viewer is a Direct/Python feature only *****/
     // Panda contains a built-in viewer that lets you view the results of
     // your render-to-texture operations.  This code configures the viewer.
@@ -151,7 +154,6 @@ void init(void)
 
     // event handling
     framework.define_key("space", "", EV_FN() { toggle_distortion(); }, 0);
-    framework.define_key("escape", "", framework.event_esc, &framework);
     distortion_on = true;
 }
 
@@ -181,6 +183,7 @@ void toggle_distortion()
     else
 	distortion_object.show();
     distortion_on = !distortion_on;
+}
 }
 
 int main(int argc, char **argv)

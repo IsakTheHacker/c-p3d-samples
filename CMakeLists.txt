@@ -21,9 +21,22 @@ subdirs(
     culling
     disco-lights
     distortion      # no BufferViewer
+    fireflies       # no BufferViewer; sometimes crashes on model load
+#    fractal-plants # not yet
+#    gamepad # not yet
+#    glow-filter # not yet
+#    infinite-tunnel # not yet
     looking-and-gripping
     media-player
+#    motion-trails # not yet
+#    mouse-modes # not yet
     music-box       # fails lock assertion on exit; uses imgui
+#    particles # not yet
+#    procedural-cube # not yet
+#    render-to-texture # not yet
+#    roaming-ralph # not yet
+#    rocket-console # not yet; probably never
     shader-terrain
+#    shadows # not yet
     solar-system
 )
