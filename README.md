@@ -73,13 +73,13 @@ TODO:
  - ✓ boxing-robots
  - ✓ bump-mapping
  - ✓ carousel
- - ~ cartoon-shader - requires Python-only functionality; see note #3, #4.
+ - ~ cartoon-shader - requires Python-only functionality; see note #2, #3.
  - ✓ chessboard
  - ✓ culling
  - ✓ disco-lights
- - ~  distortion - requires Python-only functionality; see note #4.
- - ~  fireflies - requires Python-only functionality; see note #4, #5.
- - _  fractal-plants
+ - ~  distortion - requires Python-only functionality; see note #3.
+ - ~  fireflies - requires Python-only functionality; see note #3, #4.
+ - ✓  fractal-plants
  - _  gamepad
  - _  glow-filter
  - _  infinite-tunnel
@@ -87,7 +87,7 @@ TODO:
  - ✓  media-player
  - _  motion-trails
  - _  mouse-modes
- - ✓  music-box - uses imgui; see note #1; crashes on exit; see note #2
+ - ✓  music-box - crashes on exit; see note #1
  - _  particles
  - _  procedural-cube
  - _  render-to-texture
@@ -99,36 +99,23 @@ TODO:
 
 notes:
 
-1) The Direct GUI is entirely in Python, and I have no interest in
-   porting it.  Instead, I used someone else's work to get imgui working
-   in panda3d.  imgui has many flaws, some of which make the samples
-   that use GUIs harder, but I honestly believe that an independently
-   developed widget GUI has no place in this library (by widget I do
-   not include things like BufferViewer and the on-screen text
-   display).  Naturally, the GUI looks and works differently.
-   
-   **NOTE:**
-   
-   If you didn't use `--recursive` to obtain this git repository, you
-   must do "`git submodule init; git submodule update`" to load the 
-   imgui module source.
-2) OpenAL sounds require the OpenAL sound manager to exist when they
+1) OpenAL sounds require the OpenAL sound manager to exist when they
    are deleted.  At program exit, the deletion order can't be relied
    on.  I tried simple solutions to this, which didn't work, so I have
    left music-box to crash (assertion failure due to manager's lock no
    longer existing) on exit.  Really, the manager should track which
    sounds still exist, and delete them itself in its destructor.  Or
    at least flag the sounds to become inert.
-3) The filter classes, including the "common filters" are only
+2) The filter classes, including the "common filters" are only
    available in Python.  I suppose I should fix that, since they seem
    generally useful.  Maybe in a future revision.  Thus, the
    cartoon-shader "simple" sample won't work.
-4) The BufferViewer class is a feature of the Direct GUI, and
+3) The BufferViewer class is a feature of the Direct GUI, and
    therefore not available in C++.  I have gone ahead and ported
    samples which originally used this without that particular
    sub-feature.  Maybe one day I'll port BufferViewer, but not now.
    though.  Way too much exposure to Python for my taste.
-5) fireflies attempts to load models asynchronously, and often fails:
+4) fireflies attempts to load models asynchronously, and often fails:
    seg faulting in the memory allocator (usually), not showing the
    "Loading models..." message, etc.  Sometimes it works, though, and
    it's hard to reproduce in the debugger or in valgrind.  I will

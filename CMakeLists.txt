@@ -22,7 +22,7 @@ subdirs(
     disco-lights
     distortion      # no BufferViewer
     fireflies       # no BufferViewer; sometimes crashes on model load
-#    fractal-plants # not yet
+    fractal-plants
 #    gamepad # not yet
 #    glow-filter # not yet
 #    infinite-tunnel # not yet
@@ -30,7 +30,7 @@ subdirs(
     media-player
 #    motion-trails # not yet
 #    mouse-modes # not yet
-    music-box       # fails lock assertion on exit; uses imgui
+    music-box       # fails lock assertion on exit
 #    particles # not yet
 #    procedural-cube # not yet
 #    render-to-texture # not yet

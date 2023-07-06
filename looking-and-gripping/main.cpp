@@ -28,7 +28,7 @@
 
 #include "anim_supt.h"
 
-//namespace { // don't export/pollute the global namespace
+namespace { // don't export/pollute the global namespace
 // Global variables
 // The Python sample uses a class, which can have forward references even
 // in C++.  I am using globals, though, as it saves a few headaches.  Thus,
@@ -227,6 +227,7 @@ void setup_lights()  // Sets up some default lighting
     auto render = window->get_render();
     render.set_light(render.attach_new_node(directional_light));
     render.set_light(render.attach_new_node(ambient_light));
+}
 }
 
 int main(int argc, char* argv[]) {

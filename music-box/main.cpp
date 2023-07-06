@@ -16,11 +16,9 @@
 #include <panda3d/audio.h>
 #include <panda3d/pointLight.h>
 #include <panda3d/ambientLight.h>
+#include <panda3d/mouseButton.h>
 
 #include "anim_supt.h"
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include "imgui_supt.h"
-using namespace ImGui;
 
 namespace { // don't export/pollute the global namespace
 // Global variables
@@ -38,9 +36,10 @@ double music_time;
 bool box_open;
 NodePath Lid, Panda, HingeNode;
 PT(CInterval) lid_open, lid_close, panda_turn;
-const char *button_text;
 
-void toggle_music_box(void);
+void set_music_box_volume(const Event *, void *);
+void toggle_music_box(const Event *, void *);
+void set_pad(PGItem *item, PN_stdfloat x, PN_stdfloat y);
 
 void init(void)
 {
@@ -81,6 +80,7 @@ void init(void)
     title.set_scale(0.05);
 
     // Set up the key input
+    window->enable_keyboard();
     framework.define_key("escape", "Quit", framework.event_esc, &framework);
 
     // Fix the camera position
@@ -89,7 +89,6 @@ void init(void)
     // Sounds require an audio manager.  As per the docs, there should be
     // one AudioManager for each type of sound you use.
     music_manager = AudioManager::create_AudioManager();
-    music_manager->local_object();
 
     // Loading the main music box song
     // Synchronous loads can ge done with get_sound().  Asynchronous
@@ -123,7 +122,6 @@ void init(void)
     // Loading the open/close effect
     // Sound effects are in a different audio manager.
     sfx_manager = AudioManager::create_AudioManager();
-    sfx_manager->local_object();
 
     auto lid_sfx = sfx_manager->get_sound(sample_path + "music/openclose.ogg");
     // The open/close file has both effects in it. Fortunatly we can use intervals
@@ -133,52 +131,51 @@ void init(void)
 
     // For this tutorial, it seemed appropriate to have on screen controls.
     // The following code creates them.
-    // Since the "direct" GUI is Python-only, this uses Dear ImGui.
-    setup_imgui(window);
-    GetIO().Fonts->Clear(); // replace the default font
-    static PN_stdfloat orig_ys;
-    orig_ys = window->get_pixel_2d().get_sz();
-    // GUI was probably designed for height=600
-    auto load_fscale = 600 / (2 / orig_ys);
-    static float fheight;
-    fheight = load_font("Sans-20", load_fscale)->FontSize / load_fscale;
-    GetIO().IniFilename = NULL;
-    imgui_draw({
-	// pixel2d is a child of render2d, so the scale factors are the
-	// actual # of pixels / 2 (due to -1..1)
-	auto scale = window->get_pixel_2d().get_scale();
-	ImVec2 sz(1 / scale.get_x(), 1 / scale.get_z());
-	auto fscale = orig_ys / scale.get_z() * 300 / fheight;
-	SetNextWindowPos(ImVec2(0, 0));
-	SetNextWindowSize(sz * 2);
-	sz.y = -sz.y; // for coordinates, invert y
-	auto d2i = [&](float x, float y) { return (ImVec2(x, y) + ImVec2(1, -1)) * sz; };
-	if(Begin("mainwin", NULL, ImGuiWindowFlags_NoDecoration |
-		                  ImGuiWindowFlags_AlwaysAutoResize |
-		                  ImGuiWindowFlags_NoBackground)) {
-	    // Original coordinates: -0.1, .75.   Too far to the right.
-	    // Presumably it's being centered, but centering is hard
-	    SetCursorScreenPos(d2i(-0.7, 0.75));
-	    // scale=.07
-	    GetIO().FontGlobalScale = 0.07 * fscale;
-	    float vol = music_box_sound->get_volume();
-	    if(SliderFloat(" ", &vol, 0, 1, "Volume %.2f",
-			   ImGuiSliderFlags_AlwaysClamp))
-		music_box_sound->set_volume(vol);
-	    // Again, original (0.9,0.75) is too far to the right.
-	    SetCursorScreenPos(d2i(0.65, 0.75));
-	    GetIO().FontGlobalScale = 
-	    // scale=.1, pad=(.2, .2)
-	    GetIO().FontGlobalScale = 0.1 * fscale;
-	    if(Button(button_text))
-		toggle_music_box();
-	}
-	End();
-    });
+    // Note that instead of the Python-only DirectGUI, this uses PGUI, upon
+    // which DirectGUI is partially based.
+    // All PGUI elements must be descendents of PGTop.  The WindowFramework
+    // conveniently roots aspect_2d and pixel_2d with PGTop.
+    // We'll be using aspect_2d, just like with the on-screen text in the
+    // other samples.  The coordinates match the Python code, in any case.
+    // This is a label for a slider
+    text_node = new TextNode("label");
+    title = NodePath(text_node);
+    text_node->set_text("Volume");
+    title.reparent_to(window->get_aspect_2d());
+    title.set_pos(-0.1, 0, 0.87); // def. center (0, 0, 0)
+    text_node->set_align(TextNode::A_center);
+    title.set_scale(0.07);
+    text_node->set_text_color(1, 1, 1, 1);
+    text_node->set_shadow_color(0, 0, 0, .5);
+    text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
 
+    // The slider itself.
+    auto slider = new PGSliderBar;
+//    slider->setup_slider(false, ....);
+    auto slider_node = window->get_aspect_2d().attach_new_node(slider);
+    slider_node.set_pos(-0.1, 0, 0.75); // def. center == (0,0,0)
+    slider_node.set_scale(0.8);
+    slider->set_value(0.50); // default range is 0..1
+    slider->setup_slider(false, 2, 0.16, 0.8); // DirectGUI default size
+    // In order to respond to changes, a callback needs to be added.
+    // One way would be to subclass a PGSliderBarNotifier object, and
+    // attach it using set_notify().  However, that's way too much
+    // effort, so instead, I'll use the standard event management system.
+    // The event name has a unique embedded ID, so you obtain it using
+    // get_adjust_event().  This then calls set_music_box_volume when
+    // adjusted.
+    auto &evhnd = framework.get_event_handler();
+    evhnd.add_hook(slider->get_adjust_event(), set_music_box_volume, slider);
+    // A button that calls toggle_music_box when pressed
+    PT(PGButton) button = new PGButton("open/close");
+    auto button_node = window->get_aspect_2d().attach_new_node(button);
+    button_node.set_pos(.9, 0, .75);
+    button->setup("Open");
+    set_pad(button, 0.2, 0.2);
+    button_node.set_scale(0.1);
+    evhnd.add_hook(button->get_click_event(MouseButton::one()), toggle_music_box, button);
     // A variable to represent the state of the simulation. It starts closed
     box_open = false;
-    button_text = "Open";
 
     // Here we load and set up the music box. It was modeled in a complex way, so
     // setting it up will be complicated
@@ -238,11 +235,20 @@ void init(void)
 	}, 0));
 }
 
-void toggle_music_box()
+void set_music_box_volume(const  Event *, void *data)
+{
+    auto slider = reinterpret_cast<PGSliderBar *>(data);
+    music_box_sound->set_volume(slider->get_value());
+}
+
+void toggle_music_box(const Event *, void *data)
 {
     //if(lid_open->is_playing() || lid_close->is_playing())
     //    // It's currently already opening or closing
     //    return;
+
+    const char *button_text;
+    auto button = reinterpret_cast<PGButton *>(data);
 
     if(box_open) {
 	lid_open->pause();
@@ -263,10 +269,24 @@ void toggle_music_box()
 	music_box_sound->play();  // Play the music
 	button_text = "Close";  // Prepare to change button label
     }
+    // Can't just set_text(), so must call setup().  This requires
+    // re-adjusting the "pad" as well
+    button->setup(button_text);
+    set_pad(button, 0.2, 0.2);
 
     // Set our state to opposite what it was
     box_open = !box_open;
     //(closed to open or open to closed)
+}
+
+void set_pad(PGItem *item, PN_stdfloat x, PN_stdfloat y)
+{
+    auto bframe = item->get_frame();
+    bframe[0] -= x;
+    bframe[1] += x;
+    bframe[2] -= y;
+    bframe[3] += y;
+    item->set_frame(bframe);
 }
 }
 

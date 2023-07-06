@@ -5,7 +5,7 @@
 # There is no need for 3.21.0; I picked that version pretty much at random.
 cmake_minimum_required(VERSION 3.21.0)
 
-set(SAMPLE music-box)
+set(SAMPLE fractal-plants)
 
 # The project name can be anything; it doesn't affect the results.
 project(${SAMPLE} LANGUAGES CXX)
@@ -13,6 +13,6 @@ project(${SAMPLE} LANGUAGES CXX)
 include(../supt/samples.cmake)
 
 #### Build executable
-add_executable(${SAMPLE} main.cpp ${SUPT_SRC})
-target_link_libraries(${SAMPLE} ${PANDALIBS} ${PANDA-p3direct})
+add_executable(${SAMPLE} main.cpp)
+target_link_libraries(${SAMPLE} ${PANDALIBS})
 install(TARGETS ${SAMPLE})

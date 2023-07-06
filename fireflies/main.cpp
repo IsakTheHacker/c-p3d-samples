@@ -98,7 +98,7 @@ void init(void)
     init_interval();
 
     //Set the window title and open new window
-    framework.set_window_title("fireflies - C++ Panda3D Samples");
+    framework.set_window_title("Fireflies - C++ Panda3D Samples");
     window = framework.open_window();
     window->set_background_type(WindowFramework::BT_black);
 

@@ -1,2 +1,0 @@
-const char shader_frag[] = ${shader_frag};
-const char shader_vert[] = ${shader_vert};

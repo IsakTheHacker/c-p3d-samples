@@ -1,6 +1,0 @@
-[submodule "supt/panda3d_imgui"]
-	path = supt/panda3d_imgui
-	url = https://github.com/bluekyu/panda3d_imgui
-[submodule "supt/imgui"]
-	path = supt/imgui
-	url = https://github.com/ocornut/imgui
