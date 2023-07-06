@@ -33,13 +33,13 @@ bool distortion_on;
 // Function to put instructions on the screen.
 void add_instructions(PN_stdfloat pos, const std::string &msg)
 {
+    auto a2d = window->get_aspect_2d();
     TextNode *text_node = new TextNode("instructions");
-    auto text = NodePath(text_node);
+    auto text = a2d.attach_new_node(text_node);
     text_node->set_text(msg);
     // style = 1 -> plain (default)
     text_node->set_text_color(1, 1, 1, 1);
-    text.reparent_to(window->get_aspect_2d()); // a2d
-    text.set_pos(-1.0+-0.25, 0, 1 - pos); // TopLeft == (-1,0,1)
+    text.set_pos(-1.25, 0, pos); // default center = (0, 0, 0)
     text_node->set_align(TextNode::A_left);
     text.set_scale(0.05);
 }
@@ -48,14 +48,13 @@ void add_instructions(PN_stdfloat pos, const std::string &msg)
 void add_title(const std::string &text)
 {
     TextNode *text_node = new TextNode("title");
-    auto node = NodePath(text_node);
+    auto node = window->get_aspect_2d().attach_new_node(text_node);
     text_node->set_text(text);
     // style = 1 -> plain (default)
     text_node->set_text_color(1, 1, 1, 1);
     text_node->set_shadow_color(0, 0, 0, 1);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
-    node.set_pos(1.0+0.25, 0, -1 + 0.05); // BottomRight == (1,0,-1)
-    node.reparent_to(window->get_aspect_2d()); // a2d
+    node.set_pos(1.25, 0, -0.95); // Default center
     text_node->set_align(TextNode::A_right);
     node.set_scale(0.07);
 }
@@ -87,10 +86,10 @@ void init(void)
 
     // Show the instructions
     add_title("Panda3D: Tutorial - Distortion Effect");
-    add_instructions(0.04, "ESC: Quit");
-    add_instructions(0.10, "Space: Toggle distortion filter On/Off");
+    add_instructions(0.92, "ESC: Quit");
+    add_instructions(0.86, "Space: Toggle distortion filter On/Off");
 #if 0
-    add_instructions(0.16, "V: View the render-to-texture results");
+    add_instructions(0.80, "V: View the render-to-texture results");
 #endif
 
     // Load background

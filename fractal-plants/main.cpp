@@ -42,14 +42,14 @@ void setup_lights(void), setup_tapper(void);
 // TJM: like other samples, this is the common code to add instruction text
 TextNode *add_instruction(const std::string &msg, int off)
 {
+    auto a2d = window->get_aspect_2d();
     auto text_node = new TextNode("instruction");
-    auto text = NodePath(text_node);
+    auto text = a2d.attach_new_node(text_node);
     text_node->set_text(msg);
-    text.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_align(TextNode::A_left);
     // style = 1 - default
     text_node->set_text_color(1, 1, 1, 1);
-    text.set_pos(-1.0 + 0.06, 0, 1.0 - 0.10 - off * 0.06); // TopLeft == (-1,0,1)
+    text.set_pos(-1.0/a2d.get_sx() + 0.06, 0, 1.0 - 0.10 - off * 0.06); // TopLeft == (-1,0,1)
     text.set_scale(0.05);
     return text_node; // may_change = true
 }
@@ -64,12 +64,12 @@ void init(void)
 
     // There is no convenient "OnScreenText" class, although one could
     // be written.  Instead, here are the manual steps:
+    auto a2d = window->get_aspect_2d();
     TextNode *text_node = new TextNode("title");
-    auto text = NodePath(text_node);
+    auto text = a2d.attach_new_node(text_node);
     text_node->set_text("Panda3D: Tutorial - Procedurally Making a Tree");
     // style = 1 - default
     text_node->set_text_color(1, 1, 1, 1);
-    text.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_align(TextNode::A_center); // "default"
     text.set_pos(0, 0, -1+0.1); // BottomCenter == (0,0,-1)
     text.set_scale(0.08);

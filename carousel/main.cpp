@@ -65,10 +65,10 @@ void init(void)
     // This creates the on screen title that is in every tutorial
     // There is no convenient "OnScreenText" class, although one could
     // be written.  Instead, here are the manual steps:
+    auto a2d = window->get_aspect_2d();
     TextNode *text_node = new TextNode("title");
-    auto title = NodePath(text_node);
+    auto title = a2d.attach_new_node(text_node);
     text_node->set_text("Panda3D: Tutorial - Carousel");
-    title.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_text_color(1, 1, 1, 1);
     text_node->set_shadow_color(0.0f, 0.0f, 0.0f, 0.5f);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText

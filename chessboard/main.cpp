@@ -108,36 +108,34 @@ void init(void)
     // There is no convenient "OnScreenText" class, although one could
     // be written.  Instead, here are the manual steps:
     // This code was modified slightly to match the other demos
+    auto a2d = window->get_aspect_2d();
     auto text_node = new TextNode("title");
-    auto text = NodePath(text_node);
+    auto text = a2d.attach_new_node(text_node);
     text_node->set_text("Panda3D: Tutorial - Mouse Picking");
     // style=1: default
     text_node->set_text_color(1, 1, 1, 1);
     text_node->set_shadow_color(0.0f, 0.0f, 0.0f, 0.5f);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
-    text.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_align(TextNode::A_right);
-    text.set_pos(1.0-0.2, 0, -1+0.05); // BottomRight == (1,0,-1)
+    text.set_pos(1.0/a2d.get_sx()-0.2, 0, -1+0.05); // BottomRight == (1,0,-1)
     text.set_scale(0.07);
 
     text_node = new TextNode("instructions");
-    text = NodePath(text_node);
+    text = a2d.attach_new_node(text_node);
     text_node->set_text("ESC: Quit");
-    text.reparent_to(window->get_aspect_2d()); // a2d
     // style=1: default
     text_node->set_text_color(1, 1, 1, 1);
-    text.set_pos(-1+0.06, 0, 1-0.1); // TopLeft == (-1,0,1)
+    text.set_pos(-1/a2d.get_sx()+0.06, 0, 1-0.1); // TopLeft == (-1,0,1)
     text_node->set_align(TextNode::A_left);
     text.set_scale(0.05);
 
     text_node = new TextNode("instructions2");
-    text = NodePath(text_node);
+    text = a2d.attach_new_node(text_node);
     text_node->set_text("Left-click and drag: Pick up and drag piece");
-    text.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_align(TextNode::A_left);
     // style=1: default
     text_node->set_text_color(1, 1, 1, 1);
-    text.set_pos(-1+0.06, 0, 1-0.16); // TopLeft == (-1,0,1)
+    text.set_pos(-1/a2d.get_sx()+0.06, 0, 1-0.16); // TopLeft == (-1,0,1)
     text.set_scale(0.05);
 
     window->enable_keyboard();

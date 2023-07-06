@@ -57,15 +57,15 @@ template<class T> T clamp(T i, T mn=(T)0, T mx=(T)1)
 // onscreen instructions
 TextNode *make_status_label(int i)
 {
+    auto a2d = window->get_aspect_2d();
     TextNode *text_node = new TextNode("status_label");
-    auto path = NodePath(text_node);
-    path.reparent_to(window->get_aspect_2d()); // a2d
+    auto path = a2d.attach_new_node(text_node);
     text_node->set_align(TextNode::A_left);
     // style=1: default
     text_node->set_text_color(1, 1, 1, 1);
     text_node->set_shadow_color(0, 0, 0, .4);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
-    path.set_pos(-1.0 + 0.06, 0, 1.0 - 0.1 - 0.06 * i); // TopLeft == (-1,0,1)
+    path.set_pos(-1.0/a2d.get_sx() + 0.06, 0, 1.0 - 0.1 - 0.06 * i); // TopLeft == (-1,0,1)
     path.set_scale(0.05);
     return text_node; // may_change
 }
@@ -95,16 +95,16 @@ void init(void)
     // There is no convenient "OnScreenText" class, although one could
     // be written.  Instead, here are the manual steps:
     // This code was modified slightly to match the other demos
+    auto a2d = window->get_aspect_2d();
     auto text_node = new TextNode("title");
-    auto text = NodePath(text_node);
+    auto text = a2d.attach_new_node(text_node);
     text_node->set_text("Panda3D: Tutorial - Lighting");
     // style=1: default
     text_node->set_text_color(1, 1, 0, 1);
     text_node->set_shadow_color(0, 0, 0, 0.5);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
-    text.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_align(TextNode::A_right);
-    text.set_pos(1.0-0.13, 0, -1+0.05); // BottomRight == (1,0,-1)
+    text.set_pos(1.0/a2d.get_sx()-0.13, 0, -1+0.05); // BottomRight == (1,0,-1)
     text.set_scale(0.07);
 
     // Creates labels used for onscreen instructions

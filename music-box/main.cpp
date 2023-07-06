@@ -59,10 +59,10 @@ void init(void)
     // Our standard title and instructions text
     // There is no convenient "OnScreenText" class, although one could
     // be written.  Instead, here are the manual steps:
+    auto a2d = window->get_aspect_2d();
     TextNode *text_node = new TextNode("title");
-    auto title = NodePath(text_node);
+    auto title = a2d.attach_new_node(text_node);
     text_node->set_text("Panda3D: Tutorial - Music Box");
-    title.reparent_to(window->get_aspect_2d()); // a2d
     title.set_pos(0, 0, -1+0.08); // BottomCenter == (0,0,-1)
     title.set_scale(0.08);
     text_node->set_align(TextNode::A_center);
@@ -71,11 +71,10 @@ void init(void)
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
 
     text_node = new TextNode("instructions");
-    title = NodePath(text_node);
+    title = a2d.attach_new_node(text_node);
     text_node->set_text("ESC: Quit");
-    title.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_text_color(1, 1, 1, 1);
-    title.set_pos(-1.0 + 0.06, 0, 1.0 - 0.1); // TopLeft == (-1,0,1)
+    title.set_pos(-1.0/a2d.get_sx() + 0.06, 0, 1.0 - 0.1); // TopLeft == (-1,0,1)
     text_node->set_align(TextNode::A_left);
     title.set_scale(0.05);
 
@@ -139,9 +138,8 @@ void init(void)
     // other samples.  The coordinates match the Python code, in any case.
     // This is a label for a slider
     text_node = new TextNode("label");
-    title = NodePath(text_node);
+    title = a2d.attach_new_node(text_node);
     text_node->set_text("Volume");
-    title.reparent_to(window->get_aspect_2d());
     title.set_pos(-0.1, 0, 0.87); // def. center (0, 0, 0)
     text_node->set_align(TextNode::A_center);
     title.set_scale(0.07);
@@ -152,7 +150,7 @@ void init(void)
     // The slider itself.
     auto slider = new PGSliderBar;
 //    slider->setup_slider(false, ....);
-    auto slider_node = window->get_aspect_2d().attach_new_node(slider);
+    auto slider_node = a2d.attach_new_node(slider);
     slider_node.set_pos(-0.1, 0, 0.75); // def. center == (0,0,0)
     slider_node.set_scale(0.8);
     slider->set_value(0.50); // default range is 0..1
@@ -168,7 +166,7 @@ void init(void)
     evhnd.add_hook(slider->get_adjust_event(), set_music_box_volume, slider);
     // A button that calls toggle_music_box when pressed
     PT(PGButton) button = new PGButton("open/close");
-    auto button_node = window->get_aspect_2d().attach_new_node(button);
+    auto button_node = a2d.attach_new_node(button);
     button_node.set_pos(.9, 0, .75);
     button->setup("Open");
     set_pad(button, 0.2, 0.2);

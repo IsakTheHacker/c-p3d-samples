@@ -55,12 +55,12 @@ template<class T> T clamp(T i, T mn=(T)-1, T mx=(T)1)
 // on screen instructions
 void gen_label_text(const char *text, int i)
 {
+    auto a2d = window->get_aspect_2d();
     TextNode *text_node = new TextNode("label_text");
-    auto path = NodePath(text_node);
+    auto path = a2d.attach_new_node(text_node);
     text_node->set_text(text);
-    path.reparent_to(window->get_aspect_2d()); // a2d
     path.set_scale(0.06);
-    path.set_pos(-1.0 + 0.06, 0, 1.0 - 0.08 * i); // TopLeft == (-1,0,1)
+    path.set_pos(-1.0/a2d.get_sx() + 0.06, 0, 1.0 - 0.08 * i); // TopLeft == (-1,0,1)
     text_node->set_text_color(1, 1, 1, 1);
     text_node->set_shadow_color(0, 0, 0, .5);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
@@ -84,13 +84,13 @@ void init(void)
     window = framework.open_window();
 
     // This code puts the standard title and instruction text on screen
+    auto a2d = window->get_aspect_2d();
     auto text_node = new TextNode("title");
-    auto text = NodePath(text_node);
+    auto text = a2d.attach_new_node(text_node);
     text_node->set_text("Panda3D: Tutorial - Joint Manipulation");
     text_node->set_text_color(1, 1, 1, 1);
-    text.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_align(TextNode::A_right);
-    text.set_pos(1.0-0.1, 0, -1+0.1); // BottomRight == (1,0,-1)
+    text.set_pos(1.0/a2d.get_sx()-0.1, 0, -1+0.1); // BottomRight == (1,0,-1)
     text_node->set_shadow_color(0, 0, 0, 0.5);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
     text.set_scale(0.08);

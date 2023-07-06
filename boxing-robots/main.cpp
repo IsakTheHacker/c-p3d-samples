@@ -42,12 +42,12 @@ std::string sample_path
 // on screen instructions
 void gen_label_text(const char *text, int i)
 {
+    auto a2d = window->get_aspect_2d();
     TextNode *text_node = new TextNode(text);
-    auto path = NodePath(text_node);
+    auto path = a2d.attach_new_node(text_node);
     text_node->set_text(text);
-    path.reparent_to(window->get_aspect_2d()); // a2d
     path.set_scale(0.05);
-    path.set_pos(-1.0 + 0.1, 0, 1.0 - 0.1 - 0.07 * i); // TopLeft == (-1,0,1)
+    path.set_pos(-1.0/a2d.get_sx() + 0.1, 0, 1.0 - 0.1 - 0.07 * i); // TopLeft == (-1,0,1)
     text_node->set_text_color(1, 1, 1, 1);
     text_node->set_align(TextNode::A_left);
 }
@@ -71,13 +71,13 @@ void init()
     // This code puts the standard title and instruction text on screen
     // There is no convenient "OnScreenText" class, although one could
     // be written.  Instead, here are the manual steps:
+    auto a2d = window->get_aspect_2d();
     TextNode *text_node = new TextNode("title");
-    auto text = NodePath(text_node);
+    auto text = a2d.attach_new_node(text_node);
     text_node->set_text("Panda3D: Tutorial - Actors");
-    text.reparent_to(window->get_aspect_2d()); // a2d
     // style = 1 -> plain (default)
     text_node->set_text_color(0, 0, 0, 1);
-    text.set_pos(1.0-0.2, 0, -1+0.1); // BottomRight == (1,0,-1)
+    text.set_pos(1.0/a2d.get_sx()-0.2, 0, -1+0.1); // BottomRight == (1,0,-1)
     text_node->set_align(TextNode::A_right);
     text.set_scale(0.09);
     gen_label_text("ESC: Quit", 0);

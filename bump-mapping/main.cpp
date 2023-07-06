@@ -41,16 +41,16 @@ bool shaderenable;
 // Function to put instructions on the screen.
 TextNode *add_instructions(PN_stdfloat pos, const std::string &msg)
 {
+    auto a2d = window->get_aspect_2d();
     TextNode *text_node = new TextNode("instructions");
-    auto text = NodePath(text_node);
+    auto text = a2d.attach_new_node(text_node);
     text_node->set_text(msg);
     text_node->set_text_color(1, 1, 1, 1);
     // style = 1 -> plain (default)
     text.set_scale(0.05);
     text_node->set_shadow_color(0, 0, 0, 1);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
-    text.reparent_to(window->get_aspect_2d()); // a2d
-    text.set_pos(-1.0+0.08, 0, 1 - pos - 0.04); // TopLeft == (-1,0,1)
+    text.set_pos(-1.0/a2d.get_sx()+0.08, 0, 1 - pos - 0.04); // TopLeft == (-1,0,1)
     text_node->set_align(TextNode::A_left);
     return text_node;
 }
@@ -58,15 +58,15 @@ TextNode *add_instructions(PN_stdfloat pos, const std::string &msg)
 // Function to put title on the screen.
 void add_title(const std::string &text)
 {
+    auto a2d = window->get_aspect_2d();
     TextNode *text_node = new TextNode("title");
-    auto node = NodePath(text_node);
+    auto node = a2d.attach_new_node(text_node);
     text_node->set_text(text);
     text_node->set_text_color(1, 1, 1, 1);
     // style = 1 -> plain (default)
     node.set_scale(0.08);
-    node.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_align(TextNode::A_right);
-    node.set_pos(1.0-0.1, 0, -1 + 0.09); // BottomRight == (1,0,-1)
+    node.set_pos(1.0/a2d.get_sx()-0.1, 0, -1 + 0.09); // BottomRight == (1,0,-1)
     text_node->set_shadow_color(0, 0, 0, 1);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
 }

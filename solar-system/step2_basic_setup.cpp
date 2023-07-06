@@ -40,13 +40,13 @@ struct World {  // Our main class (struct: public by default)
         // We will use similar commands in all of our tutorials to create titles and
         // instruction guides.
 	// Ignore most of this; it's just a re-implementation of OnscreenText().
+	auto a2d = window->get_aspect_2d(); // coordinate space: 2d aspect-corrected
 	TextNode *text_node = new TextNode("title"); // a scene node to hold title
-	auto text = NodePath(text_node); // a path to the node
+	auto text = a2d.attach_new_node(text_node); // a path to the node
 	// the scene node is text.  Set its attributes:
 	text_node->set_text("Panda3D: Tutorial 1 - Solar System"); // text
-	text.reparent_to(window->get_aspect_2d()); // coordinate space: 2d aspect-corrected
 	text_node->set_align(TextNode::A_right); // bottom-right: right-align
-	text.set_pos(1.0-0.1, 0, -1+0.1); // Bottom-Right base is(1,0,-1) (3D Z is 2D Y; 3D Y is 0)
+	text.set_pos(1.0/a2d.get_sx()-0.1, 0, -1+0.1); // Bottom-Right base is(1,0,-1) (3D Z is 2D Y; 3D Y is 0)
 	text_node->set_text_color(1, 1, 1, 1); // color
 	text.set_scale(0.07);  // font size: ~28 lines (2/.07) on screen
 

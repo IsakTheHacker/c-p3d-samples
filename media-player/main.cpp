@@ -28,32 +28,32 @@ PT(AudioSound) sound;
 // Function to put instructions on the screen.
 void add_instructions(PN_stdfloat pos, const char *msg)
 {
+    auto a2d = window->get_aspect_2d();
     TextNode *text_node = new TextNode(msg);
-    auto path = NodePath(text_node);
+    auto path = a2d.attach_new_node(text_node);
     text_node->set_text(msg);
     // style=1 -> default
     text_node->set_text_color(0, 0, 0, 1);
     text_node->set_shadow_color(1, 1, 1, 1);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
-    path.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_align(TextNode::A_left);
-    path.set_pos(-1.0 + 0.08, 0, 1.0 - pos - 0.04); // TopLeft == (-1,0,1)
+    path.set_pos(-1.0/a2d.get_sx() + 0.08, 0, 1.0 - pos - 0.04); // TopLeft == (-1,0,1)
     path.set_scale(0.06);
 }
 
 // Function to put title on the screen.
 void add_title(const char *msg)
 {
+    auto a2d = window->get_aspect_2d();
     TextNode *text_node = new TextNode(msg);
-    auto path = NodePath(text_node);
+    auto path = a2d.attach_new_node(text_node);
     text_node->set_text(msg);
     // style=1 -> default
-    path.set_pos(1.0 - 0.1, 0, -1.0 + 0.09); // BottomRight == (1,0,-1)
+    path.set_pos(1.0/a2d.get_sx() - 0.1, 0, -1.0 + 0.09); // BottomRight == (1,0,-1)
     path.set_scale(0.08);
     text_node->set_text_color(1, 1, 1, 1);
     text_node->set_shadow_color(0, 0, 0, 1);
     text_node->set_shadow(0.04, 0.04); // baked into OnscreenText
-    path.reparent_to(window->get_aspect_2d()); // a2d
     text_node->set_align(TextNode::A_right);
 }
 

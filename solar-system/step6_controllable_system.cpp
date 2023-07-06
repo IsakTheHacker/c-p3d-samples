@@ -49,11 +49,11 @@ struct World {
 
     TextNode *gen_label_text(const char *text, int i)
     {
+	auto a2d = window->get_aspect_2d();
 	TextNode *text_node = new TextNode(text);
-	auto node = NodePath(text_node);
+	auto node = a2d.attach_new_node(text_node);
 	text_node->set_text(text);
-	node.reparent_to(window->get_aspect_2d());
-	node.set_pos(-1.0-0.06, 0, 1 - 0.06 * (i + 0.5)); // TopLeft is (-1, 0, 1)
+	node.set_pos(-1.0/a2d.get_sx()+0.06, 0, 1 - 0.06 * (i + 0.5)); // TopLeft is (-1, 0, 1)
 	text_node->set_text_color(1, 1, 1, 1);
 	text_node->set_align(TextNode::A_left);
 	node.set_scale(0.05);
@@ -80,19 +80,19 @@ struct World {
 	//      2D y coordinate, and 0 for y.  When the Python GUI uses a "location"
 	//      projection, the location is added to every coordinate.  For example,
 	//      "a2dBottomRight" is just aspect_2d which adds (1,0,-1) to any
-	//      given coordinates.
+	//      given coordinates, but left is scaled by aspect ratio (get_sx).
         // align sets the alingment of the text relative to the pos argument.
         //       Default is left, but in Python it's center.
         // scale set the scale of the text
 	// There is no may_change argument.  Instead, just save the text_node
 	// pointer and call set_text() on it to change the text later.
+	auto a2d = window->get_aspect_2d();
 	TextNode *text_node = new TextNode("title");  // Create the title
-	auto text = NodePath(text_node);
+	auto text = a2d.attach_new_node(text_node);
 	// We seem to have jumped from 1 to 3 in 6 steps w/o #2...
 	text_node->set_text("Panda3D: Tutorial 3 - Events");
-	text.reparent_to(window->get_aspect_2d());
 	text_node->set_align(TextNode::A_right);
-	text.set_pos(1.0-0.1, 0, -1+0.1);
+	text.set_pos(1.0/a2d.get_sx()-0.1, 0, -1+0.1);
 	text_node->set_text_color(1, 1, 1, 1);
 	text.set_scale(0.07);
 

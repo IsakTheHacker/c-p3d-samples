@@ -40,12 +40,12 @@ std::string sample_path
 struct World {
     World() {
         // This is the initialization we had before
+	auto a2d = window->get_aspect_2d();
 	TextNode *text_node = new TextNode("title");  // Create the title
-	auto text = NodePath(text_node);
+	auto text = a2d.attach_new_node(text_node);
 	text_node->set_text("Panda3D: Tutorial 1 - Solar System");
-	text.reparent_to(window->get_aspect_2d());
 	text_node->set_align(TextNode::A_right);
-	text.set_pos(1.0-0.1, 0, -1+0.1);
+	text.set_pos(1.0/a2d.get_sx()-0.1, 0, -1+0.1);
 	text_node->set_text_color(1, 1, 1, 1);
 	text.set_scale(0.07);
 
