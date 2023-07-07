@@ -23,11 +23,6 @@ namespace { // don't export/pollute the global namespace
 // Global variables.
 PandaFramework framework;
 WindowFramework* window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
 NodePath lbl_warning, lbl_action;
 TextNode *lbl_action_text;
 InputDevice *wheel;
@@ -240,9 +235,6 @@ AsyncTask::DoneStatus move_task(GenericAsyncTask *task, void *data)
 
 int main(int argc, const char **argv)
 {
-    if(argc > 1)
-	sample_path = argv[1];
-
     init();
 
     //Do the main loop (start 3d rendering and event processing)

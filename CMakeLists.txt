@@ -29,7 +29,7 @@ subdirs(
     looking-and-gripping
     media-player
 #    motion-trails # not yet
-#    mouse-modes # not yet
+    mouse-modes
     music-box       # fails lock assertion on exit
 #    particles # not yet
 #    procedural-cube # not yet

@@ -69,7 +69,7 @@ void init(void)
     init_interval();
 
     //Set the window title and open new window
-    framework.set_window_title("Ball in maze - C++ Panda3D Samples");
+    framework.set_window_title("Ball in Maze - C++ Panda3D Samples");
     window = framework.open_window();
 
     // This code puts the standard title and instruction text on screen

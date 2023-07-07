@@ -86,7 +86,7 @@ TODO:
  - ✓  looking-and-gripping
  - ✓  media-player
  - _  motion-trails
- - _  mouse-modes
+ - ✓  mouse-modes
  - ✓  music-box - crashes on exit; see note #1
  - _  particles
  - _  procedural-cube
