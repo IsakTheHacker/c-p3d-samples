@@ -23,7 +23,7 @@ subdirs(
     distortion      # no BufferViewer
     fireflies       # no BufferViewer; sometimes crashes on model load
     fractal-plants
-#    gamepad # not yet
+    gamepad         # no GUI-heavy sample yet
 #    glow-filter # not yet
 #    infinite-tunnel # not yet
     looking-and-gripping

@@ -80,7 +80,7 @@ TODO:
  - ~  distortion - requires Python-only functionality; see note #3.
  - ~  fireflies - requires Python-only functionality; see note #3, #4.
  - ✓  fractal-plants
- - _  gamepad
+ - ~  gamepad - see note #5; also neither sample w/ GUI yet
  - _  glow-filter
  - _  infinite-tunnel
  - ✓  looking-and-gripping
@@ -120,3 +120,5 @@ notes:
    "Loading models..." message, etc.  Sometimes it works, though, and
    it's hard to reproduce in the debugger or in valgrind.  I will
    revisit this some day, maybe.
+5) I do not own a flight stick or steering wheel, and cannot test the
+   ports of their respective samples.  It compiles, at least.

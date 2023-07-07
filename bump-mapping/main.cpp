@@ -21,6 +21,7 @@
 
 #include "anim_supt.h"
 
+namespace { // don't export/pollute the global namespace
 // Global variables.  The Python sample stored these in the class; I am not
 // using a class here.  Since it's not a class, C++ doesn't do forward
 // references, so they are all declared up here.
@@ -242,6 +243,7 @@ AsyncTask::DoneStatus control_camera(GenericAsyncTask *task, void *data)
     focus = camera.get_pos() + (dir * 5);
     last = task->get_elapsed_time();
     return AsyncTask::DS_cont;
+}
 }
 
 int main(int argc, char* argv[]) {

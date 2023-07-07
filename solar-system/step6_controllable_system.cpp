@@ -23,6 +23,7 @@
 
 #include "anim_supt.h"
 
+namespace { // don't export/pollute the global namespace
 // Globals
 PandaFramework framework;
 WindowFramework *window;
@@ -466,6 +467,7 @@ struct World {
     // because the scene graph takes ownership, and never loses it.  However,
     // the animations need to be saved.
 }; // end class world
+}
 
 int main(int argc, char **argv)
 {
