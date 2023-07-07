@@ -19,7 +19,7 @@
 #include <panda3d/texturePool.h>
 #include <panda3d/shaderPool.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Global variables

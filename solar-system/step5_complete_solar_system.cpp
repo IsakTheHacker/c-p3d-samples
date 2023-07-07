@@ -21,7 +21,7 @@
 #include <panda3d/graphicsOutput.h>
 #include <panda3d/texturePool.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 // Globals
 PandaFramework framework;
@@ -217,7 +217,7 @@ int main(int argc, char **argv)
 
     framework.open_framework();
 
-    init_interval(); // run the animations when added
+    update_intervals(); // run the animations when added
 
     window = framework.open_window();
 
@@ -225,5 +225,6 @@ int main(int argc, char **argv)
     World w;
 
     framework.main_loop();
+    kill_intervals(); // stop the animations to avoid crashing
     framework.close_framework();
 }

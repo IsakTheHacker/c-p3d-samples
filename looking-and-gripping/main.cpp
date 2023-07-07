@@ -26,7 +26,7 @@
 #include <panda3d/mouseWatcher.h>
 #include <panda3d/modelNode.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Global variables
@@ -68,7 +68,7 @@ void gen_label_text(const char *text, int i)
 }
 
 void switch_object(int i);
-AsyncTask::DoneStatus turn_head(GenericAsyncTask* task, void* mouse_watcher_node);
+AsyncTask::DoneStatus turn_head(GenericAsyncTask *, void *mouse_watcher_node);
 void setup_lights(void);
 
 void init(void)
@@ -77,7 +77,7 @@ void init(void)
     // everything like ShowBase, but it does provide convenient functions
     // to do so.
     framework.open_framework();
-    init_interval();
+    update_intervals();
 
     //Set the window title and open new window
     framework.set_window_title("Looking and Gripping - C++ Panda3D Samples");
@@ -199,7 +199,7 @@ void switch_object(int i)
 
 // This task gets the position of mouse each frame, and rotates the neck based
 // on it.
-AsyncTask::DoneStatus turn_head(GenericAsyncTask* task, void* mouse_watcher_node)
+AsyncTask::DoneStatus turn_head(GenericAsyncTask *, void *mouse_watcher_node)
 {
     // Check to make sure the mouse is readable
     auto mouse_watcher = DCAST(MouseWatcher, (PandaNode*)mouse_watcher_node);
@@ -232,12 +232,13 @@ void setup_lights()  // Sets up some default lighting
 
 int main(int argc, char* argv[]) {
     if(argc > 1)
-	sample_path = argv[1]; // old C++ sample had -vs for ../../.., but I don't care
+	sample_path = argv[1];
 
     init();
 
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();
+    kill_intervals();
     framework.close_framework();
     return 0;
 }

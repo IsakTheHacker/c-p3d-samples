@@ -81,14 +81,14 @@ TODO:
  - ~  fireflies - requires Python-only functionality; see note #3, #4.
  - ✓  fractal-plants
  - ~  gamepad - see note #5; also neither sample w/ GUI yet
- - _  glow-filter
+ - ~  glow-filter - requires Python-only functionality; see note #2, #3.
  - _  infinite-tunnel
  - ✓  looking-and-gripping
  - ✓  media-player
  - _  motion-trails
  - ✓  mouse-modes
  - ✓  music-box - crashes on exit; see note #1
- - _  particles
+ - X  particles - both samples rely heavily on Python; see note #6.
  - _  procedural-cube
  - _  render-to-texture
  - _  roaming-ralph
@@ -109,7 +109,7 @@ notes:
 2) The filter classes, including the "common filters" are only
    available in Python.  I suppose I should fix that, since they seem
    generally useful.  Maybe in a future revision.  Thus, the
-   cartoon-shader "simple" sample won't work.
+   cartoon-shader and glow-filter "basic" samples won't work.
 3) The BufferViewer class is a feature of the Direct GUI, and
    therefore not available in C++.  I have gone ahead and ported
    samples which originally used this without that particular
@@ -122,3 +122,14 @@ notes:
    revisit this some day, maybe.
 5) I do not own a flight stick or steering wheel, and cannot test the
    ports of their respective samples.  It compiles, at least.
+6) The particle samples will not be ported any time soon.  The
+   particle_panel sample simply invokes the Python-only ParticlePanel
+   class, which I don't feel like porting or examining to find out if
+   there is a C++ equivalent.  The steam_example sample uses ptf files,
+   which are Python scripts executed blindly by the loader.  I could
+   just parse the parts that are generated, and reject any additional
+   Python, or I could hand-convert these to C++ calls and comple them.
+   I don't know of (and don't feel like looking for) a run-time
+   loadable particle system format (maybe egg can be coerced?).  It
+   would be nice if I could just write some Python code to do the
+   conversion process, but I hate Python.

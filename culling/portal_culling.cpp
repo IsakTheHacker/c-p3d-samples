@@ -22,7 +22,7 @@
 #include <panda3d/texturePool.h>
 #include <panda3d/load_prc_file.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 #include "cellmgr.cpp" // I'm too lazy to make a header
 

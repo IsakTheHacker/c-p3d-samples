@@ -20,7 +20,7 @@
 #include <panda3d/cullFaceAttrib.h>
 #include <panda3d/texturePool.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Global variables
@@ -130,7 +130,7 @@ vec_list_t small_random_axis(const vec_list_t &vec_list)
 // if the vertices before you were an end, dont draw branches to it
 void draw_body(NodePath &node_path, GeomVertexData *vdata, const LVector3 &pos,
 	       const vec_list_t &vec_list, PN_stdfloat radius=1,
-	       bool keep_drawing=true, int num_vertices=8)
+	       bool keep_drawing=true, unsigned num_vertices=8)
 {
     PT(Geom) circle_geom = new Geom(vdata);
 
@@ -190,8 +190,8 @@ void draw_body(NodePath &node_path, GeomVertexData *vdata, const LVector3 &pos,
     // we cant draw quads directly so we use Tristrips
     if(draw_reader.get_data1i() != 0) {
         PT(GeomTristrips) lines = new GeomTristrips(Geom::UH_static);
-        int half = num_vertices * 0.5;
-        for(int i = 0; i < num_vertices; i++) {
+        unsigned half = num_vertices * 0.5;
+        for(unsigned i = 0; i < num_vertices; i++) {
             lines->add_vertex(i + start_row);
             if(i < half)
                 lines->add_vertex(i + start_row - half);
@@ -219,8 +219,7 @@ void draw_body(NodePath &node_path, GeomVertexData *vdata, const LVector3 &pos,
 }
 
 // this draws leafs when we reach an end
-void draw_leaf(NodePath &node_path, GeomVertexData *vdata,
-	       LVector3 pos=LVector3(0, 0, 0),
+void draw_leaf(NodePath &node_path, LVector3 pos=LVector3(0, 0, 0),
 	       const vec_list_t &vec_list={{0, 0, 1}, {1, 0, 0}, {0, -1, 0}},
 	       PN_stdfloat scale=0.125)
 {
@@ -238,6 +237,7 @@ void draw_leaf(NodePath &node_path, GeomVertexData *vdata,
     // orginlly made the leaf out of geometry but that didnt look good
     // I also think there should be a better way to handle the leaf texture other than
     // hardcoding the filename
+    // [tjm: this means the original "vdata" parameter is not used]
     auto leaf_model = def_load_model("models/shrubbery");
     auto leaf_texture = def_load_texture("models/material-10-cl.png");
 
@@ -278,7 +278,7 @@ void make_fractal_tree(GeomVertexData *bodydata, NodePath &node_path,
 
     } else {
         draw_body(node_path, bodydata, pos, vec_list, length.get_x(), false);
-        draw_leaf(node_path, bodydata, pos, vec_list);
+        draw_leaf(node_path, pos, vec_list);
     }
 }
 

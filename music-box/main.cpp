@@ -18,7 +18,7 @@
 #include <panda3d/ambientLight.h>
 #include <panda3d/mouseButton.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Global variables
@@ -50,7 +50,7 @@ void init(void)
     // The C++ framework doesn't have a global, automaticaly-run interval
     // pool.  The following line uses a support function I wrote to spawn
     // an asynchronous task to do the updates.
-    init_interval();
+    update_intervals();
 
     //Set the window title and open new window
     framework.set_window_title("Music Box - C++ Panda3D Samples");
@@ -225,12 +225,7 @@ void init(void)
 
     // Finally, one other thing done by the Python API that isn't done here
     // is to actually run the AudioMagager()s.  A task is added for this.
-    framework.get_task_mgr().
-	add(new GenericAsyncTask("audio", [](GenericAsyncTask *, void *){
-	    music_manager->update();
-	    sfx_manager->update();
-	    return AsyncTask::DS_cont;
-	}, 0));
+    update_sounds({music_manager, sfx_manager});
 }
 
 void set_music_box_volume(const  Event *, void *data)
@@ -297,6 +292,10 @@ int main(int argc, const char **argv)
 
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();
+    kill_intervals();
+    kill_sounds(); // avoid possible crashes due to sounds still updating
     framework.close_framework();
+    // unfortunately, this will crash with a lock assertion on exit
+    // due probably to sounds being freed after their sound manager.
     return 0;
 }

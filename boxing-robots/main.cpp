@@ -19,7 +19,7 @@
 #include <panda3d/directionalLight.h>
 #include <panda3d/character.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Global variables
@@ -62,7 +62,7 @@ void init()
     // everything like ShowBase, but it does provide convenient functions
     // to do so.
     framework.open_framework();
-    init_interval();
+    update_intervals();
 
     //Set the window title and open new window
     framework.set_window_title("Boxing Robots - C++ Panda3D Samples");
@@ -245,6 +245,7 @@ int main(int argc, char **argv)
 	sample_path = argv[1];
     init();
     framework.main_loop();
+    kill_intervals();
     framework.close_framework();
     return 0;
 }

@@ -1,19 +1,21 @@
-#include "anim_supt.h"
 #include <panda3d/cIntervalManager.h>
-#include <panda3d/genericAsyncTask.h>
-#include <panda3d/asyncTaskManager.h>
 #include <panda3d/character.h>
 #include <panda3d/partBundle.h>
 #include <panda3d/loader.h>
+#include <panda3d/genericAsyncTask.h>
+#include "sample_supt.h"
 
-// FIXME: sleep until there's something to do
-void init_interval(void)
+void update_intervals()
 {
-    AsyncTaskManager::get_global_ptr()->
-	add(new GenericAsyncTask("cInterval", [](GenericAsyncTask *, void *){
-	    CIntervalManager::get_global_ptr()->step();
-	    return AsyncTask::DS_cont;
-    }, 0));
+    start_updater("CInterval updater", [] {
+	CIntervalManager::get_global_ptr()->step();
+	return AsyncTask::DS_cont;
+    }, 20); // sort order from ShowBase
+}
+
+void kill_intervals()
+{
+    kill_task("CInterval updater");
 }
 
 // Since there a lot of animations to load, this convenience function
@@ -31,27 +33,18 @@ PT(AnimControl) load_anim(NodePath &model, const std::string &file)
     auto char_node = dynamic_cast<Character *>
 	(model.find("-Character").node());
 #endif
-    // These flags (with obnoxiously long names) are needed to bind the
-    // sample animations.  This bypasses hierarchy match integrity checks.
-    // The first fails because it stupidly expects the animation name to
-    // match the model name.
-    // The second fails because there are some joints in the animation
-    // with no corresponding joint in the model.
-    int match_flags = PartGroup::HMF_ok_wrong_root_name | // the first killer
-                      PartGroup::HMF_ok_anim_extra; // the silent killer
-
 #if 1
     // There is a convenient combination function, load_bind_anim(), to
     // do all the work:
     static Loader loader; // any loader will do; window's supports vfs
     return char_node->get_bundle(0)->
-	load_bind_anim(&loader, file, match_flags, PartSubset(), false);     
+	load_bind_anim(&loader, file, ANIM_BIND_FLAGS, PartSubset(), false);     
 #else
     // Since the window's load_model() has additional functionality, it's
     // probably better to always use it, though.
     auto mod = def_load_model(file);
     auto anim = AnimBundleNode::find_anim_bundle(mod);
-    auto ret = char_node->get_bundle(0)->bind_anim(anim, match_flags);
+    auto ret = char_node->get_bundle(0)->bind_anim(anim, ANIM_BIND_FLAGS);
     ret->set_anim_model(mod);
     return ret;
 #endif
@@ -84,7 +77,6 @@ void CharAnimate::priv_finalize(void)
     _ctrl->get_part()->set_control_effect(_ctrl, 0);
     CInterval::priv_finalize();
 }
-
 
 void FuncAsyncI::priv_instant()
 {

@@ -14,7 +14,7 @@
 #include <panda3d/load_prc_file.h>
 #include <sstream>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Global variables
@@ -42,7 +42,7 @@ TextNode *gen_label_text(const char *text, int i)
 
 void set_mouse_mode(WindowProperties::MouseMode mode);
 void recenter_mouse(void), toggle_recenter(void), toggle_mouse(void);
-AsyncTask::DoneStatus mouse_task(GenericAsyncTask *task, void *data);
+AsyncTask::DoneStatus mouse_task(GenericAsyncTask *, void *);
 
 void init(void)
 {
@@ -98,7 +98,7 @@ void init(void)
     framework.get_task_mgr().add(new GenericAsyncTask("Mouse Task", mouse_task, 0));
 }
 
-AsyncTask::DoneStatus resolve_mouse(GenericAsyncTask *task, void *data);
+AsyncTask::DoneStatus resolve_mouse(GenericAsyncTask *, void *);
 
 void set_mouse_mode(WindowProperties::MouseMode mode)
 {
@@ -116,7 +116,7 @@ void set_mouse_mode(WindowProperties::MouseMode mode)
     framework.get_task_mgr().add(task);
 }
 
-AsyncTask::DoneStatus resolve_mouse(GenericAsyncTask *task, void *data)
+AsyncTask::DoneStatus resolve_mouse(GenericAsyncTask *, void *)
 {
     auto wp = window->get_graphics_window()->get_properties();
 
@@ -158,7 +158,7 @@ void toggle_mouse()
     window->get_graphics_window()->request_properties(wp);
 }
 
-AsyncTask::DoneStatus mouse_task(GenericAsyncTask *task, void *data)
+AsyncTask::DoneStatus mouse_task(GenericAsyncTask *, void *)
 {
     auto win = window->get_graphics_window();
     if(!win) // exiting
@@ -221,7 +221,7 @@ AsyncTask::DoneStatus mouse_task(GenericAsyncTask *task, void *data)
 }
 }
 
-int main(int argc, char **argv)
+int main(void)
 {
     init();
     //Do the main loop (start 3d rendering and event processing)

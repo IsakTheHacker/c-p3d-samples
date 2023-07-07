@@ -21,7 +21,7 @@
 #include <panda3d/graphicsOutput.h>
 #include <panda3d/texturePool.h>
 
-#include "anim_supt.h" // some macros I creaed to ease porting
+#include "sample_supt.h" // some macros I creaed to ease porting
 
 PandaFramework framework;
 WindowFramework *window;

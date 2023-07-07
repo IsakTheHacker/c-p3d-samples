@@ -17,7 +17,7 @@
 #include <panda3d/occluderNode.h>
 #include <panda3d/load_prc_file.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Global variables
@@ -152,7 +152,7 @@ void init()
     // Load occluders
     occluder_model = def_load_model("models/occluders");
     auto occluder_nodepaths = occluder_model.find_all_matches("**/+OccluderNode");
-    for(int i = 0; i < occluder_nodepaths.size(); i++) {
+    for(unsigned i = 0; i < occluder_nodepaths.size(); i++) {
 	auto &&occluder_nodepath = occluder_nodepaths[i];
 	window->get_render().set_occluder(occluder_nodepath);
 	DCAST(OccluderNode,occluder_nodepath.node())->set_double_sided(true);

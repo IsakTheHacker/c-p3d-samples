@@ -10,6 +10,10 @@ cmake_minimum_required(VERSION 3.21.0)
 
 project(cpp-panda3d LANGUAGES CXX)
 
+# create supt library only once, globally
+set(SAMPLE none)
+include(supt/samples.cmake)
+
 subdirs(
     asteroids
     ball-in-maze
@@ -24,14 +28,14 @@ subdirs(
     fireflies       # no BufferViewer; sometimes crashes on model load
     fractal-plants
     gamepad         # no GUI-heavy sample yet
-#    glow-filter # not yet
+    glow-filter     # only advanced works, and no BufferViewer
 #    infinite-tunnel # not yet
     looking-and-gripping
     media-player
 #    motion-trails # not yet
     mouse-modes
     music-box       # fails lock assertion on exit
-#    particles # not yet
+#    particles # not yet; probably not ever (too much Python)
 #    procedural-cube # not yet
 #    render-to-texture # not yet
 #    roaming-ralph # not yet

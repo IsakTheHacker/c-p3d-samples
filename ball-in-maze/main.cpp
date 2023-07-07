@@ -28,7 +28,7 @@
 #include <panda3d/directionalLight.h>
 #include <panda3d/mouseWatcher.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 // Some constants for the program
 namespace { // don't export/pollute the global namespace
@@ -66,7 +66,7 @@ void init(void)
     // everything like ShowBase, but it does provide convenient functions
     // to do so.
     framework.open_framework();
-    init_interval();
+    update_intervals();
 
     //Set the window title and open new window
     framework.set_window_title("Ball in Maze - C++ Panda3D Samples");
@@ -339,7 +339,7 @@ void wall_collide_handler(PT(CollisionEntry) entry)
 void lose_game(PT(CollisionEntry) entry);
 
 // This is the task that deals with making everything interactive
-AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouse_watcher_node)
+AsyncTask::DoneStatus roll_func(GenericAsyncTask *, void* mouse_watcher_node)
 {
     // Python's ShowBase has a task that traverses the entire scene once
     // a frame.  There is no equivalent in framework, so use this task,
@@ -359,7 +359,9 @@ AsyncTask::DoneStatus roll_func(GenericAsyncTask* task, void* mouse_watcher_node
     // to handle the collision based on the name of what was collided into
     if (collision_handler->get_num_entries() > 0) {
 	collision_handler->sort_entries(); // tjm -- why?  python demo doesn't sort
-	for (size_t i = 0; i < collision_handler->get_num_entries(); i++) {
+	// Note: CollisionHandlerQueue::get_num_entries() is signed int for
+	// some weird reason (probably a bug)
+	for (size_t i = 0; i < (size_t)collision_handler->get_num_entries(); i++) {
 	    PT(CollisionEntry) entry = collision_handler->get_entry(i);
 	    const std::string &name = entry->get_into_node()->get_name();
 	    if (name == "wall_collide")
@@ -437,6 +439,7 @@ int main(int argc, char* argv[]) {
 
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();
+    kill_intervals();
     framework.close_framework();
     return 0;
 }

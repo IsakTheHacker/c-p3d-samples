@@ -13,6 +13,6 @@ project(${SAMPLE} LANGUAGES CXX)
 include(../supt/samples.cmake)
 
 #### Build executable
-add_executable(${SAMPLE} main.cpp ${SUPT_SRC})
-target_link_libraries(${SAMPLE} ${PANDALIBS} ${PANDA-p3direct})
+add_executable(${SAMPLE} main.cpp)
+target_link_libraries(${SAMPLE} ${PANDALIBS} ${PANDA-p3direct} sample_supt)
 install(TARGETS ${SAMPLE})

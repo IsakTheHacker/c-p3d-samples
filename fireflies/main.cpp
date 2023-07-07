@@ -22,7 +22,7 @@
 #include <panda3d/cardMaker.h>
 #include <panda3d/modelLoadRequest.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Global variables.  The Python sample stored these in the class; I am not
@@ -95,7 +95,7 @@ void init(void)
     // everything like ShowBase, but it does provide convenient functions
     // to do so.
     framework.open_framework();
-    init_interval();
+    update_intervals();
 
     //Set the window title and open new window
     framework.set_window_title("Fireflies - C++ Panda3D Samples");
@@ -439,7 +439,7 @@ GraphicsOutput *make_FBO(const char *name, int auxrgba)
     props.set_aux_rgba(auxrgba);
     auto win = window->get_graphics_window();
     return framework.get_graphics_engine()->make_output(
-            win->get_pipe(), "model buffer", -2,
+            win->get_pipe(), name, -2,
 	    props, winprops,
             GraphicsPipe::BF_size_track_host | GraphicsPipe::BF_can_bind_every |
 	    GraphicsPipe::BF_rtt_cumulative | GraphicsPipe::BF_refuse_window,
@@ -517,7 +517,7 @@ void toggle_cards()
 
 void inc_firefly_count(PN_stdfloat scale)
 {
-    int n = fireflies.size() * scale + 1;
+    unsigned n = fireflies.size() * scale + 1;
     while(n > fireflies.size())
 	add_firefly();
     update_readout();
@@ -525,7 +525,7 @@ void inc_firefly_count(PN_stdfloat scale)
 
 void dec_firefly_count(PN_stdfloat scale)
 {
-    int n = fireflies.size() * scale;
+    unsigned n = fireflies.size() * scale;
     if(n < 1)
 	n = 1;
     while(fireflies.size() > n) {
@@ -568,6 +568,7 @@ int main(int argc, char **argv)
     init();
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();
+    kill_intervals();
     framework.close_framework();
     return 0;
 }

@@ -16,7 +16,7 @@
 #include <panda3d/inputDeviceNode.h>
 #include <panda3d/buttonThrower.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Global variables.
@@ -29,9 +29,9 @@ PN_stdfloat
     current_move_speed = 0.0,
     max_acceleration = 28.0,
     deceleration = 10.0,
-    deacleration_brake = 37.0,
+    //deceleration_brake = 37.0,
     max_speed = 80.0;
-AsyncTask::DoneStatus move_task(GenericAsyncTask *task, void *data);
+AsyncTask::DoneStatus move_task(GenericAsyncTask *, void *);
 
 #define STICK_DEAD_ZONE 0.02
 #define THROTTLE_DEAD_ZONE 0.02
@@ -176,7 +176,7 @@ void action_up()
     lbl_action.hide();
 }
 
-AsyncTask::DoneStatus move_task(GenericAsyncTask *task, void *data)
+AsyncTask::DoneStatus move_task(GenericAsyncTask *, void *)
 {
     // framework does not appear to update devices, so do it here
     InputDeviceManager::get_global_ptr()->update();
@@ -230,7 +230,7 @@ AsyncTask::DoneStatus move_task(GenericAsyncTask *task, void *data)
 }
 }
 
-int main(int argc, const char **argv)
+int main(void)
 {
     init();
 

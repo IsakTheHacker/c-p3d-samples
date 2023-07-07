@@ -28,7 +28,7 @@
 #include <panda3d/ambientLight.h>
 #include <panda3d/directionalLight.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Global variables
@@ -56,7 +56,7 @@ void init(void)
     // The C++ framework doesn't have a global, automaticaly-run interval
     // pool.  The following line uses a support function I wrote to spawn
     // an asynchronous task to do the updates.
-    init_interval();
+    update_intervals();
 
     //Set the window title and open new window
     framework.set_window_title("Carousel - C++ Panda3D Samples");
@@ -284,6 +284,7 @@ int main(int argc, const char **argv)
 
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();
+    kill_intervals(); // stop the animations to avoid crashing
     framework.close_framework();
     return 0;
 }

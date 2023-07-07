@@ -19,7 +19,7 @@
 #include <panda3d/lodNode.h> // parallax config
 #include <panda3d/load_prc_file.h> // but actually...
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Global variables.  The Python sample stored these in the class; I am not
@@ -35,7 +35,7 @@ std::string sample_path
 NodePath room, lightpivot;
 TextNode *inst5;
 LVector3 focus;
-PN_stdfloat heading, pitch, mousex, mousey, last;
+PN_stdfloat heading, pitch, last;
 bool mousebtn[3];
 bool shaderenable;
 
@@ -89,7 +89,7 @@ void init(void)
     // everything like ShowBase, but it does provide convenient functions
     // to do so.
     framework.open_framework();
-    init_interval();
+    update_intervals();
 
     //Set the window title and open new window
     framework.set_window_title("Bump Mapping - C++ Panda3D Samples");
@@ -200,7 +200,7 @@ void toggle_shader()
     }
 }
 
-AsyncTask::DoneStatus control_camera(GenericAsyncTask *task, void *data)
+AsyncTask::DoneStatus control_camera(GenericAsyncTask *task, void *)
 {
     // figure out how much the mouse has moved (in pixels)
     auto win = window->get_graphics_window();
@@ -254,6 +254,7 @@ int main(int argc, char* argv[]) {
 
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();
+    kill_intervals();
     framework.close_framework();
     return 0;
 }

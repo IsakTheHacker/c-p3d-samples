@@ -17,7 +17,7 @@
 #include <panda3d/inputDeviceNode.h>
 #include <panda3d/buttonThrower.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Global variables.
@@ -33,7 +33,7 @@ PN_stdfloat
     deceleration_brake = 37.0,
     max_speed = 80.0,
     wheel_center = 0;
-AsyncTask::DoneStatus move_task(GenericAsyncTask *task, void *data);
+AsyncTask::DoneStatus move_task(GenericAsyncTask *, void *);
 
 void connect(InputDevice *device), disconnect(InputDevice *device);
 void connect(const Event *ev, void *), disconnect(const Event *ev, void *);
@@ -189,7 +189,7 @@ void center_wheel()
     wheel_center = wheel->find_axis(InputDevice::Axis::wheel).value;
 }
 
-AsyncTask::DoneStatus move_task(GenericAsyncTask *task, void *data)
+AsyncTask::DoneStatus move_task(GenericAsyncTask *, void *)
 {
     // framework does not appear to update devices, so do it here
     InputDeviceManager::get_global_ptr()->update();
@@ -233,7 +233,7 @@ AsyncTask::DoneStatus move_task(GenericAsyncTask *task, void *data)
 }
 }
 
-int main(int argc, const char **argv)
+int main(void)
 {
     init();
 

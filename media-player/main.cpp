@@ -11,7 +11,7 @@
 #include <panda3d/cardMaker.h>
 #include <panda3d/audioManager.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Global variables

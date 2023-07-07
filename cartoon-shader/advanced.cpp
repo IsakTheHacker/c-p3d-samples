@@ -20,7 +20,7 @@
 #include <panda3d/character.h>
 #include <panda3d/animBundleNode.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Global variables.  The Python sample stored these in the class; I am not
@@ -76,7 +76,7 @@ void init(void)
     // everything like ShowBase, but it does provide convenient functions
     // to do so.
     framework.open_framework();
-    init_interval();
+    update_intervals();
 
     //Set the window title and open new window
     framework.set_window_title("Cartoon Shader (advanced) - C++ Panda3D Samples");
@@ -218,6 +218,7 @@ int main(int argc, const char **argv)
 
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();
+    kill_intervals();
     framework.close_framework();
     return 0;
 }

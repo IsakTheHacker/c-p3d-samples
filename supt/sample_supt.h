@@ -1,10 +1,11 @@
 #pragma once
 #include <panda3d/cMetaInterval.h>
-#include <panda3d/waitInterval.h>
-#include <panda3d/cLerpNodePathInterval.h>
 #include <initializer_list>
-#include <functional>
+#include <panda3d/waitInterval.h>
+#include <panda3d/cLerpNodePathInterval.h> // includes cLerpInterval.h
 #include <panda3d/animControl.h>
+#include <functional>
+#include <panda3d/asyncTask.h>
 
 // This is primarily animation support functions for converting Python samples
 // to C++.  It also includes a few other extras that I probably should've put
@@ -15,8 +16,8 @@
 // the list in additional curly braces:
 // (new Sequence({ new Wait(3), new Func(std::cerr<<"hi\n")})->start();
 // Since this uses direct, you will need to add p3direct to your libraries.
-// You will also have to add a task to call step(), or just call:
-void init_interval(void);
+// You will also have to add a task to call step(), or just call
+// update_intervals().
 
 // The Sequence and Parallel classes take initializer lists as
 // constructor arguments.  I guess panda3d is too old to support
@@ -131,6 +132,7 @@ template<class C, class T>class LerpFuncG : public CLerpInterval {
 
 // The node intervals are done completely differently.  As such, I only
 // provide a way to at least shorten it.
+
 typedef CLerpNodePathInterval NPAnim;
 #define NPAnim(node, name, t) \
     NPAnim(name, t, CLerpInterval::BT_no_blend, true, false, node, NodePath())
@@ -193,7 +195,6 @@ PT(AnimControl) load_anim(NodePath &model, const std::string &file);
     PartGroup::HMF_ok_wrong_root_name | /* the first killer */ \
     PartGroup::HMF_ok_anim_extra) /* the silent killer */
 
-
 ///////////////////////////////////////////////////////////////////////////
 // Some extra stuff that should probably go into a different header
 
@@ -214,3 +215,39 @@ PT(AnimControl) load_anim(NodePath &model, const std::string &file);
 // same, but define a var
 #define EV_CMt(t,m) [](const Event *, void *d) \
     { decltype(this) t = reinterpret_cast<decltype(this)>(d); t->m; }, this
+
+/*** updater tasks missing in the framework ***/
+/* This is a compromise:  if I make it "static inline", I have to pollute
+ * the namespace with unneeded symbols, and place the code in a header file.
+ * If I make it in a C++ file, I have to do a link library of some kind, so
+ * that I don't force unnecessary symbols in the final exec (such as p3direct
+ * needed for CInterval-related stuff) */
+
+// GenericAsyncTask that easily runs C++ lambda functions of type [=] and [&].
+typedef std::function<AsyncTask::DoneStatus(void)> AsyncTaskFunc;
+class FuncAsyncTask : public AsyncTask {
+  public:
+    FuncAsyncTask(const std::string &name, AsyncTaskFunc f) :
+	AsyncTask(name), func(f) {}
+    DoneStatus do_task() { return func(); }
+    // NOTE: adding members requires this:
+    ALLOC_DELETED_CHAIN(FuncAsyncTask);
+  protected:
+    AsyncTaskFunc func;
+};
+
+// generic updater starter; spawns a task that always returns DS_cont
+void start_updater(const std::string &name, AsyncTaskFunc func,
+		   int sort = 0); // 0 is the C++ default, at least
+bool kill_task(const std::string &name);
+// specific updater starters
+void update_intervals(void);
+void kill_intervals(void);
+class AudioManager;
+void update_sounds(std::vector<AudioManager *> mgrs);
+void kill_sounds(void);
+class ParticleSystemManager;
+class PhysicsManager;
+void update_particles(ParticleSystemManager *particle_mgr,
+		      PhysicsManager *physics_mgr);
+void kill_particles(void);

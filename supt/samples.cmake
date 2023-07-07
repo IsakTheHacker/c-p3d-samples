@@ -49,12 +49,22 @@ find_file(SAMPLE_DIR samples/media-player/PandaSneezes.ogv
           PATHS /usr/share /usr/local/share  PATH_SUFFIXES panda3d
           DOC "The original Python samples (for assets)")
 if(SAMPLE_DIR)
-  cmake_path(SET SAMPLE_DIR "${SAMPLE_DIR}")
-  cmake_path(GET SAMPLE_DIR PARENT_PATH SAMPLE_DIR)
-  cmake_path(GET SAMPLE_DIR PARENT_PATH SAMPLE_DIR)
-  add_compile_definitions("SAMPLE_DIR=\"${SAMPLE_DIR}/${SAMPLE}\"")
+  cmake_path(SET SDIR "${SAMPLE_DIR}")
+  cmake_path(GET SDIR PARENT_PATH SDIR)
+  cmake_path(GET SDIR PARENT_PATH SDIR)
+  if(EXISTS ${SDIR}/${SAMPLE}) # global build includes w/ invalid name for lib
+    add_compile_definitions("SAMPLE_DIR=\"${SDIR}/${SAMPLE}\"")
+  endif()
 endif()
 
 # And my own simple extensions to make porting easier
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../supt")
-set(SUPT_SRC ../supt/anim_supt.cpp)
+if(NOT SUPT_SRC) # only do this once if building everything
+  set(SUPT_SRC sample anim sound particle)
+  list(TRANSFORM SUPT_SRC PREPEND ../supt/)
+  list(TRANSFORM SUPT_SRC APPEND _supt.cpp)
+  add_library(sample_supt EXCLUDE_FROM_ALL ${SUPT_SRC}) # only build if needed
+  target_link_libraries(sample_supt ${PANDALIBS})
+endif()
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/supt/samples_supt.h)
+  include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../supt")
+endif()

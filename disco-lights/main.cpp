@@ -20,7 +20,7 @@
 #include <panda3d/pointLight.h>
 #include <sstream>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Global variables
@@ -84,7 +84,7 @@ void init(void)
     // everything like ShowBase, but it does provide convenient functions
     // to do so.
     framework.open_framework();
-    init_interval();
+    update_intervals();
 
     //Set the window title and open new window
     framework.set_window_title("Disco Lights - C++ Panda3D Samples");
@@ -488,6 +488,7 @@ int main(int argc, const char **argv)
 
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();
+    kill_intervals();
     framework.close_framework();
     return 0;
 }

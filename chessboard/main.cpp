@@ -22,7 +22,7 @@
 #include <panda3d/directionalLight.h>
 #include <panda3d/mouseWatcher.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // First we define some constants for the colors
@@ -247,7 +247,7 @@ void swap_pieces(int fr, int to)
 }
 
 // This is the task that deals with making everything interactive
-AsyncTask::DoneStatus process_mouse(GenericAsyncTask* task, void* mouse_watcher_node)
+AsyncTask::DoneStatus process_mouse(GenericAsyncTask *, void* mouse_watcher_node)
 {
     // This task deals with the highlighting and dragging based on the mouse
 

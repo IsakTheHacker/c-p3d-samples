@@ -90,7 +90,7 @@ struct CellManager {
     void load_cells_from_model(std::string modelpath) {
         auto cell_model = _window->load_model(NodePath(), modelpath);
 	auto colliders = cell_model.find_all_matches("**/+GeomNode");
-	for(int i = 0; i < colliders.size(); i++) {
+	for(unsigned i = 0; i < colliders.size(); i++) {
 	    auto collider = colliders[i];
             auto name = collider.get_name();
 	    if(name.substr(0, 4) == "cell")
@@ -106,13 +106,13 @@ struct CellManager {
     void load_portals_from_model(std::string modelpath) {
         auto portal_model = _window->load_model(NodePath(), modelpath);
         auto portal_nodepaths = portal_model.find_all_matches("**/+PortalNode");
-	for(int i = 0; i < portal_nodepaths.size(); i++) {
+	for(unsigned i = 0; i < portal_nodepaths.size(); i++) {
 	    auto portal_nodepath = portal_nodepaths[i];
             const auto &name = portal_nodepath.get_name();
             if(name.substr(0, 7) == "portal_") {
 		auto n = name.find("to");
 		auto e = name.find("_", n);
-		if(n < 0)
+		if(n == std::string::npos)
 		    continue;
 		auto from_cell_id = name.substr(7, n - 7);
 		auto into_cell_id = name.substr(n + 2, e - n - 2);

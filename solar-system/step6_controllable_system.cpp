@@ -21,7 +21,7 @@
 #include <panda3d/texturePool.h>
 #include <panda3d/throw_event.h>
 
-#include "anim_supt.h"
+#include "sample_supt.h"
 
 namespace { // don't export/pollute the global namespace
 // Globals
@@ -224,11 +224,12 @@ struct World {
                 toggle_planet("Venus", day_period_venus,
                                   orbit_period_venus, vkey_event_text);
             //Earth and moon
-            if(day_period_earth->is_playing())
+            if(day_period_earth->is_playing()) {
                 toggle_planet("Earth", day_period_earth,
                                   orbit_period_earth, ekey_event_text);
                 toggle_planet("Moon", day_period_moon,
                                   orbit_period_moon);
+	    }
             // Mars
             if(day_period_mars->is_playing())
                 toggle_planet("Mars", day_period_mars,
@@ -248,11 +249,12 @@ struct World {
             if(!day_period_venus->is_playing())
                 toggle_planet("Venus", day_period_venus,
                                   orbit_period_venus, vkey_event_text);
-            if(!day_period_earth->is_playing())
+            if(!day_period_earth->is_playing()) {
                 toggle_planet("Earth", day_period_earth,
                                   orbit_period_earth, ekey_event_text);
                 toggle_planet("Moon", day_period_moon,
                                   orbit_period_moon);
+	    }
             if(!day_period_mars->is_playing())
                 toggle_planet("Mars", day_period_mars,
                                   orbit_period_mars, mkey_event_text);
@@ -479,9 +481,9 @@ int main(int argc, char **argv)
     // Note that in order for CInterval animations to run, you need to
     // manually poke them using the step() function.  This is done
     // automatically by the Python API, but for C++, you need to manually
-    // add a task for this.  My convenience support function init_interval()
+    // add a task for this.  My convenience support function update_intervals
     // does just that.  Check it out if you like:  it is very simple.
-    init_interval(); // run the animations when added
+    update_intervals(); // run the animations when added
 
     window = framework.open_window();
 
@@ -489,5 +491,8 @@ int main(int argc, char **argv)
     World w;
 
     framework.main_loop();
+    // If you start the updater task, you man need to stop it before shutting
+    // down in order to avoid crashes
+    kill_intervals();
     framework.close_framework();
 }

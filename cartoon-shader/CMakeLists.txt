@@ -14,7 +14,7 @@ include(../supt/samples.cmake)
 
 #### Build executables
 foreach(x advanced) # basic) # basic doesn't work yet -- too much Python
-  add_executable(${x} ${x}.cpp ${SUPT_SRC})
-  target_link_libraries(${x} ${PANDALIBS} ${PANDA-p3direct})
-  install(TARGETS ${x})
+  add_executable(${SAMPLE}-${x} ${x}.cpp)
+  target_link_libraries(${SAMPLE}-${x} ${PANDALIBS} ${PANDA-p3direct} sample_supt)
+  install(TARGETS ${SAMPLE}-${x})
 endforeach()
