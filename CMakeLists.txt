@@ -35,7 +35,7 @@ subdirs(
 #    motion-trails # not yet
     mouse-modes
     music-box       # fails lock assertion on exit
-#    procedural-cube # not yet
+    procedural-cube
 #    render-to-texture # not yet
 #    roaming-ralph # not yet
     shader-terrain

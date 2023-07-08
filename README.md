@@ -37,6 +37,7 @@ Finished:
  - media-player
  - mouse-modes
  - music-box - crashes on exit; see note #1
+ - procedural-cube
  - shader-terrain
  - solar-system
 
@@ -57,24 +58,11 @@ Won't finish:
 TODO:
 
  - motion-trails (#8)
- - procedural-cube
  - render-to-texture (#3)
  - roaming-ralph
 
 Notes:
 
-0) ShowBase has a number of features which would be useful in the C++
-   framework, as well.  Clearly the Python API gets more love,
-   starting at the very beginning (ShowBase vs. PandaFramework), and
-   extending through nearly everything.  I'm surprised when a port
-   actually has close to the same number of lines as the Python code, and
-   that's not entirely due to differences between the programming
-   lanugages.  C++ just doesn't get enough love.  In some places, it
-   is clearly only used to accelerate the Python API (e.g.
-   MotionTrail). There are also some features of C++11 that dearly need
-   to be implmented in the Panda3D classes, such as initializers and
-   std::function support and proper container iterators that can be
-   used in the for(x: container) construct.
 1) OpenAL sounds require the OpenAL sound manager to exist when they
    are deleted.  At program exit, the deletion order can't be relied
    on.  I tried simple solutions to this, which didn't work, so I have
@@ -125,6 +113,18 @@ Notes:
    #6-#8 above (seeing a trend?), and have some major features that I
    would need to re-implment in C++.  For these reasons, I may never
    port mappingGUI or device_tester.
+0) ShowBase has a number of features which would be useful in the C++
+   framework, as well.  Clearly the Python API gets more love,
+   starting at the very beginning (ShowBase vs. PandaFramework), and
+   extending through nearly everything.  I'm surprised when a port
+   actually has close to the same number of lines as the Python code, and
+   that's not entirely due to differences between the programming
+   lanugages.  C++ just doesn't get enough love.  In some places, it
+   is clearly only used to accelerate the Python API (e.g.
+   MotionTrail). There are also some features of C++11 that dearly need
+   to be implmented in the Panda3D classes, such as initializers and
+   std::function support and proper container iterators that can be
+   used in the for(x: container) construct.
 
 This was a fork of https://github.com/IsakTheHacker/c-p3d-samples.  In
 spite of the name and description, that was only one working example,

@@ -411,7 +411,7 @@ void add_tree()
 
 int main(int argc, char* argv[]) {
     if(argc > 1)
-	sample_path = argv[1]; // old C++ sample had -vs for ../../.., but I don't care
+	sample_path = argv[1];
 
     init();
     std::cout << num_primitives << '\n';
