@@ -66,38 +66,46 @@ working on the code side, assuming I don't abandon Panda3D entirely in
 frustration, I'll revisit this and clean up the documentation.  This
 really needs to be coordinated with the official maintainers, though.
 
+Finished:
+
+ - asteroids
+ - ball-in-maze
+ - boxing-robots
+ - bump-mapping
+ - carousel
+ - chessboard
+ - culling
+ - disco-lights
+ - fractal-plants
+ - infinite-tunnel
+ - looking-and-gripping
+ - media-player
+ - mouse-modes
+ - music-box - crashes on exit; see note #1
+ - shader-terrain
+ - solar-system
+
+Partially finished:
+
+ - cartoon-shader - requires Python-only functionality; see note #2, #3.
+ - distortion - requires Python-only functionality; see note #3.
+ - fireflies - requires Python-only functionality; see note #3, #4.
+ - gamepad - see note #5; also neither sample w/ GUI yet
+ - glow-filter - requires Python-only functionality; see note #2, #3.
+
+Won't finish:
+ - particles - both samples rely heavily on Python; see note #6.
+ - rocket-console - requires librocket; see note #7
+
 TODO:
 
- - ✓ asteroids
- - ✓ ball-in-maze
- - ✓ boxing-robots
- - ✓ bump-mapping
- - ✓ carousel
- - ~ cartoon-shader - requires Python-only functionality; see note #2, #3.
- - ✓ chessboard
- - ✓ culling
- - ✓ disco-lights
- - ~  distortion - requires Python-only functionality; see note #3.
- - ~  fireflies - requires Python-only functionality; see note #3, #4.
- - ✓  fractal-plants
- - ~  gamepad - see note #5; also neither sample w/ GUI yet
- - ~  glow-filter - requires Python-only functionality; see note #2, #3.
- - _  infinite-tunnel
- - ✓  looking-and-gripping
- - ✓  media-player
- - _  motion-trails
- - ✓  mouse-modes
- - ✓  music-box - crashes on exit; see note #1
- - X  particles - both samples rely heavily on Python; see note #6.
- - _  procedural-cube
- - _  render-to-texture
- - _  roaming-ralph
- - _  rocket-console
- - ✓  shader-terrain
- - _  shadows
- - ✓  solar-system
+ - motion-trails
+ - procedural-cube
+ - render-to-texture
+ - roaming-ralph
+ - shadows
 
-notes:
+Notes:
 
 1) OpenAL sounds require the OpenAL sound manager to exist when they
    are deleted.  At program exit, the deletion order can't be relied
@@ -133,3 +141,9 @@ notes:
    loadable particle system format (maybe egg can be coerced?).  It
    would be nice if I could just write some Python code to do the
    conversion process, but I hate Python.
+7) Panda3D's rocket support requires the Python API, which is currently
+   officially Python2.  Thus, I can't compile Panda3D with it, and
+   besides, given this requirement, I highly doubt I could do much
+   with it outside of Python, anyway, or at the very least, I'd have
+   a very hard time porting the Python code (see particles: the C++
+   part is there, but it's not easy to use or well documented).

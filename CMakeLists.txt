@@ -29,7 +29,7 @@ subdirs(
     fractal-plants
     gamepad         # no GUI-heavy sample yet
     glow-filter     # only advanced works, and no BufferViewer
-#    infinite-tunnel # not yet
+    infinite-tunnel
     looking-and-gripping
     media-player
 #    motion-trails # not yet
