@@ -10,61 +10,16 @@ have tried to match the code of the Python samples as much as
 possible, within my tolerance of such things, but due to the missing
 features, some things may be completely different.
 
-This was a fork of https://github.com/IsakTheHacker/c-p3d-samples.  In
-spite of the name and description, that was only one working example,
-with missing features, and another mostly non-functional example,
-which I have removed.  I appreciate that as a starter, since one of
-the missing features of Panda3D's C++ support is anything resembling
-usable documentation.  In the mean time, I have added feature parity
-(on-screen help text and drain animation, along with all original code
-comments), removed Microsoft build support (I don't develop on or use
-Windows, so I have no way of modifying or testing; you might get a
-Windows build using cmake), restructured the code to match the Python
-code (all in one source file, in pretty much the same code order), and
-removed the assets (you will need the assets from the original Python
-sample).
+To build any single sample, go into its directory, and build with cmake:
 
-This is my first Panda3D experience.  It's also my first serious
-attempt at making something resembling a 3D application.  I wanted a
-functional 3D library that supported my needs without major effort
-required to get it running (e.g. pretty much everything I looked at,
-including Panda3D, requires changes/fixes for animated model loading;
-at least Panda3D's assimp support seems to be progressing without my
-intervention), or major misfeatures (such as not being able to avoid
-the use of excessive configuration files or scripting languages, in
-particular Python or Python-like languages or Python-like practices
-(e.g. auto-downloading a complete distribution in order to run
-anything), as I consider Python a plague upon humanity, and an even
-biggest step backwards than Visual Basic).  I originally rejected
-Panda3D due to my impression that it was impossible to write anything
-useful except in Python.  However, I found that most every other
-freely available library is unusable, as well.  Upon re-examining it
-just before deleting it, I found the C++ link in the official (on-line
-only, impossible to download) documentation.  This is what encouraged
-me to look into it further. This collection of samples represents my
-work in evaluating the library.  I found that many things were still
-missing, and expect that future development will involve even more
-Python-only facilities, but it is tolerable as is.
+    cmake -S . -B b && cmake --build -j9
 
-As an aside, in order to get an offline (or any) document, I have
-tried to make Doxygen produce something.  Even with projects that put
-a lot of effort into it, Doxygen always produces awful documentation
-(poorly organized at almost every level, massive excessive useless
-copying and whitespace, but, hey, pretty (useless) pictures!), but
-it's better than nothing.  Panda3D in particular uses practices that
-make it even harder (I discovered many new misfeatures in Doxygen as a
-result), such as placing documentation in the implementation rather
-than in the API definition.  I have collected my current work on the
-matter into the doxy directory.  It's intended to be run after
-building, in a top-level subdirectory (doxy in my case) of the panda3d
-source tree.  There are still undocumented entities, and it still
-includes internal APIs probably not intended for public use, and it is
-most definitely not tutorial in nature, but, again, it's better than
-nothing.  Don't even bother looking at the broken latex output (20k+
-pages of bloated garbage, and then dies).  Perhaps after I get things
-working on the code side, assuming I don't abandon Panda3D entirely in
-frustration, I'll revisit this and clean up the documentation.  This
-really needs to be coordinated with the official maintainers, though.
+You can also build all of them at once by executing the same command
+in the top-level directory.  As usual, solve issues and/or set config
+options using `ccmake` or `cmake-gui`.  In particular, note that if it
+can't find the library, it will give `NOTFOUND` for all of them, but
+you only need to correct the first (`panda`) and reconfigure to find
+the rest.
 
 Finished:
 
@@ -90,23 +45,36 @@ Partially finished:
  - cartoon-shader - requires Python-only functionality; see note #2, #3.
  - distortion - requires Python-only functionality; see note #3.
  - fireflies - requires Python-only functionality; see note #3, #4.
- - gamepad - see note #5; also neither sample w/ GUI yet
+ - gamepad - see note #5; also neither sample w/ GUI yet (#9)
  - glow-filter - requires Python-only functionality; see note #2, #3.
+ - shadows requires Python-only functionality; see note #3.
 
 Won't finish:
+
  - particles - both samples rely heavily on Python; see note #6.
  - rocket-console - requires librocket; see note #7
 
 TODO:
 
- - motion-trails
+ - motion-trails (#8)
  - procedural-cube
- - render-to-texture
+ - render-to-texture (#3)
  - roaming-ralph
- - shadows
 
 Notes:
 
+0) ShowBase has a number of features which would be useful in the C++
+   framework, as well.  Clearly the Python API gets more love,
+   starting at the very beginning (ShowBase vs. PandaFramework), and
+   extending through nearly everything.  I'm surprised when a port
+   actually has close to the same number of lines as the Python code, and
+   that's not entirely due to differences between the programming
+   lanugages.  C++ just doesn't get enough love.  In some places, it
+   is clearly only used to accelerate the Python API (e.g.
+   MotionTrail). There are also some features of C++11 that dearly need
+   to be implmented in the Panda3D classes, such as initializers and
+   std::function support and proper container iterators that can be
+   used in the for(x: container) construct.
 1) OpenAL sounds require the OpenAL sound manager to exist when they
    are deleted.  At program exit, the deletion order can't be relied
    on.  I tried simple solutions to this, which didn't work, so I have
@@ -145,5 +113,77 @@ Notes:
    officially Python2.  Thus, I can't compile Panda3D with it, and
    besides, given this requirement, I highly doubt I could do much
    with it outside of Python, anyway, or at the very least, I'd have
-   a very hard time porting the Python code (see particles: the C++
+   a very hard time porting the Python code (see #6: the C++
    part is there, but it's not easy to use or well documented).
+8) The fireball sample uses infrastucture which is technically available
+   in C++, but requires some support and mangling, and basically
+   duplication of the Python MotionTrail class.  Like #6 and #7, and
+   Intervals, it's not well documented and hard to use outside of the
+   Python wrappers.  The fact that it pulls in libp3direct should be a
+   clear indicator it wasn't meant for raw usage in C++ code.
+9) The PGUI elements are hard to use and poorly documnted, much like
+   #6-#8 above (seeing a trend?), and have some major features that I
+   would need to re-implment in C++.  For these reasons, I may never
+   port mappingGUI or device_tester.
+
+This was a fork of https://github.com/IsakTheHacker/c-p3d-samples.  In
+spite of the name and description, that was only one working example,
+with missing features, and another mostly non-functional example,
+which I have removed.  I appreciate that as a starter, since one of
+the missing features of Panda3D's C++ support is anything resembling
+usable documentation.  In the mean time, I have added feature parity
+(on-screen help text and drain animation, along with all original code
+comments), removed Microsoft build support (I don't develop on or use
+Windows, so I have no way of modifying or testing; you might get a
+Windows build using cmake), restructured the code to match the Python
+code (all in one source file, in pretty much the same code order), and
+removed the assets (you will need the assets from the original Python
+sample).  In other words, it is almost a complete rewrite of what
+little there was.
+
+This is my first Panda3D experience.  It's also my first serious
+attempt at making something resembling a 3D application.  I wanted a
+functional 3D library that supported my needs without major effort
+required to get it running (e.g. pretty much everything I looked at,
+including Panda3D, requires changes/fixes for animated model loading;
+at least Panda3D's assimp support seems to be progressing without my
+intervention), or major misfeatures (such as not being able to avoid
+the use of excessive configuration files or scripting languages, in
+particular Python or Python-like languages or Python-like practices
+(e.g. auto-downloading a complete distribution in order to run
+anything), as I consider Python a plague upon humanity, and an even
+bigger step backwards than Visual Basic).  I originally rejected
+Panda3D due to my impression that it was impossible to write anything
+useful except in Python.  However, I found that most every other
+freely available library is unusable, as well.  Upon re-examining it
+just before deleting it, I found the C++ link in the official (on-line
+only, impossible to download) documentation.  This is what encouraged
+me to look into it further. This collection of samples represents my
+work in evaluating the library.  I found that many things were still
+missing, and expect that future development will involve even more
+Python-only facilities, but it is tolerable as is.
+
+As an aside, in order to get an offline (or any) document, I have
+tried to make Doxygen produce something.  Even with projects that put
+a lot of effort into it, Doxygen always produces awful documentation
+(poorly organized at almost every level, massive excessive useless
+copying and whitespace, but, hey, pretty (useless) pictures!), but
+it's better than nothing.  Panda3D in particular uses practices that
+make it even harder (I discovered many new misfeatures in Doxygen as a
+result), such as placing documentation in the implementation rather
+than in the API definition.  I have collected my current work on the
+matter into the doxy directory.  It's intended to be run after
+building, in a top-level subdirectory (doxy in my case) of the panda3d
+source tree.  There are still undocumented entities, and it still
+includes internal APIs probably not intended for public use, and it is
+most definitely not tutorial in nature, but, again, it's better than
+nothing.  Don't even bother looking at the broken latex output (20k+
+pages of bloated garbage, and then dies).  Perhaps after I get things
+working on the code side, assuming I don't abandon Panda3D entirely in
+frustration, I'll revisit this and clean up the documentation.  This
+really needs to be coordinated with the official maintainers, though.
+Note that although there is a way to download the docs (panda3d-docs,
+duh! -- don't know why I missed it before), I can't get it to produce
+anything at the moment.  If I can get it to give me a decent off-line
+document, expect this entire paragraph and the associated doxy
+directory to disappear.

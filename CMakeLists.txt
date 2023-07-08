@@ -35,12 +35,12 @@ subdirs(
 #    motion-trails # not yet
     mouse-modes
     music-box       # fails lock assertion on exit
-#    particles # not yet; probably not ever (too much Python)
 #    procedural-cube # not yet
 #    render-to-texture # not yet
 #    roaming-ralph # not yet
-#    rocket-console # not yet; probably never
     shader-terrain
-#    shadows # not yet
+    shadows         # no BufferViewer
     solar-system
+#    particles      # not yet; probably not ever (too much Python)
+#    rocket-console # not yet; probably never
 )

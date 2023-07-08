@@ -2,7 +2,7 @@
  *  Translation of Python infinite-tunnel sample from Panda3D.
  *  https://github.com/panda3d/panda3d/tree/v1.10.13/samples/infinite-tunnel
  *
- * Original C++ conversion by Thomas J. Moore June 2023.
+ * Original C++ conversion by Thomas J. Moore July 2023.
  *
  * Comments are mostly extracted from the Python sample, such as:
  *

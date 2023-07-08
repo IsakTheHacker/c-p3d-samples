@@ -85,11 +85,12 @@ class FuncAsyncI : public FuncI {
 template<class C, class T>class LerpFunc : public CLerpInterval {
   public:
     LerpFunc(std::string name, C *what, void(C::*setter)(T) , T start, T end,
-	     double duration) :
-	CLerpInterval(name, duration, BT_no_blend),
+	     double duration, BlendType bt = BT_no_blend) :
+	CLerpInterval(name, duration, bt),
 	_what(what), _setter(setter), _start(start), _diff(end - start) {}
-    LerpFunc(C *what, void(C::*setter)(T), T start, T end, double duration) :
-	CLerpInterval(std::to_string((unsigned long)this), duration, BT_no_blend),
+    LerpFunc(C *what, void(C::*setter)(T), T start, T end, double duration,
+	     BlendType bt = BT_no_blend) :
+	CLerpInterval(std::to_string((unsigned long)this), duration, bt),
 	_what(what), _setter(setter), _start(start), _diff(end - start) {}
     virtual void priv_step(double t) {
 	double curt = compute_delta(t);
