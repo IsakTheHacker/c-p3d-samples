@@ -12,16 +12,41 @@ features, some things may be completely different.
 
 To build any single sample, go into its directory, and build with cmake:
 
-    cmake -S . -B build && cmake --build build -j9
+>     cmake -S . -B build
+>     cmake --build build -j9
 
-You can also build all of them at once by executing the same commands
-in the top-level directory.  As usual, solve issues and/or set config
-options using `ccmake` or `cmake-gui`.  In particular, note that if it
-can't find the library, it will give `NOTFOUND` for all of them, but
-you only need to correct the first (`panda`) and reconfigure to find
-the rest.
+While each sample is essentially independent, they all depend on some
+common support routines I created during the porting process.  These
+are all in the `supt` subdirectory.  This includes the bulk of the
+cmake code, so you can't even build without it.
 
-Finished:
+You can also build all of the samples at once by executing the same
+commands in the top-level directory.  While there is an install
+target, it's generally not a good idea to install samples in the
+system.  However, after building all samples at once, it might be
+convenient to collect them all in one directory.  A way to do this is
+to install.  For example, to install all of them in `/tmp/p3ds/bin`:
+
+>     cmake --install build --prefix /tmp/p3ds
+
+As is usual with CMake, solve build issues and/or set config options
+using `ccmake` or `cmake-gui`.  In particular, note that if it can't
+find the Panda3D libraries, it will give `NOTFOUND` for all of them,
+but you only need to correct the first (PANDALIB, the path to the
+`panda` library) and reconfigure to find the rest.
+
+Every sample that has assets (i.e., most of them, including the
+"procedurally generated" ones) takes a single command-line argument,
+which is the directory in which to find the assets.  I did not
+duplicate the sample assets here; you will have to obtain these from
+the official SDK.  If the assets are found by CMake during the build
+process, the sample will use the found directory by default, so you
+should usually not need to provide this command-line parameter.
+
+Official Panda3D 1.10.13 SDK samples
+------------------------------------
+
+Completely finished:
 
  - asteroids
  - ball-in-maze
@@ -36,13 +61,13 @@ Finished:
  - looking-and-gripping
  - media-player
  - mouse-modes
- - music-box - crashes on exit; see note #1
+ - music-box - crashes on exit; see note #1.
  - procedural-cube
  - roaming-ralph
  - shader-terrain
  - solar-system
 
-Fully functional except BufferView (see note #3):
+Fully functional except no BufferViewer debug window (see note #3):
 
  - distortion
  - fireflies - sometims crashes; see note #4.
@@ -53,14 +78,14 @@ Partially finished; probably won't complete:
 
  - cartoon-shader - requires Python-only functionality; see note #2, #3.
  - motion-trails - fireball needs too much work; see note #8.  Other
-   sample Broken; see #10.
+   sample broken; see note #10.
  - gamepad - see note #5; also neither sample w/ GUI yet (note #9)
  - glow-filter - requires Python-only functionality; see note #2, #3.
 
 Won't even start:
 
  - particles - both samples rely heavily on Python; see note #6.
- - rocket-console - requires librocket; see note #7
+ - rocket-console - requires librocket; see note #7.
 
 Notes:
 
@@ -132,21 +157,46 @@ Notes:
    to be implmented in the Panda3D classes, such as initializers and
    std::function support and proper container iterators that can be
    used in the for(x: container) construct.
+0) The official C++ tutorial calls people lazy for using intervals,
+   and then runs its character animations using `WindowFramework`'s
+   `loop_animations` method.  I do not use that in any of my samples,
+   because in the real world, the methods used by `loop_animations`
+   don't work.  You'll want control over individual animations.
+   You'll want to load multi-animation files with named animations
+   that don't match your model's name, and be able to find, bind and
+   run only the ones you want.  You'll want to be able to control the
+   speed of individual animations.  In fact, even some of the samples
+   I ported would not benefit from this sipmlistic method.  I suggest
+   avoiding it in your own code, and I suggest to the Panda3D team to
+   rethink or remove this method.  Was it created just to shorten the
+   tutorial?  Is it really beneficial to users to call binding "magic"
+   rather than providing the 3 or 4 lines of code needed to bind
+   manually?  I guess with those obnoxiously long flag names needed to
+   override the default matching behavior, maybe so.
 
 This was a fork of https://github.com/IsakTheHacker/c-p3d-samples.  In
 spite of the name and description, that was only one working example
 (ball-in-maze), with missing features, and another mostly
-non-functional example, which I have removed.  I appreciate that as a
-starter, since one of the missing features of Panda3D's C++ support is
-anything resembling usable documentation.  In the mean time, I have
-added feature parity (on-screen help text and drain animation, along
-with all original code comments), removed Microsoft build support (I
-don't develop on or use Windows, so I have no way of modifying or
-testing; you might get a Windows build using cmake), restructured the
-code to match the Python code (all in one source file, in pretty much
-the same code order), and removed the assets (you will need the assets
-from the original Python sample).  In other words, it is almost a
-complete rewrite of what little there was.
+non-functional example ("snake"), which I have removed.  I appreciate
+that as a starter, since one of the missing features of Panda3D's C++
+support is anything resembling usable documentation (in the mean time,
+I have found that the official documentation is not as bad as it
+originally appeared to be, including an actual tutorial example, but
+the fact that my initial impression was that it was a slightly
+modified version of the Python documentation didn't just come out of
+nowhere).  In the mean time, I have added feature parity with the
+official Python version of ball-in-maze:  on-screen help text, drain
+animation, and all original code comments.  I have also removed
+Microsoft build support (I don't develop on or use Windows, so I have
+no way of modifying or testing); CMake supports MS builds, so you might
+get a Windows build, but I haven't tested it and won't:  if/when I do
+build for Windows, I'll be using cross-compilation tools, anyway.  I
+also restructured the code to match the Python code (all in one source
+file, in pretty much the same code order) and removed the assets.  In
+other words, it is almost a complete rewrite of what little there was.
+Plus, of course, more than 20 additional samples mostly written from
+scratch, including important concepts not present in the original,
+like the animations and on-screen text I added to ball-in-maze.
 
 This is my first Panda3D experience.  It's also my first serious
 attempt at making something resembling a 3D application.  I wanted a
@@ -163,34 +213,20 @@ bigger step backwards than Visual Basic).  I originally rejected
 Panda3D due to my impression that it was impossible to write anything
 useful except in Python.  However, I found that most every other
 freely available library is unusable, as well.  Upon re-examining it
-just before deleting it, I found the C++ link in the official (on-line
-only, impossible to download) documentation.  This is what encouraged
-me to look into it further. This collection of samples represents my
-work in evaluating the library.  I found that many things were still
-missing, and expect that future development will involve even more
-Python-only facilities, but it is tolerable as is.
+just before deleting it, I found the C++ link in the official
+documentation.  This is what encouraged me to look into it further.
+This collection of samples represents my work in evaluating the
+library.  I found that many things were still missing, and expect that
+future development will involve even more Python-only facilities, but
+it is tolerable as is.
 
-As an aside, in order to get an offline (or any) document, I have
-tried to make Doxygen produce something.  Even with projects that put
-a lot of effort into it, Doxygen always produces awful documentation
-(poorly organized at almost every level, massive excessive useless
-copying and whitespace, but, hey, pretty (useless) pictures!), but
-it's better than nothing.  Panda3D in particular uses practices that
-make it even harder (I discovered many new misfeatures in Doxygen as a
-result), such as placing documentation in the implementation rather
-than in the API definition.  I have collected my current work on the
-matter into the doxy directory.  It's intended to be run after
-building, in a top-level subdirectory (doxy in my case) of the panda3d
-source tree.  There are still undocumented entities, and it still
-includes internal APIs probably not intended for public use, and it is
-most definitely not tutorial in nature, but, again, it's better than
-nothing.  Don't even bother looking at the broken latex output (20k+
-pages of bloated garbage, and then dies).  Perhaps after I get things
-working on the code side, assuming I don't abandon Panda3D entirely in
-frustration, I'll revisit this and clean up the documentation.  This
-really needs to be coordinated with the official maintainers, though.
-Note that although there is a way to download the docs (panda3d-docs,
-duh! -- don't know why I missed it before), I can't get it to produce
-anything at the moment.  If I can get it to give me a decent off-line
-document, expect this entire paragraph and the associated doxy
-directory to disappear.
+As an aside, during development, I did not use the official API
+reference.  Instead, I painstakingly, partially reconstructed it using
+Doxygen, because I missed the fact that you can download the [official
+documentation sources](https://github.com/panda3d/panda3d-docs) and
+build them locally, albeit via a long, non-parallizable build
+requiring `pip` and other things I dislike.  Not that I'm a big fan of
+Doxygen, either, but it seemed like the best way to get a locally
+installed API reference at the time.  I used to include my work to
+date on this matter, but have removed it.  Feel free to scour the git
+history for it if you are interested.
