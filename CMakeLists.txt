@@ -36,7 +36,7 @@ subdirs(
     mouse-modes
     music-box       # fails lock assertion on exit
     procedural-cube
-#    render-to-texture # not yet
+    render-to-texture # no BuferViewer
     roaming-ralph
     shader-terrain
     shadows         # no BufferViewer

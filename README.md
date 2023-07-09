@@ -49,6 +49,7 @@ Partially finished:
  - fireflies - requires Python-only functionality; see note #3, #4.
  - gamepad - see note #5; also neither sample w/ GUI yet (#9)
  - glow-filter - requires Python-only functionality; see note #2, #3.
+ - render-to-texture requires Python-only functionality; see note #3.
  - shadows requires Python-only functionality; see note #3.
 
 Won't finish:
@@ -59,7 +60,6 @@ Won't finish:
 TODO:
 
  - motion-trails (#8)
- - render-to-texture (#3)
 
 Notes:
 
@@ -73,7 +73,8 @@ Notes:
 2) The filter classes, including the "common filters" are only
    available in Python.  I suppose I should fix that, since they seem
    generally useful.  Maybe in a future revision.  Thus, the
-   cartoon-shader and glow-filter "basic" samples won't work.
+   cartoon-shader and glow-filter "basic" samples won't work.  The
+   "advanced" samples do everything manually, so they work.
 3) The BufferViewer class is a feature of the Direct GUI, and
    therefore not available in C++.  I have gone ahead and ported
    samples which originally used this without that particular
