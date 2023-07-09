@@ -38,6 +38,7 @@ Finished:
  - mouse-modes
  - music-box - crashes on exit; see note #1
  - procedural-cube
+ - roaming-ralph
  - shader-terrain
  - solar-system
 
@@ -59,7 +60,6 @@ TODO:
 
  - motion-trails (#8)
  - render-to-texture (#3)
- - roaming-ralph
 
 Notes:
 

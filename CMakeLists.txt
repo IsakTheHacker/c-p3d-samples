@@ -37,7 +37,7 @@ subdirs(
     music-box       # fails lock assertion on exit
     procedural-cube
 #    render-to-texture # not yet
-#    roaming-ralph # not yet
+    roaming-ralph
     shader-terrain
     shadows         # no BufferViewer
     solar-system
