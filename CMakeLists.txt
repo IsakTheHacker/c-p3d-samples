@@ -20,19 +20,15 @@ subdirs(
     boxing-robots
     bump-mapping
     carousel
-    cartoon-shader  # only advanced works, and no BufferViewer
     chessboard
     culling
     disco-lights
     distortion      # no BufferViewer
     fireflies       # no BufferViewer; sometimes crashes on model load
     fractal-plants
-    gamepad         # no GUI-heavy sample yet
-    glow-filter     # only advanced works, and no BufferViewer
     infinite-tunnel
     looking-and-gripping
     media-player
-#    motion-trails # not yet
     mouse-modes
     music-box       # fails lock assertion on exit
     procedural-cube
@@ -41,6 +37,12 @@ subdirs(
     shader-terrain
     shadows         # no BufferViewer
     solar-system
+
+    cartoon-shader  # only advanced works, and no BufferViewer
+    glow-filter     # only advanced works, and no BufferViewer
+    gamepad         # no GUI-heavy sample yet
+
+    motion-trails   # fireball too much trouble.  fb-fb mostly non-functional.
 #    particles      # not yet; probably not ever (too much Python)
 #    rocket-console # not yet; probably never
 )

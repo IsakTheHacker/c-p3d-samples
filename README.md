@@ -12,9 +12,9 @@ features, some things may be completely different.
 
 To build any single sample, go into its directory, and build with cmake:
 
-    cmake -S . -B b && cmake --build -j9
+    cmake -S . -B build && cmake --build build -j9
 
-You can also build all of them at once by executing the same command
+You can also build all of them at once by executing the same commands
 in the top-level directory.  As usual, solve issues and/or set config
 options using `ccmake` or `cmake-gui`.  In particular, note that if it
 can't find the library, it will give `NOTFOUND` for all of them, but
@@ -42,24 +42,25 @@ Finished:
  - shader-terrain
  - solar-system
 
-Partially finished:
+Fully functional except BufferView (see note #3):
+
+ - distortion
+ - fireflies - sometims crashes; see note #4.
+ - render-to-texture
+ - shadows
+
+Partially finished; probably won't complete:
 
  - cartoon-shader - requires Python-only functionality; see note #2, #3.
- - distortion - requires Python-only functionality; see note #3.
- - fireflies - requires Python-only functionality; see note #3, #4.
- - gamepad - see note #5; also neither sample w/ GUI yet (#9)
+ - motion-trails - fireball needs too much work; see note #8.  Other
+   sample Broken; see #10.
+ - gamepad - see note #5; also neither sample w/ GUI yet (note #9)
  - glow-filter - requires Python-only functionality; see note #2, #3.
- - render-to-texture requires Python-only functionality; see note #3.
- - shadows requires Python-only functionality; see note #3.
 
-Won't finish:
+Won't even start:
 
  - particles - both samples rely heavily on Python; see note #6.
  - rocket-console - requires librocket; see note #7
-
-TODO:
-
- - motion-trails (#8)
 
 Notes:
 
@@ -93,7 +94,7 @@ Notes:
    there is a C++ equivalent.  The steam_example sample uses ptf files,
    which are Python scripts executed blindly by the loader.  I could
    just parse the parts that are generated, and reject any additional
-   Python, or I could hand-convert these to C++ calls and comple them.
+   Python, or I could hand-convert these to C++ calls and compile them.
    I don't know of (and don't feel like looking for) a run-time
    loadable particle system format (maybe egg can be coerced?).  It
    would be nice if I could just write some Python code to do the
@@ -110,10 +111,15 @@ Notes:
    Intervals, it's not well documented and hard to use outside of the
    Python wrappers.  The fact that it pulls in libp3direct should be a
    clear indicator it wasn't meant for raw usage in C++ code.
-9) The PGUI elements are hard to use and poorly documnted, much like
+9) The PGUI elements are hard to use and poorly documented, much like
    #6-#8 above (seeing a trend?), and have some major features that I
-   would need to re-implment in C++.  For these reasons, I may never
+   would need to re-implement in C++.  For these reasons, I may never
    port mappingGUI or device_tester.
+10) I could not get framebuffer-feedback to work.  I don't know why.
+    I may try to fix this later.  I'm tired of working on these samples.
+    Feel free to look at my code and tell me where I went wrong.  It
+    looks to me like I'm doing everything exactly like how the Python
+    code does it.
 0) ShowBase has a number of features which would be useful in the C++
    framework, as well.  Clearly the Python API gets more love,
    starting at the very beginning (ShowBase vs. PandaFramework), and
@@ -128,19 +134,19 @@ Notes:
    used in the for(x: container) construct.
 
 This was a fork of https://github.com/IsakTheHacker/c-p3d-samples.  In
-spite of the name and description, that was only one working example,
-with missing features, and another mostly non-functional example,
-which I have removed.  I appreciate that as a starter, since one of
-the missing features of Panda3D's C++ support is anything resembling
-usable documentation.  In the mean time, I have added feature parity
-(on-screen help text and drain animation, along with all original code
-comments), removed Microsoft build support (I don't develop on or use
-Windows, so I have no way of modifying or testing; you might get a
-Windows build using cmake), restructured the code to match the Python
-code (all in one source file, in pretty much the same code order), and
-removed the assets (you will need the assets from the original Python
-sample).  In other words, it is almost a complete rewrite of what
-little there was.
+spite of the name and description, that was only one working example
+(ball-in-maze), with missing features, and another mostly
+non-functional example, which I have removed.  I appreciate that as a
+starter, since one of the missing features of Panda3D's C++ support is
+anything resembling usable documentation.  In the mean time, I have
+added feature parity (on-screen help text and drain animation, along
+with all original code comments), removed Microsoft build support (I
+don't develop on or use Windows, so I have no way of modifying or
+testing; you might get a Windows build using cmake), restructured the
+code to match the Python code (all in one source file, in pretty much
+the same code order), and removed the assets (you will need the assets
+from the original Python sample).  In other words, it is almost a
+complete rewrite of what little there was.
 
 This is my first Panda3D experience.  It's also my first serious
 attempt at making something resembling a 3D application.  I wanted a

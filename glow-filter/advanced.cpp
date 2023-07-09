@@ -80,7 +80,7 @@ GraphicsOutput *make_filter_buffer(GraphicsOutput *srcbuffer,
     blur_buffer->set_sort(sort);
     blur_buffer->set_clear_color(LColor(1, 0, 0, 1));
     /// start of replacement for make_camera2d(blur_buffer)
-    auto dr = blur_buffer->make_mono_display_region(LVector4(0, 1, 0, 1)); // default rect
+    auto dr = blur_buffer->make_mono_display_region();
     dr->set_sort(10); // default sort
     PT(Camera) blur_camera = new Camera("camera2d");
     auto blur_camera_node = window->get_render().attach_new_node(blur_camera);
