@@ -16,6 +16,14 @@ void update_intervals()
 void kill_intervals()
 {
     kill_task("CInterval updater");
+    auto mgr = CIntervalManager::get_global_ptr();
+    for(unsigned i = mgr->get_max_index(); i--; ) {
+	auto ci = mgr->get_c_interval(i);
+	if(ci)
+	    ci->finish();
+    }
+    while(mgr->get_num_intervals())
+	mgr->step();
 }
 
 // Since there a lot of animations to load, this convenience function

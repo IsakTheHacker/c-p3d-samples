@@ -45,4 +45,6 @@ subdirs(
     motion-trails   # fireball too much trouble.  fb-fb mostly non-functional.
 #    particles      # not yet; probably not ever (too much Python)
 #    rocket-console # not yet; probably never
+
+    square
 )

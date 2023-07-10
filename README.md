@@ -46,7 +46,7 @@ should usually not need to provide this command-line parameter.
 Official Panda3D 1.10.13 SDK samples
 ------------------------------------
 
-Completely finished:
+### Completely finished:
 
  - asteroids
  - ball-in-maze
@@ -61,20 +61,20 @@ Completely finished:
  - looking-and-gripping
  - media-player
  - mouse-modes
- - music-box - crashes on exit; see note #1.
+ - music-box - see note #1.
  - procedural-cube
  - roaming-ralph
  - shader-terrain
  - solar-system
 
-Fully functional except no BufferViewer debug window (see note #3):
+### Fully functional except no BufferViewer debug window (see note #3):
 
  - distortion
  - fireflies - sometims crashes; see note #4.
  - render-to-texture
  - shadows
 
-Partially finished; probably won't complete:
+### Partially finished; probably won't complete:
 
  - cartoon-shader - requires Python-only functionality; see note #2, #3.
  - motion-trails - fireball needs too much work; see note #8.  Other
@@ -82,20 +82,19 @@ Partially finished; probably won't complete:
  - gamepad - see note #5; also neither sample w/ GUI yet (note #9)
  - glow-filter - requires Python-only functionality; see note #2, #3.
 
-Won't even start:
+### Won't even start:
 
  - particles - both samples rely heavily on Python; see note #6.
  - rocket-console - requires librocket; see note #7.
 
-Notes:
+### Notes:
 
 1) OpenAL sounds require the OpenAL sound manager to exist when they
    are deleted.  At program exit, the deletion order can't be relied
-   on.  I tried simple solutions to this, which didn't work, so I have
-   left music-box to crash (assertion failure due to manager's lock no
-   longer existing) on exit.  Really, the manager should track which
-   sounds still exist, and delete them itself in its destructor.  Or
-   at least flag the sounds to become inert.
+   on.  I found a way to get it to shut down cleanly without an
+   assertion failure on the managers' global locks, but I'm not very
+   happy with the fix.  This probably needs fixing on the library
+   level.  For now, music-box shuts down without a crash.
 2) The filter classes, including the "common filters" are only
    available in Python.  I suppose I should fix that, since they seem
    generally useful.  Maybe in a future revision.  Thus, the
@@ -174,6 +173,26 @@ Notes:
    manually?  I guess with those obnoxiously long flag names needed to
    override the default matching behavior, maybe so.
 
+Other samples
+-------------
+
+### square
+
+This is a port of https://oldmanprogrammer.net/demos/square/.  It
+generates a terrain with "square" tiles.  This was my first test
+program for most other engines; for Panda3D, I waited until I finished
+all the samples (in particular, fractal-tree and procedural-cube).
+Mostly a quick hack.
+
+Note that this is more independent than the above samples:  it does not
+depend on the `supt` subdirectory at all (the cmake portions were
+copied into the `CMakeLists.txt` itself).  The `square` directory can
+be copied anywhere outside and still be built.  It can still be built
+at the same time as the rest using a top-level build, though.
+
+Other Notes
+-----------
+
 This was a fork of https://github.com/IsakTheHacker/c-p3d-samples.  In
 spite of the name and description, that was only one working example
 (ball-in-maze), with missing features, and another mostly
@@ -203,22 +222,25 @@ attempt at making something resembling a 3D application.  I wanted a
 functional 3D library that supported my needs without major effort
 required to get it running (e.g. pretty much everything I looked at,
 including Panda3D, requires changes/fixes for animated model loading;
-at least Panda3D's assimp support seems to be progressing without my
-intervention), or major misfeatures (such as not being able to avoid
-the use of excessive configuration files or scripting languages, in
-particular Python or Python-like languages or Python-like practices
-(e.g. auto-downloading a complete distribution in order to run
-anything), as I consider Python a plague upon humanity, and an even
-bigger step backwards than Visual Basic).  I originally rejected
-Panda3D due to my impression that it was impossible to write anything
-useful except in Python.  However, I found that most every other
-freely available library is unusable, as well.  Upon re-examining it
-just before deleting it, I found the C++ link in the official
-documentation.  This is what encouraged me to look into it further.
-This collection of samples represents my work in evaluating the
-library.  I found that many things were still missing, and expect that
-future development will involve even more Python-only facilities, but
-it is tolerable as is.
+at least Panda3D's assimp support seemed to be progressing without my
+intervention, but as evidenced by the responses to a bug report, I was
+wrong:  their only asset importing solution is to use a third party
+tool which has the misfeatures I mention next, and only works for
+assets that blender can import properly), or major misfeatures (such
+as not being able to avoid the use of excessive configuration files or
+scripting languages, in particular Python or Python-like languages or
+Python-like practices (e.g. auto-downloading a complete distribution
+in order to run anything), as I consider Python a plague upon
+humanity, and an even bigger step backwards than Visual Basic). I
+originally rejected Panda3D due to my impression that it was
+impossible to write anything useful except in Python.  However, I
+found that most every other freely available library is unusable, as
+well.  Upon re-examining it just before deleting it, I found the C++
+link in the official documentation.  This is what encouraged me to
+look into it further. This collection of samples represents my work in
+evaluating the library.  I found that many things were still missing,
+and expect that future development will involve even more Python-only
+facilities, but it is tolerable as is.
 
 As an aside, during development, I did not use the official API
 reference.  Instead, I painstakingly, partially reconstructed it using

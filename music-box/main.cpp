@@ -30,7 +30,7 @@ std::string sample_path
 #endif
 	;
 PT(AudioManager) music_manager, sfx_manager;
-PT(AudioSound) music_box_sound;
+PT(AudioSound) music_box_sound, lid_sfx;
 PT(CInterval) lid_open_sfx, lid_close_sfx;
 double music_time;
 bool box_open;
@@ -122,7 +122,7 @@ void init(void)
     // Sound effects are in a different audio manager.
     sfx_manager = AudioManager::create_AudioManager();
 
-    auto lid_sfx = sfx_manager->get_sound(sample_path + "music/openclose.ogg");
+    lid_sfx = sfx_manager->get_sound(sample_path + "music/openclose.ogg");
     // The open/close file has both effects in it. Fortunatly we can use intervals
     // to easily define parts of a sound file to play
     lid_open_sfx = new SoundInterval(lid_sfx, 2, 0);
@@ -297,5 +297,14 @@ int main(int argc, const char **argv)
     framework.close_framework();
     // unfortunately, this will crash with a lock assertion on exit
     // due probably to sounds being freed after their sound manager.
+    // The only way I have found to fix it is to clear the sound pointers
+    // and then clear the sound manager pointers, as follows:
+    music_box_sound.clear();
+    lid_sfx.clear();
+    music_manager.clear();
+    sfx_manager.clear();
+    // Since there is no convenient way to get a list of sounds, this means
+    // you'll have to track them separately/manually.  There are only 2 here,
+    // so it's not that difficult.
     return 0;
 }
