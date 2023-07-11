@@ -30,8 +30,7 @@ std::string sample_path
 #endif
 	;
 NodePath tron, finalcard;
-PT(CInterval) running;
-PT(AnimControl) running_ctl;
+PT(AnimControl) running;
 PT(NPAnim) interval;
 bool is_running, glow_on;
 GraphicsOutput *glow_buffer;
@@ -141,8 +140,7 @@ void init(void)
 
     // load our model
     tron = def_load_model("models/tron");
-    running_ctl = load_anim(tron, sample_path + "models/tron_anim");
-    running = new CharAnimate(running_ctl);
+    running = load_anim(tron, sample_path + "models/tron_anim");
     auto render = window->get_render();
     tron.reparent_to(render);
     interval = new NPAnim(tron, "interval", 60);
@@ -228,14 +226,14 @@ void toggle_display()
     auto camera = window->get_camera_group();
     if(!is_running) {
 	camera.set_pos(0, -50, 0);
-	running->finish();
-	running_ctl->pose(0);
+	running->stop();
+	running->pose(0);
 	interval->loop();
     } else {
 	camera.set_pos(0, -170, 3);
 	interval->finish();
 	tron.set_hpr(0, 0, 0);
-	running->loop();
+	running->loop(true);
     }
 }
 }

@@ -56,7 +56,7 @@ void choose_effect_ghost(void), choose_effect_paint_brush(void),
 void init_trails(void)
 {
     framework.open_framework();
-    update_intervals();
+    //update_intervals();
     framework.set_window_title("Motion Trails (Framebuffer Feedback) - C++ Panda3D Samples");
     window = framework.open_window();
 
@@ -267,7 +267,7 @@ void init(void)
     auto anim_node = DCAST(AnimBundleNode, dancer.get_child(1).node());
     auto anim = character->get_bundle(0)->bind_anim(anim_node->get_bundle(), ANIM_BIND_FLAGS);
     anim->set_anim_model(anim_node);
-    (new CharAnimate(anim))->loop();
+    anim->loop(true);
     // auto spin = new NPAnim(dancer, "spin", 15);
     // spin->set_end_hpr({360, 0, 0});
     // spin->loop();
@@ -293,7 +293,7 @@ int main(int argc, const char **argv)
     init();
 
     framework.main_loop();
-    kill_intervals();
+    //kill_intervals();
     framework.close_framework();
     return 0;
 }

@@ -28,7 +28,7 @@ PN_stdfloat push_bias, ambient;
 int camera_selection, light_selection;
 NodePath panda_model, teapot;
 PT(NPAnim) panda_movement, teapot_movement;
-PT(CharAnimate) panda_walk;
+PT(AnimControl) panda_walk;
 NodePath cam;
 Camera *cam_node;
 TextNode *inst_a;
@@ -67,7 +67,8 @@ void add_title(const std::string &text)
 }
 
 void increment_camera_position(int), increment_light_position(int);
-void toggle_interval(CInterval *), toggle_update_shadow_map(void);
+void toggle_interval(CInterval *), toggle_anim(AnimInterface *),
+     toggle_update_shadow_map(void);
 void adjust_push_bias(PN_stdfloat);
 
 void init(void)
@@ -169,11 +170,11 @@ void init(void)
 
     auto panda_axis = render.attach_new_node("panda axis");
     panda_model = window->load_model(panda_axis, "panda-model");
-    auto panda_walk_anim = load_anim(panda_model, "panda-walk4");
+    panda_walk = load_anim(panda_model, "panda-walk4");
     panda_model.set_pos(9, 0, 0);
     panda_model.set_shader_input("scale", LVector4(0.01, 0.01, 0.01, 1.0));
-    panda_walk = new CharAnimate(panda_walk_anim, 1.8);
-    panda_walk->loop();
+    panda_walk->set_play_rate(1.8);
+    panda_walk->loop(true);
     panda_movement = new NPAnim(panda_axis, "panda_movement", 20.0);
     panda_movement->set_end_hpr(LPoint3(-360, 0, 0));
     panda_movement->set_start_hpr(LPoint3(0, 0, 0));
@@ -190,7 +191,7 @@ void init(void)
     framework.define_key("arrow_right", "", EV_FN() { increment_camera_position(1); }, 0);
     framework.define_key("p", "", EV_FN() { toggle_interval(panda_movement); }, 0);
     framework.define_key("t", "", EV_FN() { toggle_interval(teapot_movement); }, 0);
-    framework.define_key("w", "", EV_FN() { toggle_interval(panda_walk); }, 0);
+    framework.define_key("w", "", EV_FN() { toggle_anim(panda_walk); }, 0);
     // framework.define_key("v", "", EV_FN() { window->buffer_viewer.toggle_enable(); }, 0);
     framework.define_key("u", "", EV_FN() { toggle_update_shadow_map(); }, 0);
     framework.define_key("l", "", EV_FN() { increment_light_position(1); }, 0);
@@ -248,6 +249,14 @@ void toggle_interval(CInterval *ival)
 	ival->pause();
     else
 	ival->resume();
+}
+
+void toggle_anim(AnimInterface *anim)
+{
+    if(anim->is_playing())
+	anim->stop();
+    else
+	anim->loop(false);
 }
 
 void toggle_update_shadow_map()

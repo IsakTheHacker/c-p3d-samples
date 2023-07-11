@@ -35,6 +35,7 @@ std::string sample_path
 	;
 PN_stdfloat separation = 0.001, cutoff = 0.3;
 NodePath drawn_scene;
+PT(AnimControl) anim;
 
 // Function to put instructions on the screen.
 void add_instructions(PN_stdfloat pos, const std::string &msg)
@@ -179,9 +180,9 @@ void init(void)
     // Scan for the anim bundlue (should be 2nd child)
     //auto anim_node = DCAST(AnimBundleNode, char_model.find("**/+AnimBundleNode").node());
     auto anim_node = DCAST(AnimBundleNode, char_model.get_child(1).node());
-    auto anim = character->get_bundle(0)->bind_anim(anim_node->get_bundle(), ANIM_BIND_FLAGS);
+    anim = character->get_bundle(0)->bind_anim(anim_node->get_bundle(), ANIM_BIND_FLAGS);
     anim->set_anim_model(anim_node);
-    (new CharAnimate(anim))->loop();
+    anim->loop(true);
     auto spin = new NPAnim(char_model, "spin", 15);
     spin->set_end_hpr({360, 0, 0});
     spin->loop();

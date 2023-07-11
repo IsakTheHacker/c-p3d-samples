@@ -113,7 +113,7 @@ void init(void)
     window->get_camera_group().set_pos(0, -15, 2);  // Position the camera
 
     auto eve = def_load_model("models/eve");  // Load our animated charachter
-    auto walk = load_anim(eve, sample_path + "models/eve_walk");
+    PT(AnimControl) walk = load_anim(eve, sample_path + "models/eve_walk");
     eve.reparent_to(window->get_render());  // Put it in the scene
 
     // Now we use control_joint() to control her neck
@@ -137,7 +137,7 @@ void init(void)
     // We now play an animation. An animation must be played, or at least posed
     // for the nodepath we just got from control_joint to actually affect the
     // model
-    (new CharAnimate(walk, 2))->loop();
+    walk->loop(true);
     // Now we add a task that will take care of turning the head
     framework.get_task_mgr().add(new GenericAsyncTask("turn_head", turn_head,
 						      (void*)window->get_mouse().node()));

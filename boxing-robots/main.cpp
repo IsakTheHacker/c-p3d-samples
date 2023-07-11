@@ -52,6 +52,53 @@ void gen_label_text(const char *text, int i)
     text_node->set_align(TextNode::A_left);
 }
 
+// AnimControl is asynchronous, so make it more Interval-like by stepping
+// through it one frame (pose) at a time in a custom CInterval:
+class CharAnimate : public CInterval {
+  public:
+    // constructor
+    CharAnimate(AnimControl *ctrl, double rate = 1.0,
+		double start = 0, double end = -1) :
+	// intervals need a globally unique name, so why not its address?
+	CInterval(std::to_string((unsigned long)this), 0, false) {
+	    _ctrl = ctrl;
+	    auto bundle = ctrl->get_anim();
+	    if(end > bundle->get_num_frames() || end < 0)
+		end = bundle->get_num_frames() - 1;
+	    if(start < 0)
+		start = 0;
+	    _end_t = _duration = (end - start + 1) / rate / bundle->get_base_frame_rate();
+	    set_play_rate(rate);
+	    _start = start;
+	    _end = end;
+	}
+    // "private" interval step override
+    // just compute the current frame and pose it.
+    void priv_step(double t)
+    {
+	double frame = _start + (_end - _start) / (_duration ? _duration : 1) * t;
+	_ctrl->pose(frame);
+    }
+    // "private" interval startup override
+    // cause the animation to influence parts
+    void priv_initialize(double t) {
+	_ctrl->get_part()->set_control_effect(_ctrl, 1);
+	CInterval::priv_initialize(t);
+    }
+    // "private" interval shutdown override
+    // cause the animation to stop influencing parts
+    void priv_finalize() {
+	_ctrl->get_part()->set_control_effect(_ctrl, 0);
+	CInterval::priv_finalize();
+    }
+    // NOTE: adding members, like below, requires this:
+    ALLOC_DELETED_CHAIN(CharAnimate);
+  protected:
+    PT(AnimControl) _ctrl;
+    int _start, _end;
+};
+
+
 void try_punch(const Event *, void *);
 void check_punch(int);
 void setup_lights(void);
@@ -131,13 +178,13 @@ void init()
     robot[1].reparent_to(window->get_render());
 
     // Now we define how the animated models will move. Animations are played
-    // through special intervals.  Since the Python code uses special convenience
-    // wrappers, this code does, as well.  They are defined in the common
-    // anim_supt.h file.  In this case we use a custom CInterval (CharAnimate,
-    // located in anim_supt.h) that runs the animation directly.  This
-    // is used in a sequence to play the part of the punch animation where the
-    // arm extends, call a function to check if the punch landed, and then
-    // play the part of the animation where the arm retracts
+    // via their AnimControl.  However, this is entirely asynchronous, and we
+    // need to do things when the animation is done.  Thus, we use a special
+    // custom CInterval (CharAnimate) that steps through the animation via
+    // its control.  It is defined below. This is used in a Sequence to
+    // play the part of the punch animation where the arm extends, call a
+    // function to check if the punch landed, and then play the part of
+    // the animation where the arm retracts
 
     for(int r = 0; r < 2; r++) {
 	// Punch sequence for robot's left arm

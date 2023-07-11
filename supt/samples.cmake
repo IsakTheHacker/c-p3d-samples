@@ -59,7 +59,7 @@ endif()
 
 # And my own simple extensions to make porting easier
 if(NOT SUPT_SRC) # only do this once if building everything
-  set(SUPT_SRC sample anim sound particle)
+  set(SUPT_SRC sample anim interval sound particle)
   list(TRANSFORM SUPT_SRC PREPEND ../supt/)
   list(TRANSFORM SUPT_SRC APPEND _supt.cpp)
   add_library(sample_supt EXCLUDE_FROM_ALL ${SUPT_SRC}) # only build if needed

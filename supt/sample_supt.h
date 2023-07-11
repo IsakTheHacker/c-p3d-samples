@@ -140,38 +140,6 @@ typedef CLerpNodePathInterval NPAnim;
 // for uncovered cases, using all constructor args:
 #define NPAnimEx CLerpNodePathInterval
 
-// Character animations.  Instead of supplying the animation name, like in
-// Python, provide the actual AnimControl.  If you don't have it, you can still
-// search by name with find().
-// This was using CLerpAnimEffectInterval, but I don't think that was
-// appropriate.  Instead, it now uses pose() on the ctrl directly.
-class CharAnimate : public CInterval {
-    PT(AnimControl) _ctrl;
-    int _start, _end;
-    void init(AnimControl *ctrl, double rate, double start, double end);
-  public:
-    const std::string &anim_name() { return _ctrl->get_name(); }
-    CharAnimate(std::string name, AnimControl *ctrl, double rate = 1.0,
-		double start = 0, double end = -1) :
-	CInterval(name, 0, false) {
-	    init(ctrl, rate, start, end);
-	}
-    CharAnimate(AnimControl *ctrl, double rate = 1.0,
-		double start = 0, double end = -1) :
-	CInterval(std::to_string((unsigned long)this), 0, false) {
-	    init(ctrl, rate, start, end);
-	}
-    // NOTE: adding members requires this:
-    ALLOC_DELETED_CHAIN(CharAnimate);
-    void priv_step(double t)
-    {
-	double frame = _start + (_end - _start) / (_duration ? _duration : 1) * t;
-	_ctrl->pose(frame);
-    }
-    void priv_initialize(double t);
-    void priv_finalize();
-};
-
 // I'm too lazy to make a sound player, so here's a macro:
 #define SoundInterval(snd, len, start) \
     Sequence({ \

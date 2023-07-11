@@ -33,8 +33,7 @@ std::string sample_path
 #endif
     ;
 NodePath ralph, floater;
-PT(CInterval) run;
-PT(AnimControl) walk;
+PT(AnimControl) run, walk;
 CollisionTraverser c_trav;
 PT(CollisionHandlerQueue) ralph_ground_handler, cam_ground_handler;
 // Game state variables
@@ -81,7 +80,6 @@ void init(void)
 {
     // Set up the window, camera, etc.
     framework.open_framework();
-    update_intervals();
     framework.set_window_title("Roaming Ralph - C++ Panda3D Samples");
     window = framework.open_window();
 
@@ -117,9 +115,8 @@ void init(void)
     // Create the main character, Ralph
 
     auto ralph_start_pos = environ.find("**/start_point").get_pos();
-    std::cerr << ralph_start_pos << '\n';
     ralph = def_load_model("models/ralph");
-    run = new CharAnimate(load_anim(ralph, sample_path + "models/ralph-run"));
+    run = load_anim(ralph, sample_path + "models/ralph-run");
     walk = load_anim(ralph, sample_path + "models/ralph-walk");
     ralph.reparent_to(render);
     ralph.set_scale(.2);
@@ -238,11 +235,11 @@ AsyncTask::DoneStatus move(GenericAsyncTask *, void *)
 
     if(key_map[k_forward] || key_map[k_left] || key_map[k_right]) {
 	if(!is_moving) {
-	    run->loop();
+	    run->loop(true);
 	    is_moving = true;
         }
     } else if(is_moving) {
-	run->finish();
+	run->stop();
 	walk->pose(5);
 	is_moving = false;
     }
@@ -320,7 +317,6 @@ int main(int argc, char* argv[]) {
     init();
 
     framework.main_loop();
-    kill_intervals();
     framework.close_framework();
     return 0;
 }

@@ -27,7 +27,7 @@ std::string sample_path
 #endif
 	;
 NodePath alt_cam;
-std::vector<PT(CInterval)> tv_men;
+std::vector<PT(AnimControl)> tv_men;
 
 // Function to put instructions on the screen.
 void add_instructions(PN_stdfloat pos, const std::string &msg)
@@ -165,8 +165,9 @@ void make_tv_man(PN_stdfloat x, PN_stdfloat y, PN_stdfloat z, Texture *tex,
     auto anim_node = DCAST(AnimBundleNode, man.get_child(1).node());
     auto anim = character->get_bundle(0)->bind_anim(anim_node->get_bundle(), ANIM_BIND_FLAGS);
     anim->set_anim_model(anim_node);
-    tv_men.push_back(new CharAnimate(anim, playrate));
-    tv_men.back()->loop();
+    anim->set_play_rate(playrate);
+    tv_men.push_back(anim);
+    tv_men.back()->loop(true);
 }
 
 void zoom_in()

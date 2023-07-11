@@ -14,5 +14,5 @@ include(../supt/samples.cmake)
 
 #### Build executable
 add_executable(${SAMPLE} main.cpp)
-target_link_libraries(${SAMPLE} ${PANDALIBS} ${PANDA-p3direct} sample_supt)
+target_link_libraries(${SAMPLE} ${PANDALIBS} sample_supt ${PANDA-p3direct})
 install(TARGETS ${SAMPLE})
