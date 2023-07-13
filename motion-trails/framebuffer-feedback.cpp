@@ -34,6 +34,7 @@ std::string sample_path
 	;
 NodePath bcard, fcard;
 PN_stdfloat clickrate, nextclick;
+PT(AnimControl) anim;
 
 void add_instructions(PN_stdfloat pos, const std::string &msg)
 {
@@ -61,7 +62,18 @@ void init_trails(void)
     window = framework.open_window();
 
     window->get_camera_group().set_pos(0, -26, 4);
-    window->set_background_type(WindowFramework::BT_black);
+    // Note: according to the previous C++ effort at
+    // https://github.com//drivird/drunken-octo-robot (done 10 years before
+    // this was started, but I only became aware of it after I was "done"...
+    // setting the bg to black, or even leaving it gray, will cause this
+    // to override the texture background.  Instead, the color is cleared
+    // in the "background" renderer.  Since the background doesn't use the
+    // depth buffer, I go ahead and continue clearing it in the main renderer.
+    //window->set_background_type(WindowFramework::BT_black
+    window->set_background_type(WindowFramework::BT_none);
+    auto bgctrl = window->get_display_region_3d();
+    bgctrl->set_clear_depth_active(true);
+    bgctrl->set_clear_color(LColor(0, 0, 0, 1)); // in case I clear here
 
     // Create a texture into which we can copy the main window.
     // We set it to RTM_triggered_copy_texture mode, which tells it that we
@@ -97,6 +109,8 @@ void init_trails(void)
     /// end of replacement for make_camera2d
     background.set_depth_test(false);
     background.set_depth_write(false);
+    dr->set_clear_color_active(true); // fix from DOR: clear here instead of main
+    dr->set_clear_color(LColor(0, 0, 0, 1));
 
     // Obtain two texture cards. One renders before the dragon, the other
     // after.
@@ -185,7 +199,6 @@ AsyncTask::DoneStatus take_snapshot(GenericAsyncTask *task, void *)
 
 void choose_effect_ghost()
 {
-    window->set_background_type(WindowFramework::BT_black);
     bcard.hide();
     fcard.show();
     fcard.set_color(1.0, 1.0, 1.0, 0.99);
@@ -198,7 +211,6 @@ void choose_effect_ghost()
 
 void choose_effect_paint_brush()
 {
-    window->set_background_type(WindowFramework::BT_black);
     bcard.show();
     fcard.hide();
     bcard.set_color(1, 1, 1, 1);
@@ -211,7 +223,6 @@ void choose_effect_paint_brush()
 
 void choose_effect_double_vision()
 {
-    window->set_background_type(WindowFramework::BT_black);
     bcard.show();
     bcard.set_color(1, 1, 1, 1);
     bcard.set_scale(1.0);
@@ -228,7 +239,6 @@ void choose_effect_double_vision()
 
 void choose_effect_wings_of_blue()
 {
-    window->set_background_type(WindowFramework::BT_black);
     fcard.hide();
     bcard.show();
     bcard.set_color(1.0, 0.90, 1.0, 254.0 / 255.0);
@@ -241,7 +251,6 @@ void choose_effect_wings_of_blue()
 
 void choose_effect_whirlpool()
 {
-    window->set_background_type(WindowFramework::BT_black);
     bcard.show();
     fcard.hide();
     bcard.set_color(1, 1, 1, 1);
@@ -265,7 +274,7 @@ void init(void)
     // Scan for the anim bundlue (should be 2nd child)
     //auto anim_node = DCAST(AnimBundleNode, dancer.find("**/+AnimBundleNode").node());
     auto anim_node = DCAST(AnimBundleNode, dancer.get_child(1).node());
-    auto anim = character->get_bundle(0)->bind_anim(anim_node->get_bundle(), ANIM_BIND_FLAGS);
+    anim = character->get_bundle(0)->bind_anim(anim_node->get_bundle(), ANIM_BIND_FLAGS);
     anim->set_anim_model(anim_node);
     anim->loop(true);
     // auto spin = new NPAnim(dancer, "spin", 15);

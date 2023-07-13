@@ -46,6 +46,24 @@ should usually not need to provide this command-line parameter.
 Official Panda3D 1.10.13 SDK samples
 ------------------------------------
 
+Note that after I finished this work, I stumbled upon sombody else's
+work from over 10 years ago, https://github.com/drivird/drunken-octo-robot.
+That work is more complete in some ways: full reimplementing some of
+the Direct classes in C++, and implementing the samples that I
+skipped, along with BufferViewer.  Its seletion probably reflects what
+was available in Panda3D 1.7.2, so it includes two texture swapping
+tutorials, and doesn't include culling, fireball, fireflies,
+fractal-plants, gamepad, mouse-modes, procedural-cube, shader-terrain,
+or rocket-console.  Its only problem for me is obsolete C++ (requring
+`using namespace std;` and ignoring deprecation warnings) and a few
+Panda3D incompatibilities, probalby also due to obsolescence.  I also
+don't care for Eclipse, so the build system is harder for me to use
+than CMake (but easy enough to just replace with a simple shell
+script). Given that project, though, I don't think the Panda3D team
+has any excuse whatsoever for not shipping C++ versions of the samples
+in the first place, saving me all this time, effort, and unwanted
+Python exposure.
+
 ### Completely finished:
 
  - asteroids
@@ -77,8 +95,7 @@ Official Panda3D 1.10.13 SDK samples
 ### Partially finished; probably won't complete:
 
  - cartoon-shader - requires Python-only functionality; see note #2, #3.
- - motion-trails - fireball needs too much work; see note #8.  Other
-   sample broken; see note #10.
+ - motion-trails - fireball needs too much work; see note #8.
  - gamepad - see note #5; also neither sample w/ GUI yet (note #9)
  - glow-filter - requires Python-only functionality; see note #2, #3.
 
@@ -94,17 +111,23 @@ Official Panda3D 1.10.13 SDK samples
    on.  I found a way to get it to shut down cleanly without an
    assertion failure on the managers' global locks, but I'm not very
    happy with the fix.  This probably needs fixing on the library
-   level.  For now, music-box shuts down without a crash.
+   level.  For now, music-box shuts down without a crash.  Note that
+   the aforementioned previous effort crashes on exit as well.
 2) The filter classes, including the "common filters" are only
    available in Python.  I suppose I should fix that, since they seem
    generally useful.  Maybe in a future revision.  Thus, the
    cartoon-shader and glow-filter "basic" samples won't work.  The
-   "advanced" samples do everything manually, so they work.
+   "advanced" samples do everything manually, so they work.  Note that
+   the aforementioned previous effort implemented the filter classes
+   in C++.  I won't be copying them here/using them; if you want to
+use them, just use his code.
 3) The BufferViewer class is a feature of the Direct GUI, and
    therefore not available in C++.  I have gone ahead and ported
    samples which originally used this without that particular
    sub-feature.  Maybe one day I'll port BufferViewer, but not now.
-   though.  Way too much exposure to Python for my taste.
+   though.  Way too much exposure to Python for my taste.  Note that
+   the afore-mentioned previous effort implemented this.  I will not copy
+   that here; just use his code if you want to use it.
 4) fireflies attempts to load models asynchronously, and often fails:
    seg faulting in the memory allocator (usually), not showing the
    "Loading models..." message, etc.  Sometimes it works, though, and
@@ -122,7 +145,10 @@ Official Panda3D 1.10.13 SDK samples
    I don't know of (and don't feel like looking for) a run-time
    loadable particle system format (maybe egg can be coerced?).  It
    would be nice if I could just write some Python code to do the
-   conversion process, but I hate Python.
+   conversion process, but I hate Python.  Note that the
+   aforementioned previous effort did implement at least the steam
+   example, simply hand-converting the ptf files to C++.  Again, I
+   won't copy that code here; if you want to see it, use his code.
 7) Panda3D's rocket support requires the Python API, which is currently
    officially Python2.  Thus, I can't compile Panda3D with it, and
    besides, given this requirement, I highly doubt I could do much
@@ -139,11 +165,6 @@ Official Panda3D 1.10.13 SDK samples
    #6-#8 above (seeing a trend?), and have some major features that I
    would need to re-implement in C++.  For these reasons, I may never
    port mappingGUI or device_tester.
-10) I could not get framebuffer-feedback to work.  I don't know why.
-    I may try to fix this later.  I'm tired of working on these samples.
-    Feel free to look at my code and tell me where I went wrong.  It
-    looks to me like I'm doing everything exactly like how the Python
-    code does it.
 0) ShowBase has a number of features which would be useful in the C++
    framework, as well.  Clearly the Python API gets more love,
    starting at the very beginning (ShowBase vs. PandaFramework), and

@@ -30,7 +30,7 @@ subdirs(
     looking-and-gripping
     media-player
     mouse-modes
-    music-box       # fails lock assertion on exit
+    music-box
     procedural-cube
     render-to-texture # no BuferViewer
     roaming-ralph
@@ -42,7 +42,7 @@ subdirs(
     glow-filter     # only advanced works, and no BufferViewer
     gamepad         # no GUI-heavy sample yet
 
-    motion-trails   # fireball too much trouble.  fb-fb mostly non-functional.
+    motion-trails   # fireball too much trouble.
 #    particles      # not yet; probably not ever (too much Python)
 #    rocket-console # not yet; probably never
 
