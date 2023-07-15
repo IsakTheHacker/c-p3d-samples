@@ -1,7 +1,6 @@
----
-layout: page
-title: Lesson 10 (C++ Addendum)
----
+Lesson 10 (C++ Addendum)
+------------------------
+
 The following expects you to first read:
 
 [Lesson 10](https://arsthaumaturgis.github.io/Panda3DTutorial.io/tutorial/tut_lesson10.html)
@@ -129,4 +128,4 @@ Of course, it's not fair that the walking enemy can be hit by both us
 _and_ the traps, but can't do anything itself. So let's give it the
 ability to attack, too...
 
-Proceed to Lesson11 to continue.
+Proceed to [Lesson 11](../Lesson11) to continue.

@@ -1,7 +1,6 @@
----
-layout: page
-title: Lesson 1 (C++ Addendum)
----
+Lesson 1 (C++ Addendum)
+-----------------------
+
 The following expects you to first read:
 
 [Lesson 1](https://arsthaumaturgis.github.io/Panda3DTutorial.io/tutorial/tut_lesson01.html)
@@ -155,4 +154,4 @@ its own controls, so don't do that:
 window->setup_trackball();
 ```
 
-Proceed to Lesson2 to continue.
+Proceed to [Lesson 2](../Lesson2) to continue.

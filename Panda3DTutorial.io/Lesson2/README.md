@@ -1,7 +1,6 @@
----
-layout: page
-title: Lesson 2 (C++ Addendum)
----
+Lesson 2 (C++ Addendum)
+-----------------------
+
 The following expects you to first read:
 
 [Lesson 2](https://arsthaumaturgis.github.io/Panda3DTutorial.io/tutorial/tut_lesson02.html)
@@ -208,4 +207,4 @@ camera.set_p(-90);
 
 But it still all looks so flat. Let's fix that...
 
-Proceed to Lesson3 to continue.
+Proceed to [Lesson 3](../Lesson3) to continue.

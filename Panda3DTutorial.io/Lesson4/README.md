@@ -1,7 +1,6 @@
----
-layout: page
-title: Lesson 4 (C++ Addendum)
----
+Lesson 4 (C++ Addendum)
+-----------------------
+
 The following expects you to first read:
 
 [Lesson 4](https://arsthaumaturgis.github.io/Panda3DTutorial.io/tutorial/tut_lesson04.html)
@@ -92,4 +91,4 @@ window->enable_keyboard();
 This still doesn't do much, of course. So, let's tie those controls to
 a more interesting set of reponses...
 
-Proceed to Lesson5 to continue.
+Proceed to [Lesson 5](../Lesson5) to continue.

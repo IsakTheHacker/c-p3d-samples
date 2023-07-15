@@ -1,7 +1,6 @@
----
-layout: page
-title: Lesson 9 (C++ Addendum)
----
+Lesson 9 (C++ Addendum)
+-----------------------
+
 The following expects you to first read:
 
 [Lesson 9](https://arsthaumaturgis.github.io/Panda3DTutorial.io/tutorial/tut_lesson09.html)
@@ -204,4 +203,4 @@ player-character's position. Furthermore, we'll have our character
 face the direction in which we're firing. As it happens, these two
 things work together nicely...
 
-Proceed to Lesson10 to continue.
+Proceed to [Lesson 10](../Lesson10) to continue.

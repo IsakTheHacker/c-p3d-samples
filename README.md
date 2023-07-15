@@ -197,6 +197,15 @@ use them, just use his code.
 Other samples
 -------------
 
+### Panda3DTutorial.io
+
+This is a port of the tutorial referenced at the end of the official
+C++ sample to C++.  The code has been ported up to Lesson 14 (15 uses
+DirectGUI; see note #9 above).  The documentaion has not been ported;
+instead, I have created addenda for C++, in the form of README.md
+files, [displayable by Github](Panda3DTutorial.io).  The progress of
+that is lagging, and only goes up to 11.
+
 ### square
 
 This is a port of https://oldmanprogrammer.net/demos/square/.  It
@@ -210,6 +219,10 @@ depend on the `supt` subdirectory at all (the cmake portions were
 copied into the `CMakeLists.txt` itself).  The `square` directory can
 be copied anywhere outside and still be built.  It can still be built
 at the same time as the rest using a top-level build, though.
+
+### skelanim
+
+https://discourse.panda3d.org/t/hardware-skinning/14978
 
 Other Notes
 -----------

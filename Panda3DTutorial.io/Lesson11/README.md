@@ -1,7 +1,6 @@
----
-layout: page
-title: Lesson 11 (C++ Addendum)
----
+Lesson 11 (C++ Addendum)
+------------------------
+
 The following expects you to first read:
 
 [Lesson 11](https://arsthaumaturgis.github.io/Panda3DTutorial.io/tutorial/tut_lesson11.html)
@@ -181,8 +180,4 @@ WalkingEnemy::~WalkingEnemy()
 
 And that's it!
 
-This is all very well and good, but right now all those hits and
-collisions don't have much effect. To start with, let's add some
-visual feedback: beam-impacts, hit-flashes, and a bit of UI...
-
-Proceed to Lesson12 to continue.
+Proceed to [Lesson 12](../Lesson12) to continue.

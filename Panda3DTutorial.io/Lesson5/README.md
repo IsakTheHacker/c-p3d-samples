@@ -1,7 +1,6 @@
----
-layout: page
-title: Lesson 5 (C++ Addendum)
----
+Lesson 5 (C++ Addendum)
+-----------------------
+
 The following expects you to first read:
 
 [Lesson 5](https://arsthaumaturgis.github.io/Panda3DTutorial.io/tutorial/tut_lesson05.html)
@@ -101,4 +100,4 @@ macro definition a bit:
 
 Of course, right now we can just run through the walls. That won't do...
 
-Proceed to Lesson6 to continue.
+Proceed to [Lesson 6](../Lesson6) to continue.

@@ -47,4 +47,12 @@ subdirs(
 #    rocket-console # not yet; probably never
 
     square
+    Panda3DTutorial.io
 )
+
+# misc
+foreach(x skelanim)
+  add_executable(${x} ${x}.cpp)
+  target_link_libraries(${x} ${PANDALIBS})
+  install(TARGETS ${x})
+endforeach()

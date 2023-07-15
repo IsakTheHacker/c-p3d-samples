@@ -31,7 +31,7 @@ What it is not:
 
 * __A C++ tutorial.__ This tutorial assumes a basic knowledge of
 C++-11.  You will also be expected to know how to turn C++ code into
-executables on your platform, which also includes a basica knowledge
+executables on your platform, which also includes a basic knowledge
 of linker libraries and locations, header files and locations, and so
 forth.  You don't have to be an expert, but if you're entirely new to
 the language then I recommend picking up a C++ tutorial before taking
@@ -57,7 +57,7 @@ future version will be more standalone.  You will be expected to read
 the Python tutorial first.  If you don't like Python, hold your nose.
 If you can't understand the Python code (although, really, most
 imperative languages should be understandable by anyone with basic
-competeance in at least one such language), then just ignore the code
+competence in at least one such language), then just ignore the code
 samples and look here.
 
 * __A Build system tutorial.__ This tutorial's code was built using
@@ -67,9 +67,9 @@ me know.  You will have to check the SDK installation documentation
 for your platform to find out how to get to the libraries and include
 files, as well as how to compile code into executables if you want to
 use any other method.  In particular, the common practice on most
-non-UNIX environments is to encode all the build instrucitons into the
-IDE.  CMake can do this for you for some IDEs, so you can use that as
-a starting point if you like.
+non-UNIX environments is to encode all the build instrucitons into an
+IDE project file.  CMake can do this for you for some IDEs, so you can
+use that as a starting point if you like.
 
 What's covered:
 ---------------
@@ -138,7 +138,7 @@ include_directories("${PANDA_H}")
 
 For libraries, it is actually a problem.  The full path to the
 libraries must be added to your library path, so that you can specify
-libraries by their simple naame.
+libraries by their simple name.
 
 ```cmake
 # Find the base panda library.  Once again, if it cant find it,
@@ -217,7 +217,7 @@ while(${i} LESS_EQUAL 16)
 endwhile()
 ```
 
-Proceed to Lesson1 to continue.
+Proceed to [Lesson 1](Lesson1) to continue.
 
 Sorry for not providing a link, as it is hard to link to other md
 files in anything resembling a portable manner.  Even if I stick to

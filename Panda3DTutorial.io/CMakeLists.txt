@@ -11,7 +11,7 @@ cmake_minimum_required(VERSION 3.21.0)
 project(Panda3D-tutorial LANGUAGES CXX)
 
 set(i 1)
-while(${i} LESS_EQUAL 16)
+while(${i} LESS_EQUAL 14)
    add_subdirectory(Lesson${i})
    math(EXPR i "${i}+1")
 endwhile()

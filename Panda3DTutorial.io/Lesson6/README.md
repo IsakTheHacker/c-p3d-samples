@@ -1,7 +1,6 @@
----
-layout: page
 title: Lesson 6 (C++ Addendum)
----
+------------------------------
+
 The following expects you to first read:
 
 [Lesson 6](https://arsthaumaturgis.github.io/Panda3DTutorial.io/tutorial/tut_lesson06.html)
@@ -132,4 +131,4 @@ If we try to run around now, we'll find ourselves stopped at the walls!
 With the basics of collision in place, it's time to lay the foundation
 for our core gameplay...
 
-Proceed to Lesson7 to continue.
+Proceed to [Lesson 7](../Lesson7) to continue.

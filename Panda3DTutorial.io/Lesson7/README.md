@@ -1,7 +1,6 @@
----
-layout: page
-title: Lesson 7 (C++ Addendum)
----
+Lesson 7 (C++ Addendum)
+-----------------------
+
 The following expects you to first read:
 
 [Lesson 7](https://arsthaumaturgis.github.io/Panda3DTutorial.io/tutorial/tut_lesson07.html)
@@ -531,4 +530,4 @@ an enemy!
 
 Next, let's see how we handle collision events, via our trap enemy...
 
-Proceed to Lesson8 to continue.
+Proceed to [Lesson 8](../Lesson8) to continue.

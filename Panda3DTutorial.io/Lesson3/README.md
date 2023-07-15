@@ -1,7 +1,6 @@
----
-layout: page
 title: Lesson 3 (C++ Addendum)
----
+------------------------------
+
 The following expects you to first read:
 
 [Lesson 3](https://arsthaumaturgis.github.io/Panda3DTutorial.io/tutorial/tut_lesson03.html)
@@ -65,4 +64,4 @@ render.set_shader_auto();
 
 Of course, this game doesn't do much yet. Let's change that next...
 
-Proceed to Lesson4 to continue.
+Proceed to [Lesson 4](../Lesson4) to continue.

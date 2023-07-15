@@ -1,7 +1,6 @@
----
-layout: page
-title: Lesson 8 (C++ Addendum)
----
+Lesson 8 (C++ Addendum)
+-----------------------
+
 The following expects you to first read:
 
 [Lesson 8](https://arsthaumaturgis.github.io/Panda3DTutorial.io/tutorial/tut_lesson08.html)
@@ -229,4 +228,4 @@ void trap_hits_something(const Event *ev, void *)
 We'll get to reactions to damage soon enough, but first, let's provide
 our player with a way to fight back...
 
-Proceed to Lesson9 to continue.
+Proceed to [Lesson 9](../Lesson9) to continue.
