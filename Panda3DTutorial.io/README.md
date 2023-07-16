@@ -24,8 +24,17 @@ Python and C++__.  Most of the documentation and samples you'll find
 out there are written only for Python.  You can use this as a partial
 translation dictionary.  This includes functional and similarly
 structured translations of all of the code provided in the original
-tutorial.  Just like the original, this will result in a fully
-functional game with full feature parity with the original.
+tutorial.  The intent is to produce a complete game just like the
+original tutorial, with full feature parity.  As is, I am out of time
+and have not added the wrapper GUI.  Note that my READMEs still copy a
+lot of documentation from the original tutorial; in particular, since
+I began this by only looking at the reference code, I had to add
+additional code and copied all comments from the Python code, usually
+altered to fit the C++ (sometimes, if I was feeling tired, not so
+much).  Unless a code comment is prefixed by TJM or obviously
+C++-related, you can assume it came from the original tutorial.  Or,
+you can just read the original tutorial, as intended, and then you'd
+be able to easily identify the changes made by me.
 
 What it is not:
 

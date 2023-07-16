@@ -31,7 +31,7 @@ typedef std::shared_ptr<Enemy> EnemyPtr;
 std::vector<EnemyPtr> enemies;
 std::vector<EnemyPtr> trap_enemies;
 std::vector<EnemyPtr> dead_enemies;
-std::vector<LVector3> spawn_points;
+std::vector<LPoint3> spawn_points;
 
 PN_stdfloat initial_spawn_interval, minimum_spawn_interval, spawn_interval;
 PN_stdfloat spawn_timer;

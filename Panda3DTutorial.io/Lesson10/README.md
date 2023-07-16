@@ -89,6 +89,25 @@ that's much harder to get to.  To get the primary lens, you have to
 retrieve the primary camera (`get_camera(0)`) and then get its lens
 (`get_lens`).
 
+An aside by TJM: unlike the original author, I prefer stronger typing
+over weaker typing.  I am in favor of Panda3D's distinction between
+"points" and "vectors".  Now, if C++ only had return type overloading
+(yes, I know it's possible to awkwardly fake it using type conversion
+operator wrappers), things would be almost perfect.  C++ still suffers
+from verbosity issues since C++-11, unfortunately.  More reserved
+words than Ada, a language originally derided for its excess of
+reserved words.  Awkward constructions intended to discourage
+practices, such as all the different ways to do type casting, and the
+awkward (and officially discouraged) way to do namespace inclusion.
+Not to mention C++ authors wholeheartedly adopting this verbosity
+design, with excessively long names and every name requiring too many
+obnoxiously long selector prefixes (at least in part due to the lack
+of return type overloading, in the case of enumeration constants).
+Not only is this verbosity hard on the fingers when typing (alleviated
+by editors with auto-completion, I suppose), it's hard on the eyes
+when reading (for which the only alleviation is syntax highlighting,
+which doesn't really help all that much).  (*end rant*)
+
 Finally, now that we have the point that we want, we can use it to
 direct our ray and orient our character.
 

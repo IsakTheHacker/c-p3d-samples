@@ -32,7 +32,7 @@ typedef std::shared_ptr<Enemy> EnemyPtr;
 std::vector<EnemyPtr> enemies;
 std::vector<EnemyPtr> trap_enemies;
 std::vector<EnemyPtr> dead_enemies;
-std::vector<LVector3> spawn_points;
+std::vector<LPoint3> spawn_points;
 PT(AudioManager) music_manager, sfx_manager;
 PT(AudioSound) enemy_spawn_sound, music;
 
@@ -290,7 +290,7 @@ AsyncTask::DoneStatus update(GenericAsyncTask *, void *data)
 	for(auto &enemy: enemies)
 	    if(enemy->get_health() <= 0)
 		newly_dead_enemies.push_back(enemy);
-	// this is improvied in C++-20, but I'm sticking to 11.
+	// this is improved in C++-20, but I'm sticking to 11.
 	// std::erase_if(enemies, [] { ... });
 	enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
 				     [](EnemyPtr enemy) {
@@ -308,7 +308,7 @@ AsyncTask::DoneStatus update(GenericAsyncTask *, void *data)
 	dead_enemies.insert(dead_enemies.end(), newly_dead_enemies.begin(),
 			    newly_dead_enemies.end());
 
-	// this is improvied in C++-20, but I'm sticking to 11.
+	// this is improved in C++-20, but I'm sticking to 11.
 	// std::erase_if(dead_enemies, [] { ... });
 	dead_enemies.erase(std::remove_if(dead_enemies.begin(),
 					  dead_enemies.end(), [](EnemyPtr enemy) {

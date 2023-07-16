@@ -203,8 +203,10 @@ This is a port of the tutorial referenced at the end of the official
 C++ sample to C++.  The code has been ported up to Lesson 14 (15 uses
 DirectGUI; see note #9 above).  The documentaion has not been ported;
 instead, I have created addenda for C++, in the form of README.md
-files, [displayable by Github](Panda3DTutorial.io).  The progress of
-that is lagging, and only goes up to 11.
+files, [displayable by Github](Panda3DTutorial.io).  Now if only
+Github would display the important bits (i.e., the README) on top,
+instead of on bottom, that would be swell.  Why do all the sites do
+this?
 
 ### square
 
