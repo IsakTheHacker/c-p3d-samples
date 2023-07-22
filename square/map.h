@@ -62,7 +62,7 @@ struct Map {
     snowStart  = {255, 255, 255};
 
   PN_stdfloat displace(PN_stdfloat dim) {
-    return (drand48()*(dim/2)-(dim/4))*roughness;
+    return (drand48()*(dim * 128 / mapsize)-(dim * 64 / mapsize))*roughness;
   }
 
   void mpd(int dim) {
@@ -180,7 +180,7 @@ struct Map {
 	// center = (0,0)
 	vert_writer.add_data3f(x - mapsize / 2,
 			       y - mapsize / 2,
-			       g < 30 ? 30 : g); // water is all at same level
+			       g < 51 ? 51 : g); // water is all at same level
 	if(x == mapsize || y == mapsize) {
 	  color_writer.add_data4i(1, 1, 1, 1); // don't care; just has to be there
 	  continue;

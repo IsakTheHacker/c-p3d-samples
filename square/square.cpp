@@ -11,7 +11,7 @@
  * Command-line arguments:
  *     r  roughness (default: 5)
  *     s  size      (default: 64)
- *     z  zscale    (default: 2.0)  (scale == 1/val)
+ *     z  zscale    (default: 8.0)  (scale == 1/val)
  *     c  config    set config (e.g. c "win-size 1280 720")
  *     you can combine the above letters; args will be conusmed in order.
  *     e.g. rsz 2 1024 1.0
@@ -64,7 +64,7 @@ void redraw_map(void)
   cerr << *geom->get_geom(0)->get_primitive(0) << '\n';
 #endif
   auto camera = window->get_camera_group();
-  camera.set_pos(0, -(PN_stdfloat)m.mapsize/8,  256 * render.get_sz());
+  camera.set_pos(0, -(PN_stdfloat)m.mapsize/8,  512 * render.get_sz());
   camera.look_at(n);
 }
 
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 
   // Use separate root node to scale, rotate
   render = window->get_render().attach_new_node(new PandaNode("maprender"));
-  render.set_sz(1/2.0);
+  render.set_sz(1/8.0);
 
   // cmd line args (panda3d has no standard args, so I don't parse any)
   // to set panda3d config, I added a 'c' flag.
@@ -111,20 +111,6 @@ int main(int argc, char **argv)
     }
   }
 
-  // add standard lights
-//  window->set_lighting(true);
-  auto grender = window->get_render();
-  auto alight = new AmbientLight("ambient");
-  alight->set_color(LColor(1, 1, 1, 1));
-  grender.set_light(grender.attach_new_node(alight));
-#if 0
-  auto dlight = new DirectionalLight("direct");
-  dlight->set_color(LColor(.6, .6, .6, 1));
-  auto dln = grender.attach_new_node(dlight);
-  grender.set_light(dln);
-  dln.set_pos_hpr(0, 0, 16000, 0, 90, 0);
-#endif
-
   // add the standard keybindings, including esc and ? mainly
   // most don't do anything useful, so I should probably trim it.
   window->enable_keyboard();
@@ -149,21 +135,23 @@ int main(int argc, char **argv)
       redraw_map();
     }
   }, 0);
-  framework.define_key("R", "Increase roughness", EVH() {
+  framework.define_key("shift-r", "Increase roughness", EVH() {
     if(m.roughness < 32) {
       ++m.roughness;
       redraw_map();
     }
   }, 0);
-  framework.define_key("{", "Decrease Z scale factor", EVH() {
+  framework.define_key("shift-[", "Decrease Z scale factor", EVH() {
     auto sz = 1/render.get_sz();
     if(sz > 0.15) {
       sz -= 0.1;
+	cout << "setz " << sz << '\n';
       render.set_sz(1/sz);
     }
   }, 0);
-  framework.define_key("}", "Increase Z scale factor", EVH() {
+  framework.define_key("shift-]", "Increase Z scale factor", EVH() {
     auto sz = 1/render.get_sz() + 0.1;
+	cout << "setz " << sz << '\n';
     render.set_sz(1/sz);
   }, 0);
   framework.define_key("g", "Generate new map", EVH() {

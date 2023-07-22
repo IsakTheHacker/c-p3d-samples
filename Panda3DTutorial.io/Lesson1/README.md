@@ -76,16 +76,62 @@ If you run the code above, a window should open titled "Panda", and
 showing an empty grey view.
 
 Now, of course, I did not create a subclass of PandaFramework, like
-the Python code did.  You can feel free to do that, but there is far
-less advantage to doing that in C++ than in Python.  I prefer to think
-of the mainline as an object of its own, so I don't use an object to
-encapsulate the entire program.  Again, this is more of a sytlistic
-difference, rather than a hard difference.
+the Python code did with ShowBase.  You can feel free to do that, but
+there is far less advantage to doing that in C++ than in Python.  I
+prefer to think of the mainline as an object of its own, so I don't
+use an object to encapsulate the entire program.  Again, this is more
+of a sytlistic difference, rather than a hard difference.
 
 There might be an advantage to subclassing the window's class, since
 that's where most of the equivalent globals from ShowBase reside, but
 it's meant to only be created with `open_window`, so you're stuck with
-the base class.
+the base class, unless you *also* subclass PandaFramweork, and
+override its `make_window_framework` method to create your new class.
+Keep in mind that you will probably have to do a lot of type casting
+as well.
+
+For example, using subclasses, the above code could've been written as:
+
+```c++
+#include <panda3d/pandaFramework.h>
+
+class GameFramework;
+class GameWindow : public WindowFramework {
+  public:
+    GameWindow(GameFramework *parent);
+};
+    
+class GameFramework : public PandaFramework {
+  public:
+    GameFramework() : PandaFramework() {
+	open_framework();
+	window = DCAST(GameWindow, open_window());
+    }
+    ~GameFramework() { close_framework(); }
+    GameWindow *window;
+  protected:
+    PT(WindowFramework) make_window_framework() { return new GameWindow(this); }
+};  // DO NOT CREATE HERE.  Panda3D might not yet be initialized.
+
+GameWindow::GameWindow(GameFramework *parent) : WindowFramework(parent)
+{
+}
+
+
+int main(void)
+{
+    GameFramework game;  // Safest to create the framework here.
+    game.main_loop(); // this could've been in the constructor, I guess.
+    return 0;
+}
+```
+
+Note how much more complex that code is.  Keep in mind that sloppily
+sharing members with others is not possible in C++, so when we later
+split some of the code out, it will become much more complex.  It also
+includes some concepts I won't explain until much later.  Either way
+you want to do it is fine.  My example code for the remainder of this
+tutorial will be using the first method, though.
 
 Now, on to resizing the window.  As mentioned in the Python tutorial,
 there are several ways to do this.  Here is the equivalent to what the
