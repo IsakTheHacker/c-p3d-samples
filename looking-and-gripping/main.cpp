@@ -35,6 +35,7 @@ namespace { // don't export/pollute the global namespace
 // they need to all be delcared at the top.
 PandaFramework framework;
 WindowFramework *window;
+PT(AnimControl) walk;
 NodePath eve_neck, right_hand,
     models[4]; // A list that will store our models objects
 PT(CInterval) anim;
@@ -68,9 +69,6 @@ void setup_lights(void);
 
 void init(void)
 {
-    Notify::ptr()->get_category(":loader")->set_severity(NS_spam);
-    Notify::ptr()->get_category(":egg")->set_severity(NS_spam);
-    
     // Open framework (replaces ShowBase).  This will not set up
     // everything like ShowBase, but it does provide convenient functions
     // to do so.
@@ -111,7 +109,7 @@ void init(void)
     window->get_camera_group().set_pos(0, -15, 2);  // Position the camera
 
     auto eve = def_load_model("models/eve");  // Load our animated charachter
-    PT(AnimControl) walk = load_anim(eve, "models/eve_walk");
+    walk = load_anim(eve, "models/eve_walk");
     eve.reparent_to(window->get_render());  // Put it in the scene
 
     // Now we use control_joint() to control her neck
@@ -135,6 +133,7 @@ void init(void)
     // We now play an animation. An animation must be played, or at least posed
     // for the nodepath we just got from control_joint to actually affect the
     // model
+    walk->set_play_rate(2.0);
     walk->loop(true);
     // Now we add a task that will take care of turning the head
     framework.get_task_mgr().add(new GenericAsyncTask("turn_head", turn_head,
