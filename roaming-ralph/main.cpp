@@ -27,11 +27,6 @@ namespace { // don't export/pollute the global namespace
 // Global variables
 PandaFramework framework;
 WindowFramework *window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-    = SAMPLE_DIR "/"
-#endif
-    ;
 NodePath ralph, floater;
 PT(AnimControl) run, walk;
 CollisionTraverser c_trav;
@@ -116,8 +111,8 @@ void init(void)
 
     auto ralph_start_pos = environ.find("**/start_point").get_pos();
     ralph = def_load_model("models/ralph");
-    run = load_anim(ralph, sample_path + "models/ralph-run");
-    walk = load_anim(ralph, sample_path + "models/ralph-walk");
+    run = load_anim(ralph, "models/ralph-run");
+    walk = load_anim(ralph, "models/ralph-walk");
     ralph.reparent_to(render);
     ralph.set_scale(.2);
     ralph.set_pos(ralph_start_pos + LVector3(0, 0, 0.5));
@@ -310,9 +305,13 @@ AsyncTask::DoneStatus move(GenericAsyncTask *, void *)
 }
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
 
     init();
 

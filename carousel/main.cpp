@@ -37,11 +37,6 @@ WindowFramework *window;
 NodePath carousel, lights1, lights2, env, pandas[4], models[4];
 PT(CInterval) moves[4];
 PT(Texture) light_off_tex, light_on_tex;
-std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
 
 void load_models(void);
 void setup_lights(void);
@@ -113,8 +108,8 @@ void load_models()
 
     // Load the textures for the lights. One texture is for the "on" state,
     // the other is for the "off" state.
-    light_off_tex = def_load_texture("models/carousel_lights_off.jpg");
-    light_on_tex = def_load_texture("models/carousel_lights_on.jpg");
+    light_off_tex = TexturePool::load_texture("models/carousel_lights_off.jpg");
+    light_on_tex = TexturePool::load_texture("models/carousel_lights_on.jpg");
 
     // Create an array (pandas) with filled with 4 dummy nodes attached
     // to the carousel.
@@ -211,7 +206,7 @@ void start_carousel()
     // Note that for the C++ code, I have two versions: LerpFunc and LerpFuncG.
     // LerpFunc is for methods, and LerpFuncG is for globals/statics.
     for(int i = 0; i < 4; i++) {
-	moves[i] = new LerpFuncG(
+	moves[i] = new LerpFuncG<>(
 	        // function to call
 		// this takes a functor, actually, so user arguments can be
                 // inclulded without extra contructor arguments.
@@ -277,8 +272,11 @@ void oscillate_panda(double rad, NodePath &panda, double offset)
 
 int main(int argc, const char **argv)
 {
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
 
     init();
 

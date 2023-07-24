@@ -30,11 +30,6 @@ namespace { // don't export/pollute the global namespace
 // references, so they are all declared up here.
 PandaFramework framework;
 WindowFramework* window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
 Randomizer rands;
 PT(GraphicsOutput) modelbuffer, lightbuffer;
 enum {
@@ -246,7 +241,7 @@ void init(void)
 	NodePath tempnode(new PandaNode("temp node"));
 	tempnode.set_attrib(
             AlphaTestAttrib::make(RenderAttrib::M_greater_equal, 0.5));
-	tempnode.set_shader(def_load_shader("model.sha"));
+	tempnode.set_shader(ShaderPool::load_shader("model.sha"));
 	tempnode.set_attrib(DepthTestAttrib::make(RenderAttrib::M_less_equal));
 	camm->set_initial_state(tempnode.get_state());
     }
@@ -255,7 +250,7 @@ void init(void)
 
     {
 	NodePath tempnode(new PandaNode("temp node"));
-	tempnode.set_shader(def_load_shader("light.sha"));
+	tempnode.set_shader(ShaderPool::load_shader("light.sha"));
 	tempnode.set_shader_input("texnormal", tex_normal);
 	tempnode.set_shader_input("texalbedo", tex_albedo);
 	tempnode.set_shader_input("texdepth", tex_depth);
@@ -288,7 +283,7 @@ void init(void)
     // don't have textures.  This confuses the shader I wrote.
     // This little hack guarantees that everything has a texture.
 
-    auto white = def_load_texture("models/white.jpg");
+    auto white = TexturePool::load_texture("models/white.jpg");
     render.set_texture(white, 0);
 
     // Create two subroots, to help speed cull traversal.
@@ -307,8 +302,7 @@ void init(void)
     // event upon completion.
     title = add_title("Loading models...");
 
-    forest = NodePath(new PandaNode("Forest Root"));
-    forest.reparent_to(render);
+    forest = framework.get_models().attach_new_node(new PandaNode("Forest Root"));
     forest.hide(light_mask | plain_mask);
     // The Python API just takes array arguments to load multiple files, and
     // a callback to indicate asynch loading, but everything has to be done
@@ -328,18 +322,18 @@ void init(void)
     // This is done by spawning a ModelLoaderRequest (a type of AsyncTask)
     // for every file name in the above array.
     static PT(AsyncTask) models[sizeof(model_files)/sizeof(model_files[0])];
-    PT(Loader) loader = new Loader; // alloc on stack causes ref integrity fail
     // Run these tasks in a separate thread (or more)
     static PT(AsyncTaskChain) mchn;
     mchn = framework.get_task_mgr().make_task_chain("loading");
-    mchn->set_num_threads(1); // crashes quickly when higher
+    mchn->set_num_threads(4);
+    auto loader = Loader::get_global_ptr();
     loader->set_task_chain("loading");
     // when each task finishes, it generates the "done" event, if assigned.
     framework.get_event_handler().add_hook("load_done", [](const Event *ev,void *) {
 	// The 1st arg to the "done" event is the task pointer.
-	auto task = DCAST(ModelLoadRequest, ev->get_parameter(0).get_typed_ref_count_value());
+	PT(ModelLoadRequest) task = DCAST(ModelLoadRequest, ev->get_parameter(0).get_typed_ref_count_value());
 	// do this here instead of in finish_loading() so locals can be used
-	forest.attach_new_node(task->get_model());
+	forest.attach_new_node(DCAST(PandaNode, task->get_result()));
 	// I detect completion by the fact that I've added all models to forest
 	if(forest.get_num_children() == sizeof(model_files)/sizeof(model_files[0]))
 	    // so, when done, do the planned finish (other than reparenting
@@ -350,7 +344,7 @@ void init(void)
     // before the creation of tasks which generate the event.
     for(unsigned i = 0; i < sizeof(models)/sizeof(models[0]); i++) {
 	// Just create and run async requests, generating "load_done" on completion
-	models[i] = loader->make_async_request(sample_path + model_files[i]);
+	models[i] = loader->make_async_request(model_files[i]);
 	models[i]->set_done_event("load_done");
 	loader->load_async(models[i]);
     }
@@ -372,14 +366,14 @@ void init(void)
     toggle_cards();
 #endif
 
-    spheremodel = window->load_model(framework.get_models(), "misc/sphere");
+    spheremodel = window->load_model(framework.get_models(), "models/misc/sphere");
 
     // Create the firefly model, a fuzzy dot
     auto dot_size = 1.0;
     CardMaker cm("firefly");
     cm.set_frame(-dot_size, dot_size, -dot_size, dot_size);
     firefly = NodePath(cm.generate());
-    firefly.set_texture(def_load_texture("models/firefly.png"));
+    firefly.set_texture(TexturePool::load_texture("models/firefly.png"));
     firefly.set_attrib(ColorBlendAttrib::make(ColorBlendAttrib::M_add,
         ColorBlendAttrib::O_incoming_alpha, ColorBlendAttrib::O_one));
 
@@ -405,6 +399,8 @@ void finish_loading()
     // when all of the models have finished loading.
 
     // Note that the call itself attaches them to forest.
+    // But they are added outside of render, so:
+    forest.reparent_to(window->get_render());
 
     // Show the instructions.
     title->set_text("Panda3D: Tutorial - Fireflies using Deferred Shading");
@@ -563,8 +559,12 @@ AsyncTask::DoneStatus spawn_task(GenericAsyncTask *task, void *)
 
 int main(int argc, char **argv)
 {
+    // Notify::ptr()->get_category(":loader")->set_severity(NS_spam);
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
     init();
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();

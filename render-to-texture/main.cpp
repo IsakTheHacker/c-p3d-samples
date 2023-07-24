@@ -21,11 +21,6 @@ namespace { // don't export/pollute the global namespace
 // references, so they are all declared up here.
 PandaFramework framework;
 WindowFramework* window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
 NodePath alt_cam;
 std::vector<PT(AnimControl)> tv_men;
 
@@ -193,8 +188,11 @@ void move_right()
 
 int main(int argc, char **argv)
 {
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
     init();
     framework.main_loop();
     kill_intervals();

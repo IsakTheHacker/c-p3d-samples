@@ -24,11 +24,6 @@ namespace { // don't export/pollute the global namespace
 // Global variables.
 PandaFramework framework;
 WindowFramework* window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
 NodePath lbl_warning, lbl_action;
 TextNode *lbl_action_text;
 InputDevice *gamepad;
@@ -272,8 +267,11 @@ AsyncTask::DoneStatus move_task(GenericAsyncTask *, void *)
 
 int main(int argc, const char **argv)
 {
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
 
     init();
 

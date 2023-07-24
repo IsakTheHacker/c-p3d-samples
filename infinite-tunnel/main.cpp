@@ -33,11 +33,6 @@ namespace { // don't export/pollute the global namespace
 // Global variables
 PandaFramework framework;
 WindowFramework *window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
 PT(Fog) fog;
 NodePath tunnel[4];
 PT(CInterval) tunnel_move;
@@ -224,9 +219,9 @@ void cont_tunnel()
     // Set up the tunnel to move one segment and then call cont_tunnel again
     // to make the tunnel move infinitely
     tunnel_move = new Sequence({
-	new LerpFunc(&tunnel[0], &NodePath::set_z,
-		     (PN_stdfloat)0, (PN_stdfloat)(TUNNEL_SEGMENT_LENGTH * .305),
-                     TUNNEL_TIME),
+	new LerpFunc<>(&tunnel[0], &NodePath::set_z,
+		       (PN_stdfloat)0, (PN_stdfloat)(TUNNEL_SEGMENT_LENGTH * .305),
+		       TUNNEL_TIME),
 	new FuncAsync(cont_tunnel())
     });
     tunnel_move->start();
@@ -257,8 +252,11 @@ void toggle_fog(NodePath node, Fog *fog)
 
 int main(int argc, char **argv)
 {
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
     init();
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();

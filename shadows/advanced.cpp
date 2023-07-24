@@ -18,11 +18,6 @@ namespace { // don't export/pollute the global namespace
 // Globals
 PandaFramework framework;
 WindowFramework *window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
 PT(GraphicsOutput) buffer;
 PN_stdfloat push_bias, ambient;
 int camera_selection, light_selection;
@@ -223,7 +218,7 @@ void init(void)
 
     // Put a shader on the Light camera.
     NodePath lci(new PandaNode("Light Camera Initializer"));
-    lci.set_shader(def_load_shader("caster.sha"));
+    lci.set_shader(ShaderPool::load_shader("caster.sha"));
     cam_node->set_initial_state(lci.get_state());
 
     // Put a shader on the Main camera.
@@ -233,9 +228,9 @@ void init(void)
 
     NodePath mci(new PandaNode("Main Camera Initializer"));
     if(win->get_gsg()->get_supports_shadow_filter())
-	mci.set_shader(def_load_shader("shadow.sha"));
+	mci.set_shader(ShaderPool::load_shader("shadow.sha"));
     else
-	mci.set_shader(def_load_shader("shadow-nosupport.sha"));
+	mci.set_shader(ShaderPool::load_shader("shadow-nosupport.sha"));
     window->get_camera(0)->set_initial_state(mci.get_state());
 
     increment_camera_position(0);
@@ -339,8 +334,11 @@ void adjust_push_bias(PN_stdfloat inc)
 
 int main(int argc, char **argv)
 {
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
     init();
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();

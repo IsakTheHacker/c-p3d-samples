@@ -28,11 +28,6 @@ namespace { // don't export/pollute the global namespace
 // references, so they are all declared up here.
 PandaFramework framework;
 WindowFramework* window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
 PN_stdfloat separation = 0.001, cutoff = 0.3;
 NodePath drawn_scene;
 PT(AnimControl) anim;
@@ -110,7 +105,7 @@ void init(void)
     auto render = window->get_render();
     {
 	NodePath tempnode(new PandaNode("temp node"));
-	tempnode.set_shader(def_load_shader("lightingGen.sha"));
+	tempnode.set_shader(ShaderPool::load_shader("lightingGen.sha"));
 	window->get_camera(0)->set_initial_state(tempnode.get_state());
     }
 
@@ -141,7 +136,7 @@ void init(void)
 
     {
 	NodePath tempnode(new PandaNode("temp node"));
-	tempnode.set_shader(def_load_shader("normalGen.sha"));
+	tempnode.set_shader(ShaderPool::load_shader("normalGen.sha"));
 	cam->set_initial_state(tempnode.get_state());
     }
 
@@ -157,7 +152,7 @@ void init(void)
     // it compares each adjacent pixel, looking for discontinuities.
     // wherever a discontinuity exists, it emits black ink.
 
-    auto ink_gen = ShaderPool::load_shader(sample_path + "inkGen.sha");
+    auto ink_gen = ShaderPool::load_shader("inkGen.sha");
     drawn_scene.set_shader(ink_gen);
     drawn_scene.set_shader_input("separation", LVecBase4(separation, 0, separation, 0));
     drawn_scene.set_shader_input("cutoff", LVecBase4(cutoff));
@@ -212,8 +207,11 @@ void adjust_cutoff(PN_stdfloat adj)
 
 int main(int argc, const char **argv)
 {
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
 
     init();
 

@@ -145,13 +145,11 @@ int main(int argc, char **argv)
     auto sz = 1/render.get_sz();
     if(sz > 0.15) {
       sz -= 0.1;
-	cout << "setz " << sz << '\n';
       render.set_sz(1/sz);
     }
   }, 0);
   framework.define_key("shift-]", "Increase Z scale factor", EVH() {
     auto sz = 1/render.get_sz() + 0.1;
-	cout << "setz " << sz << '\n';
     render.set_sz(1/sz);
   }, 0);
   framework.define_key("g", "Generate new map", EVH() {

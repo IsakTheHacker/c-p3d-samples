@@ -34,11 +34,6 @@ const LColor PIECEBLACK(.15, .15, .15, 1);
 // Global variables
 PandaFramework framework;
 WindowFramework *window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-    = SAMPLE_DIR "/"
-#endif
-    ;
 CollisionTraverser picker;
 PT(CollisionNode) picker_node;
 NodePath pickerNP;
@@ -400,8 +395,11 @@ const Piece *rook = &rook_factory;
 
 int main(int argc, char **argv)
 {
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
     init();
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();

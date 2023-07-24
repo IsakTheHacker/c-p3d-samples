@@ -31,11 +31,6 @@ WindowFramework *window;
 // In any case, if the demo is given a command-line argument, it is
 // a path to override this directory.  Don't forget to append a /.
 // This way, I don't have to distrubute the assets.
-std::string sample_path
-#ifdef SAMPLE_DIR
-    = SAMPLE_DIR "/"
-#endif
-    ;
 
 struct World {
     World() {
@@ -95,12 +90,11 @@ struct World {
 	// window->load_model(parent, file).  parent is a node to attach
 	// the model to, and file is a file name.  The framework provides
 	// a staging/storage area for models that you can use for the parent:
-	// framework.get_models().  For these samples, I also prepend the
-	// path to the Python sample (sample_path) to all file names so that
-	// I don't have to distribute the assets.  In fact, I do this so
-	// often in my samples, that I have added a support header file,
-	// called anim_supt.h, which defines a macro, def_load_model,
-	// which does just that.
+	// framework.get_models().  Since I use this so often in these
+	// samples, I have defined a macro in sample_supt.h, def_load_model,
+	// which uses that root with the window's load_model.  I used to
+	// also prepend a search path, but have decided instead to prepend
+	// to the model-path configuration variable; see below.
 	// You can, of course, also just use a loader, but using the window
 	// loader allows you to use the framework's virtual filesystem feature
 	// transparently.  In addition, the usage of loaders diverges greately
@@ -124,7 +118,7 @@ struct World {
         // (which are always one-sided in Panda) face inside the sphere instead of
         // outside (this is known as a model with reversed normals). Because of
         // that it has to be a separate model.
-	//sky = window->load_model(framework.get_models(), sample_path + "models/solar_sky_sphere");
+	//sky = window->load_model(framework.get_models(), "models/solar_sky_sphere");
         sky = def_load_model("models/solar_sky_sphere"); // same thing, shorter
 
         // After the object is loaded, it must be placed in the scene. We do this by
@@ -148,10 +142,8 @@ struct World {
         // Unlike the Python API, a different API must be used to load textures.
 	// The preferred method is to either create a Texture and use its read()
 	// method, or, better yet, use the global TexturePool's load_texture()
-	// method.  Once again, I have enapsulated prefixing sample_path and
-	// using TexturePool into a shorter macro.
-	//auto sky_tex = TexturePool::load_texture(sample_path + "models/stars_1k_tex.jpg");
-	auto sky_tex = def_load_texture("models/stars_1k_tex.jpg"); // same but shorter
+	// method.
+	auto sky_tex = TexturePool::load_texture("models/stars_1k_tex.jpg");
 
         // Finally, the following line sets our new sky texture on our sky model.
         // The second argument must be one or the command will be ignored.
@@ -161,7 +153,7 @@ struct World {
         sun = def_load_model("models/planet_sphere");
         // Now we repeat our other steps
         sun.reparent_to(window->get_render());
-        auto sun_tex = def_load_texture("models/sun_1k_tex.jpg");
+        auto sun_tex = TexturePool::load_texture("models/sun_1k_tex.jpg");
         sun.set_texture(sun_tex, 1);
         // The sun is really much bigger than
         sun.set_scale(2 * sizescale);
@@ -173,8 +165,16 @@ struct World {
 
 int main(int argc, char **argv)
 {
+    // The SAMPLE_DIR variable is declared during build configuration time
+    // by CMakeLists.txt.  If it can't find the sample directory, nothing
+    // is added here.
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
+    // But you can always add to the model path either using the prc files,
+    // or by just giving the path on the command line:
     if(argc > 1) // if there is a command-line argument,
-	sample_path = *++argv; // override baked-in path to sample data
+	get_model_path().prepend_directory(*++argv); // override baked-in path to sample data
 
     framework.open_framework();
     window = framework.open_window();

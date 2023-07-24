@@ -24,11 +24,6 @@ namespace { // don't export/pollute the global namespace
 PandaFramework framework;
 WindowFramework *window;
 Randomizer rands;
-std::string sample_path
-#ifdef SAMPLE_DIR
-    = SAMPLE_DIR "/"
-#endif
-    ;
 bool xray_mode, show_model_bounds;
 enum k_t {
     k_left, k_right, k_up, k_down, k_w, k_a, k_s, k_d, k_num, k_pressed = 32
@@ -146,7 +141,7 @@ void init()
     level_model.set_tex_projector(TextureStage::get_default(),
 				  window->get_render(), level_model);
     level_model.set_tex_scale(TextureStage::get_default(), 4);
-    auto tex = TexturePool::load_3d_texture(sample_path + "models/tex_#.png");
+    auto tex = TexturePool::load_3d_texture("models/tex_#.png");
     level_model.set_texture(tex);
 
     // Load occluders
@@ -233,8 +228,11 @@ void toggle_model_bounds(const Event *, void *)
 
 int main(int argc, char* argv[])
 {
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
 
     init();
 

@@ -50,6 +50,7 @@ int main(void)
     auto environment = window->load_model(render, "Models/Misc/environment");
 
     temp_actor = window->load_model(render, "Models/PandaChan/act_p3d_chan");
+    window->load_model(temp_actor, "Models/PandaChan/a_p3d_chan_run");
     AnimControlCollection anims;
     auto_bind(temp_actor.node(), anims, PartGroup::HMF_ok_anim_extra);
     auto walk = anims.get_anim(0);

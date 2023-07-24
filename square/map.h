@@ -57,9 +57,9 @@ struct Map {
     mtnStart   = {191, 180, 38},
     mtnEnd     = {60,  56,  31},
     rockStart  = {100, 100, 100},
-    rockEnd    = {190, 190, 190},
+    rockEnd    = {190, 190, 190}/*,
     snowEnd    = {200, 200, 200},
-    snowStart  = {255, 255, 255};
+    snowStart  = {255, 255, 255}*/;
 
   PN_stdfloat displace(PN_stdfloat dim) {
     return (drand48()*(dim * 128 / mapsize)-(dim * 64 / mapsize))*roughness;

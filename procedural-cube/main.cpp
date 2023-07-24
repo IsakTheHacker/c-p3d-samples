@@ -24,11 +24,6 @@ namespace { // don't export/pollute the global namespace
 // Global variables
 PandaFramework framework;
 WindowFramework *window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-    = SAMPLE_DIR "/"
-#endif
-    ;
 PT(Texture) test_texture;
 bool lights_on, lights_on1;
 NodePath cube, slnp, slnp1;
@@ -225,9 +220,13 @@ void toggle_lights_up()
 }
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
 
     init();
 

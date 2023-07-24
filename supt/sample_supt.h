@@ -82,7 +82,13 @@ class FuncAsyncI : public FuncI {
 // self-addition and scaling (multiplication by a double).
 // This whole thing is way too heavy for linear interpolation, but I
 // will use it anyway, because it's official.
-template<class C, class T>class LerpFunc : public CLerpInterval {
+// gcc infers the template parms, but clang doesn't.  Not sure
+// why.  Guess I need to go back and learn in more detail what
+// valid inference is.  For now, I'll use default values for the most
+// common case.  clang still insists on <> to select the default parms
+// explicitly (there is no inference).
+template<class T = PN_stdfloat, class C = NodePath>
+    class LerpFunc : public CLerpInterval {
   public:
     LerpFunc(std::string name, C *what, void(C::*setter)(T) , T start, T end,
 	     double duration, BlendType bt = BT_no_blend) :
@@ -108,10 +114,11 @@ template<class C, class T>class LerpFunc : public CLerpInterval {
 };
 
 // Linear interpolator with non-class (global) setter function.
-template<class C, class T>class LerpFuncG : public CLerpInterval {
+// See note above about clang.
+template<class T = PN_stdfloat, class C = std::function<void(T)>>
+    class LerpFuncG : public CLerpInterval {
   public:
-    LerpFuncG(std::string name, C setter, T start, T end,
-	      double duration) :
+    LerpFuncG(std::string name, C setter, T start, T end, double duration) :
 	CLerpInterval(name, duration, BT_no_blend),
 	_setter(setter), _start(start), _diff(end - start) {}
     LerpFuncG(C setter, T start, T end, double duration) :
@@ -168,13 +175,8 @@ PT(AnimControl) load_anim(NodePath &model, const std::string &file);
 // Some extra stuff that should probably go into a different header
 
 // I am tired of typing this all the time:
-// Loads at location offset by sample_path, rooted at standard model stash
 // Assumes the PandaFramework is called framework, and main win is window
-#define def_load_model(x) window->load_model(framework.get_models(), sample_path + x)
-#define def_load_texture(x) TexturePool::load_texture(sample_path + x)
-#define def_load_shader(x) ShaderPool::load_shader(sample_path + x)
-#define def_load_shadert(t, x) Shader::load(t, sample_path + x)
-#define def_load_shader2(t, x, y) Shader::load(t, sample_path + x, sample_path + y)
+#define def_load_model(x) window->load_model(framework.get_models(), x)
 
 // just a shorthand for using lambda functions for events
 #define EV_FN(d) [](const Event *,void *d)

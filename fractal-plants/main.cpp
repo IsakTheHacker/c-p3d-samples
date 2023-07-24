@@ -26,11 +26,6 @@ namespace { // don't export/pollute the global namespace
 // Global variables
 PandaFramework framework;
 WindowFramework *window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-    = SAMPLE_DIR "/"
-#endif
-    ;
 Randomizer rands;
 unsigned num_primitives = 0;
 
@@ -239,7 +234,7 @@ void draw_leaf(NodePath &node_path, LVector3 pos=LVector3(0, 0, 0),
     // hardcoding the filename
     // [tjm: this means the original "vdata" parameter is not used]
     auto leaf_model = def_load_model("models/shrubbery");
-    auto leaf_texture = def_load_texture("models/material-10-cl.png");
+    auto leaf_texture = TexturePool::load_texture("models/material-10-cl.png");
 
     leaf_model.reparent_to(node_path);
     leaf_model.set_texture(leaf_texture, 1);
@@ -338,7 +333,7 @@ void setup_tapper()
 
     PT(GeomVertexData) bodydata = new GeomVertexData("body vertices", format, Geom::UH_static);
 
-    bark_texture = def_load_texture("barkTexture.jpg");
+    bark_texture = TexturePool::load_texture("barkTexture.jpg");
     NodePath tree_node_path("Tree Holder");
     make_fractal_tree(bodydata, tree_node_path, LVector3(4, 4, 7));
 
@@ -409,9 +404,13 @@ void add_tree()
 }
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
 
     init();
     std::cout << num_primitives << '\n';

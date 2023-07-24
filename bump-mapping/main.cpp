@@ -27,11 +27,6 @@ namespace { // don't export/pollute the global namespace
 // references, so they are all declared up here.
 PandaFramework framework;
 WindowFramework* window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
 NodePath room, lightpivot;
 TextNode *inst5;
 LVector3 focus;
@@ -117,7 +112,7 @@ void init(void)
     // empty room containing a pillar, a pyramid, and a bunch
     // of exaggeratedly bumpy textures.
 
-    room = window->load_model(framework.get_models(), sample_path + "models/abstractroom");
+    room = window->load_model(framework.get_models(), "models/abstractroom");
     room.reparent_to(window->get_render());
 
     // Make the mouse invisible, turn off normal mouse controls
@@ -246,9 +241,13 @@ AsyncTask::DoneStatus control_camera(GenericAsyncTask *task, void *)
 }
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
 
     init();
 

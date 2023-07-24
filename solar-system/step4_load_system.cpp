@@ -28,11 +28,6 @@
 // Globals
 PandaFramework framework;
 WindowFramework *window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-    = SAMPLE_DIR "/"
-#endif
-    ;
 
 struct World {
     World() {
@@ -102,7 +97,7 @@ struct World {
         // Load the model for the sky
         sky = def_load_model("models/solar_sky_sphere");
         // Load the texture for the sky.
-	auto sky_tex = def_load_texture("models/stars_1k_tex.jpg"); // same but shorter
+	auto sky_tex = TexturePool::load_texture("models/stars_1k_tex.jpg"); // same but shorter
         sky.set_texture(sky_tex, 1);
         // Parent the sky model to the render node so that the sky is rendered
         sky.reparent_to(render);
@@ -113,7 +108,7 @@ struct World {
         // Again, we use loader.loadModel since we're using planet_sphere more
         // than once.
         sun = def_load_model("models/planet_sphere");
-        auto sun_tex = def_load_texture("models/sun_1k_tex.jpg");
+        auto sun_tex = TexturePool::load_texture("models/sun_1k_tex.jpg");
         sun.set_texture(sun_tex, 1);
         sun.reparent_to(render);
         sun.set_scale(2 * sizescale);
@@ -128,7 +123,7 @@ struct World {
 
         // Load mercury
         mercury = def_load_model("models/planet_sphere");
-        auto mercury_tex = def_load_texture("models/mercury_1k_tex.jpg");
+        auto mercury_tex = TexturePool::load_texture("models/mercury_1k_tex.jpg");
         mercury.set_texture(mercury_tex, 1);
         mercury.reparent_to(orbit_root_mercury);
         // Set the position of mercury. By default, all nodes are pre assigned the
@@ -142,7 +137,7 @@ struct World {
 
         // Load Venus
         venus = def_load_model("models/planet_sphere");
-        auto venus_tex = def_load_texture("models/venus_1k_tex.jpg");
+        auto venus_tex = TexturePool::load_texture("models/venus_1k_tex.jpg");
         venus.set_texture(venus_tex, 1);
         venus.reparent_to(orbit_root_venus);
         venus.set_pos(0.72 * orbitscale, 0, 0);
@@ -150,7 +145,7 @@ struct World {
 
         // Load Mars
         mars = def_load_model("models/planet_sphere");
-        auto mars_tex = def_load_texture("models/mars_1k_tex.jpg");
+        auto mars_tex = TexturePool::load_texture("models/mars_1k_tex.jpg");
         mars.set_texture(mars_tex, 1);
         mars.reparent_to(orbit_root_mars);
         mars.set_pos(1.52 * orbitscale, 0, 0);
@@ -158,7 +153,7 @@ struct World {
 
         // Load Earth
         earth = def_load_model("models/planet_sphere");
-        auto earth_tex = def_load_texture("models/earth_1k_tex.jpg");
+        auto earth_tex = TexturePool::load_texture("models/earth_1k_tex.jpg");
         earth.set_texture(earth_tex, 1);
         earth.reparent_to(orbit_root_earth);
         earth.set_scale(sizescale);
@@ -170,7 +165,7 @@ struct World {
 
         // Load the moon
         moon = def_load_model("models/planet_sphere");
-        auto moon_tex = def_load_texture("models/moon_1k_tex.jpg");
+        auto moon_tex = TexturePool::load_texture("models/moon_1k_tex.jpg");
         moon.set_texture(moon_tex, 1);
         moon.reparent_to(orbit_root_moon);
         moon.set_scale(0.1 * sizescale);
@@ -184,8 +179,11 @@ struct World {
 
 int main(int argc, char **argv)
 {
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1) // if there is a command-line argument,
-	sample_path = *++argv; // override baked-in path to sample data
+	get_model_path().prepend_directory(*++argv); // override baked-in path to sample data
 
     framework.open_framework();
     window = framework.open_window();

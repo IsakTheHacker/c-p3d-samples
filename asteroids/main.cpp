@@ -52,11 +52,6 @@ const PN_stdfloat
     PandaFramework framework;
     WindowFramework *window;
     Randomizer rands;
-    std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
     NodePath bg, ship;
     PN_stdfloat next_bullet;
     std::vector<NodePath> bullets, asteroids;
@@ -92,7 +87,7 @@ NodePath load_object(std::string tex, PN_stdfloat scale = 1, LPoint2 pos={0,0},
 
     if(tex.size()) {
         // Load and set the requested texture.
-	PT(Texture) texture = def_load_texture("textures/" + tex);
+	PT(Texture) texture = TexturePool::load_texture("textures/" + tex);
         texture->set_wrap_u(SamplerState::WM_clamp);
 	texture->set_wrap_v(SamplerState::WM_clamp);
         obj.set_texture(texture, 1);
@@ -544,8 +539,11 @@ void fire(double time)
 
 int main(int argc, char **argv)
 {
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
     init();
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();

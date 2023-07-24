@@ -24,11 +24,6 @@ namespace { // don't export/pollute the global namespace
 // Global variables
 PandaFramework framework;
 WindowFramework *window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
 PT(AudioManager) music_manager, sfx_manager;
 PT(AudioSound) music_box_sound, lid_sfx;
 PT(CInterval) lid_open_sfx, lid_close_sfx;
@@ -93,7 +88,7 @@ void init(void)
     // Synchronous loads can ge done with get_sound().  Asynchronous
     // loads are dune via an AudioLoadRequest object.  The latter is not
     // explained here.
-    music_box_sound = music_manager->get_sound(sample_path + "music/musicbox.ogg");
+    music_box_sound = music_manager->get_sound("music/musicbox.ogg");
     music_box_sound->set_volume(.5);  // Volume is a percentage from 0 to 1
     // 0 means loop forever, 1 (default) means
     // play once. 2 or higher means play that many times
@@ -122,7 +117,7 @@ void init(void)
     // Sound effects are in a different audio manager.
     sfx_manager = AudioManager::create_AudioManager();
 
-    lid_sfx = sfx_manager->get_sound(sample_path + "music/openclose.ogg");
+    lid_sfx = sfx_manager->get_sound("music/openclose.ogg");
     // The open/close file has both effects in it. Fortunatly we can use intervals
     // to easily define parts of a sound file to play
     lid_open_sfx = new SoundInterval(lid_sfx, 2, 0);
@@ -285,8 +280,11 @@ void set_pad(PGItem *item, PN_stdfloat x, PN_stdfloat y)
 
 int main(int argc, const char **argv)
 {
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
 
     init();
 

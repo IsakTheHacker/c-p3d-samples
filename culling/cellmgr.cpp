@@ -27,7 +27,8 @@ struct Cell {
 
 // Creates a collision ray and collision traverser to use for
 // selecting the current cell.
-struct CellManager {
+class CellManager {
+  public:
     CellManager(WindowFramework *window) :
 	_window(window), _cell_picker_world("cell_picker_world"),
         _ray(new CollisionRay), _traverser("traverser")

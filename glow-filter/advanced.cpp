@@ -23,12 +23,7 @@ namespace { // don't export/pollute the global namespace
 // using a class here.  Since it's not a class, C++ doesn't do forward
 // references, so they are all declared up here.
 PandaFramework framework;
-WindowFramework* window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
+WindowFramework *window;
 NodePath tron, finalcard;
 PT(AnimControl) running;
 PT(NPAnim) interval;
@@ -94,7 +89,7 @@ GraphicsOutput *make_filter_buffer(GraphicsOutput *srcbuffer,
     /// end of replacement for make_camera2d
     NodePath blur_scene("new Scene");
     blur_camera->set_scene(blur_scene);
-    auto shader = def_load_shader(prog);
+    auto shader = ShaderPool::load_shader(prog);
     auto card = srcbuffer->get_texture_card();
     card.reparent_to(blur_scene);
     card.set_shader(shader);
@@ -136,11 +131,11 @@ void init(void)
 
     // Create the shader that will determime what parts of the scene will
     // glow
-    auto glow_shader = def_load_shader("shaders/glowShader.sha");
+    auto glow_shader = ShaderPool::load_shader("shaders/glowShader.sha");
 
     // load our model
     tron = def_load_model("models/tron");
-    running = load_anim(tron, sample_path + "models/tron_anim");
+    running = load_anim(tron, "models/tron_anim");
     auto render = window->get_render();
     tron.reparent_to(render);
     interval = new NPAnim(tron, "interval", 60);
@@ -240,8 +235,11 @@ void toggle_display()
 
 int main(int argc, const char **argv)
 {
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
 
     init();
 

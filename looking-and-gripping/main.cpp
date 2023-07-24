@@ -35,11 +35,6 @@ namespace { // don't export/pollute the global namespace
 // they need to all be delcared at the top.
 PandaFramework framework;
 WindowFramework *window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-    = SAMPLE_DIR "/"
-#endif
-    ;
 NodePath eve_neck, right_hand,
     models[4]; // A list that will store our models objects
 PT(CInterval) anim;
@@ -73,6 +68,9 @@ void setup_lights(void);
 
 void init(void)
 {
+    Notify::ptr()->get_category(":loader")->set_severity(NS_spam);
+    Notify::ptr()->get_category(":egg")->set_severity(NS_spam);
+    
     // Open framework (replaces ShowBase).  This will not set up
     // everything like ShowBase, but it does provide convenient functions
     // to do so.
@@ -113,7 +111,7 @@ void init(void)
     window->get_camera_group().set_pos(0, -15, 2);  // Position the camera
 
     auto eve = def_load_model("models/eve");  // Load our animated charachter
-    PT(AnimControl) walk = load_anim(eve, sample_path + "models/eve_walk");
+    PT(AnimControl) walk = load_anim(eve, "models/eve_walk");
     eve.reparent_to(window->get_render());  // Put it in the scene
 
     // Now we use control_joint() to control her neck
@@ -230,9 +228,13 @@ void setup_lights()  // Sets up some default lighting
 }
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
 
     init();
 

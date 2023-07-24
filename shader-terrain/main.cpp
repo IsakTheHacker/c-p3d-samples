@@ -25,11 +25,6 @@ namespace { // don't export/pollute the global namespace
 // Global variables
 PandaFramework framework;
 WindowFramework *window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-    = SAMPLE_DIR "/"
-#endif
-    ;
 
 void init(void)
 {
@@ -74,7 +69,7 @@ void init(void)
 
     // Set a heightfield, the heightfield should be a 16-bit png and
     // have a quadratic size of a power of two.
-    auto heightfield = def_load_texture("heightfield.png");
+    auto heightfield = TexturePool::load_texture("heightfield.png");
     heightfield->set_wrap_u(SamplerState::WM_clamp);
     heightfield->set_wrap_v(SamplerState::WM_clamp);
     terrain_node->set_heightfield(heightfield);
@@ -94,7 +89,7 @@ void init(void)
 
     // Set a shader on the terrain. The ShaderTerrainMesh only works with
     // an applied shader. You can use the shaders used here in your own application
-    auto terrain_shader = def_load_shader2(Shader::SL_GLSL, "terrain.vert.glsl", "terrain.frag.glsl");
+    auto terrain_shader = Shader::load(Shader::SL_GLSL, "terrain.vert.glsl", "terrain.frag.glsl");
     terrain.set_shader(terrain_shader);
     terrain.set_shader_input("camera", window->get_camera_group());
 
@@ -107,7 +102,7 @@ void init(void)
     framework.define_key("escape", "", framework.event_esc, &framework);
 
     // Set some texture on the terrain
-    auto grass_tex = def_load_texture("textures/grass.png");
+    auto grass_tex = TexturePool::load_texture("textures/grass.png");
     grass_tex->set_minfilter(SamplerState::FT_linear_mipmap_linear);
     grass_tex->set_anisotropic_degree(16);
     terrain.set_texture(grass_tex);
@@ -117,7 +112,7 @@ void init(void)
     skybox.reparent_to(window->get_render());
     skybox.set_scale(20000);
 
-    auto skybox_texture = def_load_texture("textures/skybox.jpg");
+    auto skybox_texture = TexturePool::load_texture("textures/skybox.jpg");
     skybox_texture->set_minfilter(SamplerState::FT_linear);
     skybox_texture->set_magfilter(SamplerState::FT_linear);
     skybox_texture->set_wrap_u(SamplerState::WM_repeat);
@@ -125,15 +120,18 @@ void init(void)
     skybox_texture->set_anisotropic_degree(16);
     skybox.set_texture(skybox_texture);
 
-    auto skybox_shader = def_load_shader2(Shader::SL_GLSL, "skybox.vert.glsl", "skybox.frag.glsl");
+    auto skybox_shader = Shader::load(Shader::SL_GLSL, "skybox.vert.glsl", "skybox.frag.glsl");
     skybox.set_shader(skybox_shader);
 }
 }
 
 int main(int argc, char **argv)
 {
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
     init();
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();

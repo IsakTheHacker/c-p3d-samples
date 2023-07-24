@@ -21,11 +21,6 @@ namespace { // don't export/pollute the global namespace
 // references, so they are all declared up here.
 PandaFramework framework;
 WindowFramework* window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
 PT(GraphicsOutput) distortion_buffer;
 NodePath distortion_camera, distortion_object;
 bool distortion_on;
@@ -97,7 +92,7 @@ void init(void)
     seascape.reparent_to(window->get_render());
     seascape.set_pos_hpr(0, 145, 0, 0, 0, 0);
     seascape.set_scale(100);
-    seascape.set_texture(def_load_texture("models/ocean.jpg"));
+    seascape.set_texture(TexturePool::load_texture("models/ocean.jpg"));
 
     // Create the distortion buffer. This buffer renders like a normal
     // scene,
@@ -128,12 +123,12 @@ void init(void)
 
     // Create the shader that will determime what parts of the scene will
     // distortion
-    auto distortion_shader = def_load_shader("distortion.sha");
+    auto distortion_shader = ShaderPool::load_shader("distortion.sha");
     distortion_object.set_shader(distortion_shader);
     distortion_object.hide(1<<4);
 
     // Textures
-    auto tex1 = def_load_texture("models/water.png");
+    auto tex1 = TexturePool::load_texture("models/water.png");
     distortion_object.set_shader_input("waves", tex1);
 
     auto tex_distortion = new Texture;
@@ -187,8 +182,11 @@ void toggle_distortion()
 
 int main(int argc, char **argv)
 {
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
     init();
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();

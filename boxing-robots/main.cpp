@@ -32,11 +32,6 @@ NodePath ring, robot[2];
 PT(AnimControl) left_punch[2], right_punch[2], head_up[2], head_down[2];
 PT(Sequence) punch_left[2], punch_right[2], reset_head[2];
 Randomizer rands;
-std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
 
 // Macro-like function used to reduce the amount to code needed to create the
 // on screen instructions
@@ -162,10 +157,10 @@ void init()
 	// Then, load and bind the animations.
 	// In general, I prefer using variables or arrays over dictionaries
 	// for storing things, since it speeds up the frequent lookups.
-	left_punch[r] = load_anim(robot[r], sample_path + "models/robot_left_punch");
-	right_punch[r] = load_anim(robot[r], sample_path + "models/robot_right_punch");
-	head_up[r] = load_anim(robot[r], sample_path + "models/robot_head_up");
-	head_down[r] = load_anim(robot[r], sample_path + "models/robot_head_down");
+	left_punch[r] = load_anim(robot[r], "models/robot_left_punch");
+	right_punch[r] = load_anim(robot[r], "models/robot_right_punch");
+	head_up[r] = load_anim(robot[r], "models/robot_head_up");
+	head_down[r] = load_anim(robot[r], "models/robot_head_down");
     }
 
     // Characters need to be positioned and parented like normal objects
@@ -288,8 +283,11 @@ int main(int argc, char **argv)
 {
     // enable debug
     //Notify::ptr()->get_category(":chan")->set_severity(NS_spam);
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
     init();
     framework.main_loop();
     kill_intervals();

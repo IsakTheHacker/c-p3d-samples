@@ -17,11 +17,6 @@ namespace { // don't export/pollute the global namespace
 // Global variables
 PandaFramework framework;
 WindowFramework *window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
 PT(AudioManager) sfx_manager;
 PT(AudioSound) sound;
 
@@ -76,11 +71,16 @@ void init(const char *media_file)
     add_instructions(0.12, "S: Stop and Rewind");
     add_instructions(0.18, "M: Slow Motion / Normal Motion toggle");
 
-    // Load the texture. We could use loader.load_texture for this,
+    // Load the texture. We could use TexturePool::load_texture for this,
     // but we want to make sure we get a MovieTexture, since it
     // implements synchronize_to.
+    // TJM: Unfortunately, read() doesn't look in the model path, so we'll
+    // have to look manually.
+    auto vfs = VirtualFileSystem::get_global_ptr();
+    Filename filename(media_file);
+    vfs->resolve_filename(filename, get_model_path());
     PT(MovieTexture) tex = new MovieTexture("name");
-    if(!tex->read(sample_path + media_file)) {
+    if(!tex->read(filename)) {
 	std::cerr << "Failed to load video!";
 	framework.set_exit_flag();
 	return;
@@ -100,7 +100,10 @@ void init(const char *media_file)
     card.set_texture(tex);
 
     sfx_manager = AudioManager::create_AudioManager();
-    sound = sfx_manager->get_sound(sample_path + media_file);
+    // TJM: get_sound() does use the path, but we should make
+    // sure the same file is used by using filename instead
+    // of media_file here as well.
+    sound = sfx_manager->get_sound(filename);
     // Synchronize the video to the sound.
     tex->synchronize_to(sound);
 
@@ -154,8 +157,11 @@ int main(int argc, char **argv)
 {
     // Tell Panda3D to use OpenAL, not FMOD
     audio_library_name = "p3openal_audio";
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
     init("PandaSneezes.ogv");
     //Do the main loop (start 3d rendering and event processing)
     framework.main_loop();

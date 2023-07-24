@@ -49,11 +49,6 @@ CollisionTraverser collision_traverser;
 PT(GenericAsyncTask) roll_task;
 NodePath maze, ball, ball_root;
 std::vector<NodePath> lose_triggers;
-std::string sample_path
-#ifdef SAMPLE_DIR
-	= SAMPLE_DIR "/"
-#endif
-	;
 
 // Forward decl
 void start();
@@ -418,12 +413,12 @@ void lose_game(PT(CollisionEntry) entry)
     // second and call start to reset the game
     (new Sequence({
 	new Parallel({
-	    new LerpFunc(&ball_root, &NodePath::set_x, ball_root.get_x(),
-			 to_pos.get_x(), .1),
-	    new LerpFunc(&ball_root, &NodePath::set_y, ball_root.get_y(),
-			 to_pos.get_y(), .1),
-	    new LerpFunc(&ball_root, &NodePath::set_z, ball_root.get_z(),
-			 (PN_stdfloat)(ball_root.get_z() - .9), .2)
+	    new LerpFunc<>(&ball_root, &NodePath::set_x, ball_root.get_x(),
+			   to_pos.get_x(), .1),
+	    new LerpFunc<>(&ball_root, &NodePath::set_y, ball_root.get_y(),
+			   to_pos.get_y(), .1),
+	    new LerpFunc<>(&ball_root, &NodePath::set_z, ball_root.get_z(),
+			   (PN_stdfloat)(ball_root.get_z() - .9), .2)
 	}),
 	new Wait(1),
 	new Func(start())
@@ -431,9 +426,13 @@ void lose_game(PT(CollisionEntry) entry)
 }
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1]; // old C++ sample had -vs for ../../.., but I don't care
+	get_model_path().prepend_directory(argv[1]); // old C++ sample had -vs for ../../.., but I don't care
 
     init();
 

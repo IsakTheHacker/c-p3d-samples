@@ -29,11 +29,6 @@ namespace { // don't export/pollute the global namespace
 // they need to all be delcared at the top.
 PandaFramework framework;
 WindowFramework *window;
-std::string sample_path
-#ifdef SAMPLE_DIR
-    = SAMPLE_DIR "/"
-#endif
-    ;
 TextNode *ambient_text, *directional_text, *spotlight_text, *point_light_text,
          *spinning_text, *ambient_brightness_text,
          *directional_brightness_text, *spotlight_brightness_text,
@@ -481,8 +476,11 @@ template<class T> T hsv_to_rgb(T hsv)
 
 int main(int argc, const char **argv)
 {
+#ifdef SAMPLE_DIR
+    get_model_path().prepend_directory(SAMPLE_DIR);
+#endif
     if(argc > 1)
-	sample_path = argv[1];
+	get_model_path().prepend_directory(argv[1]);
 
     init();
 
