@@ -51,5 +51,6 @@ endif()
 
 #### Build executable
 add_executable(square square.cpp)
+precompile_headers(square)
 target_link_libraries(square ${PANDALIBS})
 install(TARGETS square)

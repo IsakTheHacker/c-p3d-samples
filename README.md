@@ -131,8 +131,11 @@ use them, just use his code.
 4) fireflies attempts to load models asynchronously, and often fails:
    seg faulting in the memory allocator (usually), not showing the
    "Loading models..." message, etc.  Sometimes it works, though, and
-   it's hard to reproduce in the debugger or in valgrind.  I will
-   revisit this some day, maybe.
+   it's hard to reproduce in the debugger or in valgrind.  I have
+   revisited it once, and it seems a little more stable, but it's
+   probably still broken.  If you know what's wrong, feel free to let
+   me know.  As is, I'm just dropping the subject.  I might revisit it
+   if it takes too long for my own apps to load their models.
 5) I do not own a flight stick or steering wheel, and cannot test the
    ports of their respective samples.  It compiles, at least.
 6) The particle samples will not be ported any time soon.  The

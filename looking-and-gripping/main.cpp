@@ -169,10 +169,7 @@ void init(void)
     };
 
     for(int i = 0; i < 4; i++) {
-	auto np = i ? def_load_model(positions[i].name) :  // Load the model
-	    // the standard model doesn't get a path prefix
-	    // instead of !i, I could've said !strchr(name, '/')
-	    window->load_model(framework.get_models(), positions[i].name);
+	auto np = def_load_model(positions[i].name);  // Load the model
 	np.set_pos(positions[i].pos);  // Position it
 	np.set_hpr(positions[i].rot);  // Rotate it
 	np.set_scale(positions[i].scale);  // Scale it

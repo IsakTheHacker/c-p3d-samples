@@ -57,12 +57,36 @@ if(SAMPLE_DIR)
   endif()
 endif()
 
+# precompile headers
+function(precompile_headers)
+  if(${ARGC} EQUAL 0)
+    set(ARGN ${SAMPLE})
+  endif()
+  foreach(t ${ARGN})
+    if(NOT PRECOMPILE_ROOT)
+      set(PRECOMPILE_ROOT "${t}" CACHE STRING "DO NOT TOUCH")
+      mark_as_advanced(PRECOMPILE_ROOT)
+    endif()
+    if("${PRECOMPILE_ROOT}" STREQUAL "${t}")
+      set(sample_supt supt/sample_supt.h)
+      while(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${sample_supt}")
+        set(sample_supt "../${sample_supt}")
+      endwhile()
+      target_precompile_headers(${t} PUBLIC "${PANDA_H}/panda3d/pandaFramework.h"
+                                ${sample_supt})
+    else()
+      target_precompile_headers("${t}" REUSE_FROM ${PRECOMPILE_ROOT})
+    endif()
+  endforeach()
+endfunction()
+
 # And my own simple extensions to make porting easier
 if(NOT SUPT_SRC) # only do this once if building everything
   set(SUPT_SRC sample anim interval sound particle)
   list(TRANSFORM SUPT_SRC PREPEND ../supt/)
   list(TRANSFORM SUPT_SRC APPEND _supt.cpp)
   add_library(sample_supt EXCLUDE_FROM_ALL ${SUPT_SRC}) # only build if needed
+  precompile_headers(sample_supt)
   target_link_libraries(sample_supt ${PANDALIBS})
 endif()
 if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/supt/samples_supt.h)

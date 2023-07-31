@@ -21,6 +21,7 @@ foreach(x
   steeringWheel
 )
   add_executable(${x} ${x}.cpp)
+  precompile_headers(${x})
   target_link_libraries(${x} ${PANDALIBS})
   install(TARGETS ${x})
 endforeach()

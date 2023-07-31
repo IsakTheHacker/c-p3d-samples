@@ -15,6 +15,7 @@ include(../supt/samples.cmake)
 #### Build executables
 foreach(x advanced basic)
   add_executable(${SAMPLE}-${x} ${x}.cpp)
+  precompile_headers(${SAMPLE}-${x})
   target_link_libraries(${SAMPLE}-${x} ${PANDALIBS} ${PANDA-p3direct} sample_supt)
   install(TARGETS ${SAMPLE}-${x})
 endforeach()

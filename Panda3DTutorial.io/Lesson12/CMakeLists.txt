@@ -51,5 +51,6 @@ endif()
 
 #### Build executable
 add_executable(${PROJECT_NAME} Game.cpp GameObject.cpp)
+precompile_headers(${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME} ${PANDALIBS})
 install(TARGETS ${PROJECT_NAME})

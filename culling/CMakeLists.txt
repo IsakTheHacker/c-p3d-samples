@@ -15,6 +15,7 @@ include(../supt/samples.cmake)
 #### Build executables
 foreach(x occluder portal)
   add_executable(${x}_culling ${x}_culling.cpp)
+  precompile_headers(${x}_culling)
   target_link_libraries(${x}_culling ${PANDALIBS})
   install(TARGETS ${x}_culling)
 endforeach()

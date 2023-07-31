@@ -15,6 +15,7 @@ include(../supt/samples.cmake)
 #### Build executables
 foreach(x framebuffer-feedback) # fireball) # fireball is too Python-heavy
   add_executable(${x} ${x}.cpp)
+  precompile_headers(${x})
   target_link_libraries(${x} ${PANDALIBS} sample_supt)
   install(TARGETS ${x})
 endforeach()

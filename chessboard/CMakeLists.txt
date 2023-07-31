@@ -14,5 +14,6 @@ include(../supt/samples.cmake)
 
 #### Build executable
 add_executable(${SAMPLE} main.cpp)
+precompile_headers()
 target_link_libraries(${SAMPLE} ${PANDALIBS})
 install(TARGETS ${SAMPLE})
