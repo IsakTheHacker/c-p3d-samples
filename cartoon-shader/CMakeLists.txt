@@ -5,15 +5,17 @@
 # There is no need for 3.21.0; I picked that version pretty much at random.
 cmake_minimum_required(VERSION 3.21.0)
 
-set(SAMPLE ball-in-maze)
+set(SAMPLE cartoon-shader)
 
 # The project name can be anything; it doesn't affect the results.
 project(${SAMPLE} LANGUAGES CXX)
 
 include(../supt/samples.cmake)
 
-#### Build executable
-add_executable(${SAMPLE} main.cpp)
-precompile_headers()
-target_link_libraries(${SAMPLE} ${PANDALIBS} ${PANDA-p3direct} sample_supt)
-install(TARGETS ${SAMPLE})
+#### Build executables
+foreach(x advanced) # basic) # basic doesn't work yet -- too much Python
+  add_executable(${SAMPLE}-${x} ${x}.cpp)
+  precompile_headers(${SAMPLE}-${x})
+  target_link_libraries(${SAMPLE}-${x} ${PANDALIBS} ${PANDA-p3direct} sample_supt)
+  install(TARGETS ${SAMPLE}-${x})
+endforeach()

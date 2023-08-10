@@ -5,7 +5,7 @@
 # There is no need for 3.21.0; I picked that version pretty much at random.
 cmake_minimum_required(VERSION 3.21.0)
 
-set(SAMPLE ball-in-maze)
+set(SAMPLE disco-lights)
 
 # The project name can be anything; it doesn't affect the results.
 project(${SAMPLE} LANGUAGES CXX)

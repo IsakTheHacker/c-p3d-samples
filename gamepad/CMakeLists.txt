@@ -5,15 +5,23 @@
 # There is no need for 3.21.0; I picked that version pretty much at random.
 cmake_minimum_required(VERSION 3.21.0)
 
-set(SAMPLE ball-in-maze)
+set(SAMPLE gamepad)
 
 # The project name can be anything; it doesn't affect the results.
 project(${SAMPLE} LANGUAGES CXX)
 
 include(../supt/samples.cmake)
 
-#### Build executable
-add_executable(${SAMPLE} main.cpp)
-precompile_headers()
-target_link_libraries(${SAMPLE} ${PANDALIBS} ${PANDA-p3direct} sample_supt)
-install(TARGETS ${SAMPLE})
+#### Build executables
+foreach(x
+#  device_tester  # I don't know how to do scroll areas properly
+  flightstick
+  gamepad
+#  mappingGUI  # has dialogs.  Probably use Dear ImGui this time.
+  steeringWheel
+)
+  add_executable(${x} ${x}.cpp)
+  precompile_headers(${x})
+  target_link_libraries(${x} ${PANDALIBS})
+  install(TARGETS ${x})
+endforeach()
