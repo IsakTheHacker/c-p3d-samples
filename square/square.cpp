@@ -81,7 +81,7 @@ int main(int argc, char **argv)
   // Map m;  // done globally now.
 
   // Use separate root node to scale, rotate
-  render = window->get_render().attach_new_node(new PandaNode("maprender"));
+  render = window->get_render().attach_new_node("maprender");
   render.set_sz(1/8.0);
 
   // cmd line args (panda3d has no standard args, so I don't parse any)

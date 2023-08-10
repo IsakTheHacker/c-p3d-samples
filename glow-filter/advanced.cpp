@@ -171,7 +171,7 @@ void init(void)
     dr->set_camera(glow_camera_node);
 
     // Tell the glow camera to use the glow shader
-    auto tempnode = NodePath(new PandaNode("temp node"));
+    auto tempnode = NodePath("temp node");
     tempnode.set_shader(glow_shader);
     glow_camera->set_initial_state(tempnode.get_state());
 

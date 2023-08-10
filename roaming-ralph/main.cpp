@@ -120,7 +120,7 @@ void init(void)
     // Create a floater object, which floats 2 units above ralph.  We
     // use this as a target for the camera to look at.
 
-    floater = NodePath(new PandaNode("floater"));
+    floater = NodePath("floater");
     floater.reparent_to(ralph);
     floater.set_z(2.0);
 

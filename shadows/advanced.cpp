@@ -153,7 +153,7 @@ void init(void)
     CardMaker cm("");
     cm.set_frame(-2, 2, -2, 2);
     auto render = window->get_render();
-    auto floor = render.attach_new_node(new PandaNode("floor"));
+    auto floor = render.attach_new_node("floor");
     for(int y = 0; y < 12; y++)
 	for(int x = 0; x < 12; x++) {
 	    auto nn = floor.attach_new_node(cm.generate());
@@ -217,7 +217,7 @@ void init(void)
     render.set_shader_input("scale", LVector4(1, 1, 1, 1));
 
     // Put a shader on the Light camera.
-    NodePath lci(new PandaNode("Light Camera Initializer"));
+    NodePath lci("Light Camera Initializer");
     lci.set_shader(ShaderPool::load_shader("caster.sha"));
     cam_node->set_initial_state(lci.get_state());
 
@@ -226,7 +226,7 @@ void init(void)
     // If the card has that, use it.  If not, use a different
     // shader that does not require hardware support.
 
-    NodePath mci(new PandaNode("Main Camera Initializer"));
+    NodePath mci("Main Camera Initializer");
     if(win->get_gsg()->get_supports_shadow_filter())
 	mci.set_shader(ShaderPool::load_shader("shadow.sha"));
     else

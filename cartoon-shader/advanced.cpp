@@ -104,7 +104,7 @@ void init(void)
 
     auto render = window->get_render();
     {
-	NodePath tempnode(new PandaNode("temp node"));
+	NodePath tempnode("temp node");
 	tempnode.set_shader(ShaderPool::load_shader("lightingGen.sha"));
 	window->get_camera(0)->set_initial_state(tempnode.get_state());
     }
@@ -135,7 +135,7 @@ void init(void)
     cam->set_scene(render);
 
     {
-	NodePath tempnode(new PandaNode("temp node"));
+	NodePath tempnode("temp node");
 	tempnode.set_shader(ShaderPool::load_shader("normalGen.sha"));
 	cam->set_initial_state(tempnode.get_state());
     }

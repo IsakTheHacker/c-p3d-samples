@@ -238,7 +238,7 @@ void init(void)
     // Configure the render state of the model camera.
 
     {
-	NodePath tempnode(new PandaNode("temp node"));
+	NodePath tempnode("temp node");
 	tempnode.set_attrib(
             AlphaTestAttrib::make(RenderAttrib::M_greater_equal, 0.5));
 	tempnode.set_shader(ShaderPool::load_shader("model.sha"));
@@ -249,7 +249,7 @@ void init(void)
     // Configure the render state of the light camera.
 
     {
-	NodePath tempnode(new PandaNode("temp node"));
+	NodePath tempnode("temp node");
 	tempnode.set_shader(ShaderPool::load_shader("light.sha"));
 	tempnode.set_shader_input("texnormal", tex_normal);
 	tempnode.set_shader_input("texalbedo", tex_albedo);
@@ -288,9 +288,9 @@ void init(void)
 
     // Create two subroots, to help speed cull traversal.
 
-    lightroot = NodePath(new PandaNode("lightroot"));
+    lightroot = NodePath("lightroot");
     lightroot.reparent_to(render);
-    modelroot = NodePath(new PandaNode("modelroot"));
+    modelroot = NodePath("modelroot");
     modelroot.reparent_to(render);
     lightroot.hide(model_mask);
     modelroot.hide(light_mask);
@@ -302,7 +302,7 @@ void init(void)
     // event upon completion.
     title = add_title("Loading models...");
 
-    forest = framework.get_models().attach_new_node(new PandaNode("Forest Root"));
+    forest = framework.get_models().attach_new_node("Forest Root");
     forest.hide(light_mask | plain_mask);
     // The Python API just takes array arguments to load multiple files, and
     // a callback to indicate asynch loading, but everything has to be done
@@ -448,9 +448,9 @@ void add_firefly()
     auto dir = LVector3(rands.random_real(2) - 1, rands.random_real(2) - 1, rands.random_real(2) - 1);
     dir.normalize();
     auto pos2 = pos1 + (dir * 20);
-    auto fly = lightroot.attach_new_node(new PandaNode("fly"));
-    auto glow = fly.attach_new_node(new PandaNode("glow"));
-    auto dot = fly.attach_new_node(new PandaNode("dot"));
+    auto fly = lightroot.attach_new_node("fly");
+    auto glow = fly.attach_new_node("glow");
+    auto dot = fly.attach_new_node("dot");
     auto color_r = 1.0;
     auto color_g = rands.random_real(0.2) + 0.8;
     auto color_b = std::min(color_g, rands.random_real(0.5) + 0.5);

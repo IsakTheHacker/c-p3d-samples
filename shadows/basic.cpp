@@ -108,7 +108,7 @@ void init(void)
     CardMaker cm("");
     cm.set_frame(-2, 2, -2, 2);
     auto render = window->get_render();
-    auto floor = render.attach_new_node(new PandaNode("floor"));
+    auto floor = render.attach_new_node("floor");
     for(int y = 0; y < 12; y++)
 	for(int x = 0; x < 12; x++) {
 	    auto nn = floor.attach_new_node(cm.generate());
