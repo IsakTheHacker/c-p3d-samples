@@ -43,6 +43,23 @@ the official SDK.  If the assets are found by CMake during the build
 process, the sample will use the found directory by default, so you
 should usually not need to provide this command-line parameter.
 
+Important:  I have made an API change to panda3d.  Instead of including
+the header files directly, as appears to be recommended by the
+documentation (e.g. `#include "pandaFramework.h"`), I include from a
+`panda3d` subdirectory, and use angle brackets (e.g.
+`#include <panda3d/pandaFramework.h>`).  It is generally good practice
+to prefix your header names with the library it came from (either via
+a directory prefix or via a name prefix, and sometimes both), which
+Panda3D does not do (e.g. `event.h`, a very generic name).  It is also
+generally good practice to use angle brackets when using a third party
+library.  If your include files were not installed in a `panda3d`
+subdirectory, you may need to add soft links to make it work.  For
+example, executing `ln -s panda3d` in the include directory (under
+UNIX) should generally work.  I can't tell you how to do this on
+Windows: I know soft links exist, but I don't know the commands to use
+them.  The general Windows practice seems to be to just make copies,
+which unfortunately makes long-term maintenance much more difficult.
+
 Official Panda3D 1.10.13 SDK samples
 ------------------------------------
 
